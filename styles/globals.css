@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Large - 16px
+.cs-text-lg {
+  font-size: 16px;
+  line-height: 23.2734px;
+}
+
+.cs-text-lg::before {
+  content: "";
+  margin-bottom: -0.3962em;
+  display: table;
+}
+
+.cs-text-lg::after {
+  content: "";
+  margin-top: -0.3538em;
+  display: table;
+}
+
+// Default - 14px
+.cs-text {
+  font-size: 14px;
+  line-height: 19.8643px;
+}
+
+.cs-text::before {
+  content: "";
+  margin-bottom: -0.3784em;
+  display: table;
+}
+
+.cs-text::after {
+  content: "";
+  margin-top: -0.3359em;
+  display: table;
+}
+
+// Small - 12px
+.cs-text-sm {
+  font-size: 12px;
+  line-height: 22.4551px;
+}
+
+.cs-text-sm::before {
+  content: "";
+  margin-bottom: -0.6046em;
+  display: table;
+}
+
+.cs-text-sm::after {
+  content: "";
+  margin-top: -0.5621em;
+  display: table;
+}
