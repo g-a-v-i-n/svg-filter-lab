@@ -4,7 +4,7 @@ const initialNodes = [
     sourcePosition: "right",
     type: "blend",
     data: { mode: { key: "normal", label: "Normal", category: "Default" } },
-    position: { x: 0, y: 80 },
+    position: { x: 0, y: 0 },
   },
   {
     id: "horizontal-2",
@@ -22,6 +22,75 @@ const initialNodes = [
     },
     position: { x: 250, y: 0 },
   },
+  {
+    id: "horizontal-3",
+    sourcePosition: "right",
+    targetPosition: "left",
+    type: "componentTransfer",
+    data: {
+      red: {
+        isOn: true,
+        type: { label: "Identity", key: "identity" },
+        amplitude: 1,
+        exponent: 1,
+        offset: 0,
+        slope: 0,
+        intercept: 0,
+        tableValues: [
+          [1, 0, 0, 0],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1],
+        ],
+      },
+      green: {
+        isOn: true,
+        type: { label: "Identity", key: "identity" },
+        amplitude: 1,
+        exponent: 1,
+        offset: 0,
+        slope: 0,
+        intercept: 0,
+        tableValues: [
+          [1, 0, 0, 0],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1],
+        ],
+      },
+      blue: {
+        isOn: true,
+        type: { label: "Identity", key: "identity" },
+        amplitude: 1,
+        exponent: 1,
+        offset: 0,
+        slope: 0,
+        intercept: 0,
+        tableValues: [
+          [1, 0, 0, 0],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1],
+        ],
+      },
+      alpha: {
+        isOn: false,
+        type: { label: "Identity", key: "identity" },
+        amplitude: 1,
+        exponent: 1,
+        offset: 0,
+        slope: 0,
+        intercept: 0,
+        tableValues: [
+          [1, 0, 0, 0],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1],
+        ],
+      },
+    },
+    position: { x: 550, y: 0 },
+  },
 ];
 
 const initialEdges = [
@@ -29,6 +98,12 @@ const initialEdges = [
     id: "horizontal-e1-2",
     source: "horizontal-1",
     target: "horizontal-2",
+    type: "custom",
+  },
+  {
+    id: "horizontal-e2-3",
+    source: "horizontal-2",
+    target: "horizontal-3",
     type: "custom",
   },
 ];

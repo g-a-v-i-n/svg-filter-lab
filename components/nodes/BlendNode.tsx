@@ -14,27 +14,32 @@ import {
   HandlePositioner,
 } from "./NodeParts";
 import blendModes from "../../lib/blendModes";
-import useStore, { NodeData, RFState } from "../../store/store";
+import useStore, { NamedKey, RFState } from "../../store/store";
 
 const selector = (state: RFState) => state.blendNode.updateMode;
 
-function BlendNode({ id, data }) {
+type BlendNodeProps = {
+  id: string;
+  data: {
+    mode: NamedKey;
+  };
+};
+
+function BlendNode({ id, data }: BlendNodeProps) {
   const updateBlendNode = useStore(selector);
-  // console.log('blendNode/data:', data.mode.label)
   return (
-    <NodeContainer className="w-[210px]">
-      <NodeHeader title="Blend" />
+    <NodeContainer className="w-[210px] h-[104px]">
+      <NodeHeader icon="􀟗" title="Blend" />
       <NodeControlTray>
         <NodeSelect
           value={data.mode.label}
           label="Mode"
-          onValueChange={(val) => {
-            // console.log(id, val)
-            updateBlendNode(id, val);
-          }}
+          onValueChange={(val: NamedKey) => updateBlendNode(id, val)}
         >
           {blendModes.map((mode) => (
-            <SelectItem value={mode}>{mode.label}</SelectItem>
+            <SelectItem key={id + "-" + mode.key} value={mode}>
+              {mode.label}
+            </SelectItem>
           ))}
         </NodeSelect>
       </NodeControlTray>

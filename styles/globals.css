@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-// Large - 16px
+/* Large - 16px */
 .cs-text-lg {
   font-size: 16px;
   line-height: 23.2734px;
@@ -20,7 +20,7 @@
   display: table;
 }
 
-// Default - 14px
+/* Default - 14px */
 .cs-text {
   font-size: 14px;
   line-height: 19.8643px;
@@ -38,7 +38,7 @@
   display: table;
 }
 
-// Small - 12px
+/* Small - 12px */
 .cs-text-sm {
   font-size: 12px;
   line-height: 22.4551px;
@@ -54,4 +54,30 @@
   content: "";
   margin-top: -0.5621em;
   display: table;
+}
+
+:root {
+  --shadow-color: 240deg 5% 80%;
+  --shadow-elevation-low: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
+    0px 0.8px 1.2px hsl(var(--shadow-color) / 0.11),
+    0px 1.5px 2.3px hsl(var(--shadow-color) / 0.22);
+  --shadow-elevation-medium: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
+    0px 1.6px 2.4px hsl(var(--shadow-color) / 0.06),
+    0px 2.7px 4.1px hsl(var(--shadow-color) / 0.11),
+    0px 4.4px 6.6px hsl(var(--shadow-color) / 0.17),
+    0px 7.4px 11.1px hsl(var(--shadow-color) / 0.22);
+  --shadow-elevation-high: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
+    0px 2.3px 3.5px hsl(var(--shadow-color) / 0.03),
+    0px 3.9px 5.9px hsl(var(--shadow-color) / 0.05),
+    0px 5.4px 8.1px hsl(var(--shadow-color) / 0.08),
+    0px 7.1px 10.6px hsl(var(--shadow-color) / 0.1),
+    0px 9.2px 13.8px hsl(var(--shadow-color) / 0.13),
+    0px 11.7px 17.5px hsl(var(--shadow-color) / 0.16),
+    -0.1px 15.1px 22.7px hsl(var(--shadow-color) / 0.18),
+    -0.1px 19.3px 29px hsl(var(--shadow-color) / 0.21),
+    -0.1px 24.8px 37.2px hsl(var(--shadow-color) / 0.23);
+}
+
+.perfect-shadow-md {
+  box-shadow: var(--shadow-elevation-medium);
 }

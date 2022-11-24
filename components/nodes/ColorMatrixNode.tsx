@@ -16,44 +16,47 @@ import {
   NodeMatrixInput,
 } from "./NodeParts";
 import blendModes from "../../lib/blendModes";
-import useStore, { NodeData, RFState } from "../../store/store";
+import useStore, { NamedKey, NodeData, RFState } from "../../store/store";
 
 const selector = (state: RFState) => state.colorMatrixNode;
-// const valueSelector = (state: RFState) => state.colorMatrixNode.updateValue;
 
 const feColorMatrixTypes = [
-  { label: "Matrix", value: "matrix" },
-  { label: "Saturate", value: "saturate" },
-  { label: "Hue Rotate", value: "hueRotate" },
-  { label: "Luminance to Alpha", value: "luminanceToAlpha" },
+  { label: "Matrix", key: "matrix", category: "custom" },
+  { label: "Saturate", key: "saturate", category: "preset" },
+  { label: "Hue Rotate", key: "hueRotate", category: "preset" },
+  { label: "Luminance to Alpha", key: "luminanceToAlpha", category: "preset" },
 ];
 
 export type ColorMatrixValues = number[][];
 
-function BlendNode({ id, data }) {
+export type ColorMatrixNodeProps = {
+  id: string;
+  data: {
+    type: NamedKey;
+    values: ColorMatrixValues;
+  };
+};
+
+function ColorMatrixNode({ id, data }: ColorMatrixNodeProps) {
   const { updateValues, updateType } = useStore(selector);
-
-  console.log(useStore(selector));
-  // const updateColorMatrixNodeValue = useStore(valueSelector);
-
   return (
-    <NodeContainer className="w-[250px]">
-      <NodeHeader title="Color Matrix" />
+    <NodeContainer className="w-[270px]">
+      <NodeHeader icon="􀮟" title="Color Matrix" />
       <NodeControlTray>
         <NodeSelect
           value={data.type.label}
           label="Type"
-          onValueChange={(val) => {
-            updateType(id, val);
-          }}
+          onValueChange={(val) => updateType(id, val)}
         >
           {feColorMatrixTypes.map((type) => (
-            <SelectItem value={type}>{type.label}</SelectItem>
+            <SelectItem key={id + "-" + type.key} value={type}>
+              {type.label}
+            </SelectItem>
           ))}
         </NodeSelect>
         <NodeRule />
         <NodeMatrixInput
-          disabled={data.type.value !== "matrix"}
+          disabled={data.type.key !== "matrix"}
           label="Values"
           rows={4}
           cols={5}
@@ -89,4 +92,4 @@ function BlendNode({ id, data }) {
   );
 }
 
-export default memo(BlendNode);
+export default memo(ColorMatrixNode);
