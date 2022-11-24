@@ -2,6 +2,7 @@ import { Handle, Position, HandleType } from "reactflow";
 import classNames from "classnames";
 import * as Select from "@radix-ui/react-select";
 import * as Switch from "@radix-ui/react-switch";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { forwardRef } from "react";
 import "reactflow/dist/base.css";
 import classnames from "classnames";
@@ -21,12 +22,43 @@ export function StyledHandle({
   ...props
 }: StyledHandleProps) {
   return (
-    <Handle
-      type={type}
-      position={position}
-      className={`bg-primary rounded-full w-[5px] h-6 flex-none !relative !top-auto !left-auto !right-auto !bottom-auto !translate-0 ${className}`}
-      {...props}
-    />
+    <Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild>
+          <Handle
+            type={type}
+            position={position}
+            className={`bg-primary rounded-full w-[5px] h-6 flex-none !relative !top-auto !left-auto !right-auto !bottom-auto !translate-0 ${className}`}
+            {...props}
+            title={undefined} // Removing the title because of custom tooltip
+          />
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content
+            side={position === Position.Left ? "left" : "right"}
+            className="bg-primary rounded-lg p-3 cs-text text-white font-medium shadow-high"
+            sideOffset={2}
+          >
+            {props.title}
+            <Tooltip.Arrow asChild>
+              <svg
+                width="10"
+                height="7"
+                viewBox="0 0 10 7"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  transform="translate(0,-1)"
+                  d="M6.45216 6.18543C5.82919 7.27153 4.17081 7.27152 3.54784 6.18542L0 0H10L6.45216 6.18543Z"
+                  fill="#2B2F43"
+                />
+              </svg>
+            </Tooltip.Arrow>
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   );
 }
 
@@ -234,13 +266,24 @@ NodeTextInput.defaultProps = {
   className: "",
 };
 
+export type NodeNumberInputProps = {
+  label: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: number;
+  step?: number;
+  min?: number;
+  max?: number;
+  precision?: number;
+};
+
+
 export function NodeNumberInput({
   label,
   onChange,
   step,
   precision,
   ...props
-}) {
+}:NodeNumberInputProps) {
   return (
     <div className="flex w-full items-center justify-center pl-2">
       <NodeFieldLabel>{label}</NodeFieldLabel>
@@ -313,7 +356,9 @@ export function NodeSelect(props: NodeSelectProps) {
             <Select.Value>
               <div className="cs-text">{props.value}</div>
             </Select.Value>
-            <div className="text-secondary font-icon cs-text font-bold">􀆈</div>
+            <div className="text-secondary font-icon cs-text-sm font-bold">
+              􀆈
+            </div>
           </div>
         </Select.Trigger>
         <Select.Portal>
@@ -425,7 +470,7 @@ export function NodeMatrixInput({
                   <input
                     disabled={disabled}
                     key={props.label + "-" + "rows" + i + "-" + "cols" + j}
-                    className={`w-8 h-5 text-center text-middle font-mono bg-transparent cs-text border-stroke text-primary ${className} ${borderCns}`}
+                    className={`w-8 h-5 text-center text-middle font-mono bg-transparent cs-text border-stroke text-primary outline-none focus:ring-2 focus:ring-theme ${className} ${borderCns}`}
                     onChange={(event) => onChange(event.target.value, i, j)}
                     value={values[i][j]}
                   />

@@ -63,7 +63,7 @@ const useStore = create(
     // This is the function that React Flow calls every time a connection gets created
     onConnect: (params: Connection) => {
       set((state: State) => {
-        state.edges = addEdge(params, state.edges);
+        state.edges = addEdge({...params, type: 'custom'}, state.edges);
       });
     },
     // Node-specific updaters
@@ -304,9 +304,50 @@ const useStore = create(
         },
       },
     },
+    compositeNode: {
+      updateOperator: (nodeId: string, newOperator: NamedKey) => {
+        set((state: State) => {
+          const index = state.nodes.findIndex((node) => node.id === nodeId);
+          state.nodes[index].data.operator = newOperator;
+        });
+      },
+      updateK1: (nodeId: string, newK1: number) => {
+        set((state: State) => {
+          const index = state.nodes.findIndex((node) => node.id === nodeId);
+          state.nodes[index].data.k1 = newK1;
+        });
+      },
+      updateK2: (nodeId: string, newK2: number) => {
+        set((state: State) => {
+          const index = state.nodes.findIndex((node) => node.id === nodeId);
+          state.nodes[index].data.k2 = newK2;
+        });
+      },
+      updateK3: (nodeId: string, newK3: number) => {
+        set((state: State) => {
+          const index = state.nodes.findIndex((node) => node.id === nodeId);
+          state.nodes[index].data.k3 = newK3;
+        });
+      },
+      updateK4: (nodeId: string, newK4: number) => {
+        set((state: State) => {
+          const index = state.nodes.findIndex((node) => node.id === nodeId);
+          state.nodes[index].data.k4 = newK4;
+        });
+      },
+    },
+    convolutionMatrixNode: {
+      updateKernelMatrix: (nodeId:string, newKernelMatrix:number[][]) => {
+        set((state: State) => {
+        const index = state.nodes.findIndex((node) => node.id === nodeId);
+        state.nodes[index].data.kernelMatrix = newKernelMatrix;
+      });
+      }
+    }
   }))
 );
-const selector = (state: RFState) => state.componentTransferNode.updateMode;
+
+
 
 // function setNodeDataById(
 //   nodes: Node[],

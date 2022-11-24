@@ -16,7 +16,6 @@ import {
   NodeSwitch,
   NodeMatrixInput,
 } from "./NodeParts";
-import blendModes from "../../lib/blendModes";
 import useStore, { NamedKey, RFState } from "../../store/store";
 
 const feComponentTransferTypes = [

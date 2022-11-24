@@ -91,6 +91,32 @@ const initialNodes = [
     },
     position: { x: 550, y: 0 },
   },
+  {
+    id: "horizontal-4",
+    sourcePosition: "right",
+    type: "composite",
+    data: {
+      operator: { key: "over", label: "Over", category: "Default" },
+      k1: 0,
+      k2: 0,
+      k3: 0,
+      k4: 0,
+    },
+    position: { x: 760, y: 0 },
+  },
+  {
+    id: "horizontal-5",
+    sourcePosition: "right",
+    type: "convolutionMatrix",
+    data: {
+      kernelMatrix: [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1],
+      ],
+    },
+    position: { x: 980, y: 0 },
+  },
 ];
 
 const initialEdges = [

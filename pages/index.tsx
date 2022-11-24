@@ -18,11 +18,15 @@ import CustomEdge from "../components/CustomEdge";
 import BlendNode from "../components/nodes/BlendNode";
 import ColorMatrixNode from "../components/nodes/ColorMatrixNode";
 import ComponentTransferNode from "../components/nodes/ComponentTransferNode";
+import CompositeNode from "../components/nodes/CompositeNode";
+import ConvolutionMatrix from "../components/nodes/ConvolutionMatrix";
 
 const nodeTypes = {
   blend: BlendNode,
   colorMatrix: ColorMatrixNode,
   componentTransfer: ComponentTransferNode,
+  composite: CompositeNode,
+  convolutionMatrix: ConvolutionMatrix
 };
 
 const edgeTypes = {
@@ -30,9 +34,6 @@ const edgeTypes = {
 };
 
 function Flow(props) {
-  // you can access the internal state here
-  const reactFlowInstance = useReactFlow();
-
   return <ReactFlow {...props} />;
 }
 
