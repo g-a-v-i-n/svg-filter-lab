@@ -1,40 +1,34 @@
 import React, { memo } from "react";
-import { Position, useUpdateNodeInternals } from "reactflow";
-import {
-  StyledHandle,
-  NodeContainer,
-  NodeControlTray,
-  NodeHeader,
-  NodeTextInput,
-  PreviewFooter,
-  NodeRule,
-  NodeNumberInput,
-  NodeSelect,
-  SelectItem,
-  HandlePositioner,
-  NodeSwitchRow,
-  NodeSwitch,
-  NodeMatrixInput,
-} from "./NodeParts";
-import useStore, { NamedKey, RFState } from "../../store/store";
+import { Position } from "reactflow";
+import useStore, { State } from "../../stores/store";
+import { Container } from "../nodeParts/Container";
+import { ControlGroup } from "../nodeParts/ControlGroup";
+import { Divider } from "../nodeParts/Divider";
+import { Footer } from "../nodeParts/Footer";
+import { Handle } from "../nodeParts/Handle";
+import { HandlePositioner } from "../nodeParts/HandlePositioner";
+import { Header } from "../nodeParts/Header";
+import { MatrixInput } from "../nodeParts/MatrixInput";
+import { NumberInput } from "../nodeParts/NumberInput";
+import { Select, SelectItem } from "../nodeParts/Select";
+import { Switch } from "../nodeParts/Switch";
+import { SwitchRow } from "../nodeParts/SwitchRow";
+import { componentTransferTypes, ComponentTransferNodeState } from "../../stores/componentTransferNode";
 
-const feComponentTransferTypes = [
-  { label: "Identity", key: "identity", category: "preset" },
-  { label: "Table", key: "table", category: "custom" },
-  { label: "Discrete", key: "discrete", category: "custom" },
-  { label: "Linear", key: "linear", category: "custom" },
-  { label: "Gamma", key: "gamma", category: "custom" },
-];
+const selector = (state: State) => state.componentTransferNode;
 
-const selector = (state: RFState) => state.componentTransferNode;
+type ComponentTransferNodeProps = ComponentTransferNodeState & {}
 
-function ComponentTransferNode({ id, data }) {
+const mdn =
+  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer";
+
+function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProps) {
   const { red, green, blue, alpha } = useStore(selector);
   return (
-    <NodeContainer className="w-[240px]">
-      <NodeHeader icon="􀊝" title="Component Transfer" />
-      <NodeSwitchRow label="Red">
-        <NodeSwitch
+    <Container className="w-[240px]" selected={selected}>
+      <Header icon="􀊝" title="Component Transfer" mdn={mdn} />
+      <SwitchRow label="Red">
+        <Switch
           label="red-channel"
           className={`${
             data.red.isOn ? "bg-red flex-row-reverse" : "bg-tertiary flex-row"
@@ -42,14 +36,14 @@ function ComponentTransferNode({ id, data }) {
           isChecked={data.red.isOn}
           onCheckedChange={() => red.updateIsOn(id, !data.red.isOn)}
         />
-      </NodeSwitchRow>
+      </SwitchRow>
 
       {data.red.isOn && (
         <ChannelGroup id={id} channel="red" data={data} store={red} />
       )}
 
-      <NodeSwitchRow label="Green">
-        <NodeSwitch
+      <SwitchRow label="Green">
+        <Switch
           label="green-channel"
           className={`${
             data.green.isOn
@@ -59,14 +53,14 @@ function ComponentTransferNode({ id, data }) {
           isChecked={data.green.isOn}
           onCheckedChange={() => green.updateIsOn(id, !data.green.isOn)}
         />
-      </NodeSwitchRow>
+      </SwitchRow>
 
       {data.green.isOn && (
         <ChannelGroup id={id} channel="green" data={data} store={green} />
       )}
 
-      <NodeSwitchRow label="Blue">
-        <NodeSwitch
+      <SwitchRow label="Blue">
+        <Switch
           label="blue-channel"
           className={`${
             data.blue.isOn ? "bg-blue flex-row-reverse" : "bg-tertiary flex-row"
@@ -74,14 +68,14 @@ function ComponentTransferNode({ id, data }) {
           isChecked={data.blue.isOn}
           onCheckedChange={() => blue.updateIsOn(id, !data.blue.isOn)}
         />
-      </NodeSwitchRow>
+      </SwitchRow>
 
       {data.blue.isOn && (
         <ChannelGroup id={id} channel="blue" data={data} store={blue} />
       )}
 
-      <NodeSwitchRow label="Alpha">
-        <NodeSwitch
+      <SwitchRow label="Alpha">
+        <Switch
           label="alpha-channel"
           className={`${
             data.alpha.isOn
@@ -91,62 +85,55 @@ function ComponentTransferNode({ id, data }) {
           isChecked={data.alpha.isOn}
           onCheckedChange={() => alpha.updateIsOn(id, !data.alpha.isOn)}
         />
-      </NodeSwitchRow>
+      </SwitchRow>
 
       {data.alpha.isOn && (
         <ChannelGroup id={id} channel="alpha" data={data} store={alpha} />
       )}
 
-      <PreviewFooter />
+      <Footer />
 
       <HandlePositioner left>
-        <StyledHandle
-          type="target"
-          id="in"
-          title="In"
-          position={Position.Left}
-        />
+        <Handle type="target" id="in" title="In" position={Position.Left} />
       </HandlePositioner>
 
       <HandlePositioner right>
-        <StyledHandle
-          type="source"
-          id="out"
-          title="Out"
-          position={Position.Right}
-        />
+        <Handle type="source" id="result" title="Result" position={Position.Right} />
       </HandlePositioner>
-    </NodeContainer>
+    </Container>
   );
 }
 
 function ChannelGroup({ id, channel, label, data, store }) {
   return (
-    <NodeControlTray>
-      <NodeSelect
+    <ControlGroup>
+      <Select
+        first
+        last={data[channel].type.key === "identity"}
         value={data[channel].type.label}
         label="Type"
         onValueChange={(val) => store.updateType(id, val)}
       >
-        {feComponentTransferTypes.map((type) => (
+        {componentTransferTypes.map((type) => (
           <SelectItem key={id + "-" + channel + "-" + type.key} value={type}>
             {type.label}
           </SelectItem>
         ))}
-      </NodeSelect>
+      </Select>
 
       {data[channel].type.key === "linear" && (
         <>
-          <NodeRule />
-          <NodeNumberInput
+          <Divider />
+          <NumberInput
             label="Slope"
             value={data[channel].slope}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               store.updateSlope(id, e.target.value)
             }
           />
-          <NodeRule />
-          <NodeNumberInput
+          <Divider />
+          <NumberInput
+            last
             label="Intercept"
             value={data[channel].intercept}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -158,24 +145,25 @@ function ChannelGroup({ id, channel, label, data, store }) {
 
       {data[channel].type.key === "gamma" && (
         <>
-          <NodeRule />
-          <NodeNumberInput
+          <Divider />
+          <NumberInput
             label="Amplitude"
             value={data[channel].amplitude}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               store.updateAmplitude(id, e.target.value)
             }
           />
-          <NodeRule />
-          <NodeNumberInput
+          <Divider />
+          <NumberInput
             label="Exponent"
             value={data[channel].exponent}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               store.updateExponent(id, e.target.value)
             }
           />
-          <NodeRule />
-          <NodeNumberInput
+          <Divider />
+          <NumberInput
+            last
             label="Offset"
             value={data[channel].offset}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -188,8 +176,9 @@ function ChannelGroup({ id, channel, label, data, store }) {
       {(data[channel].type.key === "table" ||
         data[channel].type.key === "discrete") && (
         <>
-          <NodeRule />
-          <NodeMatrixInput
+          <Divider />
+          <MatrixInput
+            last
             rows={4}
             cols={4}
             label="Table Values"
@@ -202,7 +191,7 @@ function ChannelGroup({ id, channel, label, data, store }) {
           />
         </>
       )}
-    </NodeControlTray>
+    </ControlGroup>
   );
 }
 

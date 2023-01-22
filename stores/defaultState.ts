@@ -1,6 +1,9 @@
+import { uuid } from "../lib/uuid";
+
 const initialNodes = [
   {
     id: "horizontal-1",
+    selected: true,
     sourcePosition: "right",
     type: "blend",
     data: { mode: { key: "normal", label: "Normal", category: "Default" } },
@@ -8,6 +11,7 @@ const initialNodes = [
   },
   {
     id: "horizontal-2",
+    selected: false,
     type: "colorMatrix",
     sourcePosition: "right",
     targetPosition: "left",
@@ -24,6 +28,7 @@ const initialNodes = [
   },
   {
     id: "horizontal-3",
+    selected: false,
     sourcePosition: "right",
     targetPosition: "left",
     type: "componentTransfer",
@@ -89,10 +94,11 @@ const initialNodes = [
         ],
       },
     },
-    position: { x: 550, y: 0 },
+    position: { x: 590, y: 0 },
   },
   {
     id: "horizontal-4",
+    selected: false,
     sourcePosition: "right",
     type: "composite",
     data: {
@@ -102,10 +108,11 @@ const initialNodes = [
       k3: 0,
       k4: 0,
     },
-    position: { x: 760, y: 0 },
+    position: { x: 860, y: 0 },
   },
   {
     id: "horizontal-5",
+    selected: false,
     sourcePosition: "right",
     type: "convolutionMatrix",
     data: {
@@ -115,7 +122,7 @@ const initialNodes = [
         [0, 0, 1],
       ],
     },
-    position: { x: 980, y: 0 },
+    position: { x: 1080, y: 0 },
   },
 ];
 
@@ -123,13 +130,17 @@ const initialEdges = [
   {
     id: "horizontal-e1-2",
     source: "horizontal-1",
+    sourceHandle: 'result',
     target: "horizontal-2",
+    targetHandle: 'in1',
     type: "custom",
   },
   {
     id: "horizontal-e2-3",
     source: "horizontal-2",
+    sourceHandle: 'result',
     target: "horizontal-3",
+    targetHandle: 'in1',
     type: "custom",
   },
 ];

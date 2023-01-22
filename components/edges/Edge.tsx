@@ -1,6 +1,6 @@
 import React from "react";
 import { getBezierPath } from "reactflow";
-import { theme } from "../tailwind.config";
+import { theme } from "../../tailwind.config";
 
 export default function CustomEdge({
   id,
@@ -31,7 +31,7 @@ export default function CustomEdge({
         d={edgePath}
         markerEnd={markerEnd}
         strokeWidth="4px"
-        stroke={theme.extend.colors.quaternary}
+        className="stroke-quinary dark:stroke-inverseSecondary"
         fill="none"
         strokeLinecap="round"
       />
@@ -41,7 +41,7 @@ export default function CustomEdge({
         d={edgePath}
         markerEnd={markerEnd}
         strokeWidth="4px"
-        stroke={theme.extend.colors.primary}
+        className="stroke-primary dark:stroke-inversePrimary"
         fill="none"
         strokeDasharray="6 6"
       />

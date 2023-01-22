@@ -1,72 +1,53 @@
 import React, { memo } from "react";
-import { Position, useUpdateNodeInternals } from "reactflow";
-import {
-  StyledHandle,
-  NodeContainer,
-  NodeControlTray,
-  NodeHeader,
-  NodeTextInput,
-  PreviewFooter,
-  NodeRule,
-  NodeNumberInput,
-  NodeSelect,
-  SelectItem,
-  HandlePositioner,
-  NodeMatrixInput,
-} from "./NodeParts";
-import compositeModes from "../../lib/blendModes";
-import useStore, { NamedKey, RFState } from "../../store/store";
+import { Position } from "reactflow";
+import useStore, { State } from "../../stores/store";
+import { Container } from "../nodeParts/Container";
+import { ControlGroup } from "../nodeParts/ControlGroup";
+import { Footer } from "../nodeParts/Footer";
+import { Handle } from "../nodeParts/Handle";
+import { HandlePositioner } from "../nodeParts/HandlePositioner";
+import { Header } from "../nodeParts/Header";
+import { MatrixInput } from "../nodeParts/MatrixInput";
+import { ConvolutionMatrixNodeState } from "../../stores/convolutionMatrixNode";
 
-const selector = (state: RFState) => state.convolutionMatrixNode;
+const selector = (state: State) => state.convolutionMatrixNode;
 
-type ConvolutionMatrixProps = {
-  id: string;
-  data: {
-    kernelMatrix: number[][]
-  };
-};
+type ConvolutionMatrixProps = ConvolutionMatrixNodeState & {}
 
-function ConvolutionMatrixNode({ id, data }: ConvolutionMatrixProps) {
-  const {
-    updateKernelMatrix
-  } = useStore(selector);
+const mdn =
+  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feConvolutionMatrix";
+
+function ConvolutionMatrixNode({ id, data, selected }: ConvolutionMatrixProps) {
+  const { updateKernelMatrix } = useStore(selector);
   return (
-    <NodeContainer className="w-[230px] min-h-[104px]">
-      <NodeHeader icon="􀦸" title="Convolution Matrix" />
-      <NodeControlTray>
-      <NodeMatrixInput
-            rows={3}
-            cols={3}
-            label="Kernel Matrix"
-            values={data.kernelMatrix}
-            onChange={(value: number, i, j) => {
-              const newValues = data.kernelMatrix.map((row: number[]) => [...row]);
-              newValues[i][j] = value;
-              updateKernelMatrix(id, newValues);
-            }}
-          />
-      </NodeControlTray>
+    <Container className="w-[230px] min-h-[104px]" selected={selected}>
+      <Header icon="􀦸" title="Convolution Matrix" mdn={mdn} />
+      <ControlGroup>
+        <MatrixInput
+          rows={3}
+          cols={3}
+          label="Kernel Matrix"
+          values={data.kernelMatrix}
+          onChange={(value: number, i, j) => {
+            const newValues = data.kernelMatrix.map((row: number[]) => [
+              ...row,
+            ]);
+            newValues[i][j] = value;
+            updateKernelMatrix(id, newValues);
+          }}
+        />
+      </ControlGroup>
 
-      <PreviewFooter />
+      <Footer />
 
       <HandlePositioner left>
-        <StyledHandle
-          type="target"
-          id="in1"
-          title="In"
-          position={Position.Left}
-        />
+        <Handle type="target" id="in1" title="In" position={Position.Left} />
       </HandlePositioner>
 
       <HandlePositioner right>
-        <StyledHandle
-          type="source"
-          id="out"
-          title="Out"
-          position={Position.Right}
-        />
+        <Handle type="source" id="result" title="Result" position={Position.Right} />
       </HandlePositioner>
-    </NodeContainer>
+    </Container>
   );
 }
 

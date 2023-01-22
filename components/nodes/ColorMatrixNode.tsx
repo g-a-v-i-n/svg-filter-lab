@@ -1,61 +1,47 @@
 import React, { memo } from "react";
-import { Position, useUpdateNodeInternals } from "reactflow";
-import {
-  StyledHandle,
-  NodeContainer,
-  NodeControlTray,
-  NodeHeader,
-  NodeTextInput,
-  PreviewFooter,
-  NodeRule,
-  NodeNumberInput,
-  NodeSelect,
-  SelectItem,
-  HandlePositioner,
-  NodeTextArea,
-  NodeMatrixInput,
-} from "./NodeParts";
-import blendModes from "../../lib/blendModes";
-import useStore, { NamedKey, NodeData, RFState } from "../../store/store";
+import { Position } from "reactflow";
+import useStore, { NamedKey, NodeData, State } from "../../stores/store";
+import { Container } from "../nodeParts/Container";
+import { ControlGroup } from "../nodeParts/ControlGroup";
+import { Divider } from "../nodeParts/Divider";
+import { Footer } from "../nodeParts/Footer";
+import { Handle } from "../nodeParts/Handle";
+import { HandlePositioner } from "../nodeParts/HandlePositioner";
+import { Header } from "../nodeParts/Header";
+import { MatrixInput } from "../nodeParts/MatrixInput";
+import { Select, SelectItem } from "../nodeParts/Select";
+import { colorMatrixTypes, BlendNodeState } from "../../stores/colorMatrixNode";
 
-const selector = (state: RFState) => state.colorMatrixNode;
+const selector = (state: State) => state.colorMatrixNode;
 
-const feColorMatrixTypes = [
-  { label: "Matrix", key: "matrix", category: "custom" },
-  { label: "Saturate", key: "saturate", category: "preset" },
-  { label: "Hue Rotate", key: "hueRotate", category: "preset" },
-  { label: "Luminance to Alpha", key: "luminanceToAlpha", category: "preset" },
-];
+type ColorMatrixNodeProps = BlendNodeState & {}
 
-export type ColorMatrixValues = number[][];
+const mdn =
+  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix";
 
-export type ColorMatrixNodeProps = {
-  id: string;
-  data: {
-    type: NamedKey;
-    values: ColorMatrixValues;
-  };
-};
-
-function ColorMatrixNode({ id, data }: ColorMatrixNodeProps) {
+function ColorMatrixNode({ id, data, selected }: ColorMatrixNodeProps) {
   const { updateValues, updateType } = useStore(selector);
   return (
-    <NodeContainer className="w-[270px]">
-      <NodeHeader icon="􀮟" title="Color Matrix" />
-      <NodeControlTray>
-        <NodeSelect
+    <Container className="w-[270px]" selected={selected}>
+      <Header icon="􀮟" title="Color Matrix" mdn={mdn} />
+      <ControlGroup>
+        <Select
+          first
           value={data.type.label}
           label="Type"
           onValueChange={(val) => updateType(id, val)}
         >
-          {feColorMatrixTypes.map((type) => (
-            <SelectItem key={id + "-" + type.key} value={type}>
-              {type.label}
-            </SelectItem>
+          {colorMatrixTypes.map((type, i) => (
+            <>
+              <SelectItem key={id + "-" + type.key} value={type}>
+                {type.label}
+              </SelectItem>
+            </>
           ))}
-        </NodeSelect>
-        <NodeRule />
-        <NodeMatrixInput
+        </Select>
+        <Divider />
+        <MatrixInput
+          last
           disabled={data.type.key !== "matrix"}
           label="Values"
           rows={4}
@@ -67,28 +53,18 @@ function ColorMatrixNode({ id, data }: ColorMatrixNodeProps) {
           }}
           values={data.values}
         />
-      </NodeControlTray>
+      </ControlGroup>
 
-      <PreviewFooter />
+      <Footer />
 
       <HandlePositioner left>
-        <StyledHandle
-          type="target"
-          id="in"
-          title="In"
-          position={Position.Left}
-        />
+        <Handle type="target" id="in" title="In" position={Position.Left} />
       </HandlePositioner>
 
       <HandlePositioner right>
-        <StyledHandle
-          type="source"
-          id="out"
-          title="Out"
-          position={Position.Right}
-        />
+        <Handle type="source" id="result" title="Result" position={Position.Right} />
       </HandlePositioner>
-    </NodeContainer>
+    </Container>
   );
 }
 

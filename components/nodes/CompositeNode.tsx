@@ -1,57 +1,34 @@
 import React, { memo } from "react";
-import { Position, useUpdateNodeInternals } from "reactflow";
-import {
-  StyledHandle,
-  NodeContainer,
-  NodeControlTray,
-  NodeHeader,
-  NodeTextInput,
-  PreviewFooter,
-  NodeRule,
-  NodeNumberInput,
-  NodeSelect,
-  SelectItem,
-  HandlePositioner,
-} from "./NodeParts";
-import compositeModes from "../../lib/blendModes";
-import useStore, { NamedKey, RFState } from "../../store/store";
+import { Position } from "reactflow";
+import useStore, { NamedKey, State } from "../../stores/store";
+import { Container } from "../nodeParts/Container";
+import { ControlGroup } from "../nodeParts/ControlGroup";
+import { Divider } from "../nodeParts/Divider";
+import { Footer } from "../nodeParts/Footer";
+import { Handle } from "../nodeParts/Handle";
+import { HandlePositioner } from "../nodeParts/HandlePositioner";
+import { Header } from "../nodeParts/Header";
+import { NumberInput } from "../nodeParts/NumberInput";
+import { Select, SelectItem } from "../nodeParts/Select";
+import { compositeOperators, CompositeNodeState } from "../../stores/compositeNode";
 
-const selector = (state: RFState) => state.compositeNode;
+const selector = (state: State) => state.compositeNode;
 
-type CompositeNodeProps = {
-  id: string;
-  data: {
-    operator: NamedKey;
-    k1: number;
-    k2: number;
-    k3: number;
-    k4: number;
-  };
-};
+type CompositeNodeProps = CompositeNodeState & {};
 
-const compositeOperators = [
-  { label: "Over", key: "over", category: "preset" },
-  { label: "In", key: "in", category: "preset" },
-  { label: "Out", key: "out", category: "preset" },
-  { label: "Atop", key: "atop", category: "preset" },
-  { label: "XOR", key: "xor", category: "preset" },
-  { label: "Arithmetic", key: "arithmetic", category: "preset" },
-  { label: "Lighter", key: "lighter", category: "preset" },
-];
+const mdn =
+  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite";
 
-function CompositeNode({ id, data }: CompositeNodeProps) {
-  const {
-    updateOperator,
-    updateK1,
-    updateK2,
-    updateK3,
-    updateK4,
-  } = useStore(selector);
+function CompositeNode({ id, data, selected }: CompositeNodeProps) {
+  const { updateOperator, updateK1, updateK2, updateK3, updateK4 } =
+    useStore(selector);
   return (
-    <NodeContainer className="w-[210px] min-h-[104px]">
-      <NodeHeader icon="􀯮" title="Composite" />
-      <NodeControlTray>
-        <NodeSelect
+    <Container className="w-[210px] min-h-[104px]" selected={selected}>
+      <Header icon="􀯮" title="Composite" mdn={mdn} />
+      <ControlGroup>
+        <Select
+          first
+          last={data.operator.key !== "arithmetic"}
           value={data.operator.label}
           label="Operator"
           onValueChange={(val: NamedKey) => updateOperator(id, val)}
@@ -61,36 +38,37 @@ function CompositeNode({ id, data }: CompositeNodeProps) {
               {operator.label}
             </SelectItem>
           ))}
-        </NodeSelect>
+        </Select>
 
         {data.operator.key === "arithmetic" && (
           <>
-            <NodeRule />
-            <NodeNumberInput
+            <Divider />
+            <NumberInput
               label="K1"
               value={data.k1}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateK1(id, e.target.value)
               }
             />
-            <NodeRule />
-            <NodeNumberInput
+            <Divider />
+            <NumberInput
               label="K2"
               value={data.k2}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateK2(id, e.target.value)
               }
             />
-            <NodeRule />
-            <NodeNumberInput
+            <Divider />
+            <NumberInput
               label="K3"
               value={data.k3}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateK3(id, e.target.value)
               }
             />
-            <NodeRule />
-            <NodeNumberInput
+            <Divider />
+            <NumberInput
+              last
               label="K4"
               value={data.k4}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -99,34 +77,19 @@ function CompositeNode({ id, data }: CompositeNodeProps) {
             />
           </>
         )}
-      </NodeControlTray>
+      </ControlGroup>
 
-      <PreviewFooter />
+      <Footer />
 
       <HandlePositioner left>
-        <StyledHandle
-          type="target"
-          id="in1"
-          title="In 1"
-          position={Position.Left}
-        />
-        <StyledHandle
-          type="target"
-          id="in2"
-          title="In 2"
-          position={Position.Left}
-        />
+        <Handle type="target" id="in1" title="In 1" position={Position.Left} />
+        <Handle type="target" id="in2" title="In 2" position={Position.Left} />
       </HandlePositioner>
 
       <HandlePositioner right>
-        <StyledHandle
-          type="source"
-          id="out"
-          title="Out"
-          position={Position.Right}
-        />
+        <Handle type="source" id="result" title="Result" position={Position.Right} />
       </HandlePositioner>
-    </NodeContainer>
+    </Container>
   );
 }
 

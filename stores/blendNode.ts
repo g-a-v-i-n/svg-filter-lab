@@ -1,4 +1,7 @@
-export default [
+import { Node } from "reactflow";
+import { State } from "./store";
+
+export const blendModes = [
   {
     key: "normal",
     label: "Normal",
@@ -81,8 +84,27 @@ export default [
   },
 ];
 
-export type BlendMode = {
-  key: string;
-  label: string;
-  category: string;
+export type BlendModes = typeof blendModes;
+
+export type BlendMode = BlendModes[number];
+
+export type BlendNodeData = {
+  mode: BlendMode;
 };
+
+export type BlendNodeState = Node<BlendNodeData>;
+
+export type BlendNodeSlice = {
+  updateMode: (nodeId: string, type: BlendMode) => void;
+};
+
+export const createBlendNodeSlice = (set) => ({
+  blendNode: {
+    updateMode: (nodeId: string, newMode: BlendMode) => {
+      set((state: State) => {
+        const index = state.nodes.findIndex((node) => node.id === nodeId);
+        state.nodes[index].data.mode = newMode;
+      });
+    },
+  },
+});

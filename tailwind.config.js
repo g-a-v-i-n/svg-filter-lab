@@ -8,22 +8,38 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        surface: "#FBFBFC",
-        elevatedSurface: "#F0F2F5",
+        surface: "hsla(180, 00%, 98%, 100%)",
+        elevatedSurface: "hsla(180, 00%, 100%, 100%)",
+        inverseSurface: "hsla(230, 00%, 7%, 100%)",
+        inverseElevatedSurface: "hsla(180, 00%, 10%, 100%)",
 
-        stroke: "#EEEEF7",
+        stroke: "hsla(230, 00%, 0%, 7%)",
+        inverseStroke: "hsla(180, 00%, 100%, 10%)",
 
-        primary: "#2B2F43",
-        secondary: "#6B7384",
-        tertiary: "#A3ADC2",
-        quaternary: "#DEE2E8",
+        primary: "hsla(230, 00%, 0%, 85%)",
+        inversePrimary: "hsla(180, 00%, 100%, 85%)",
 
-        theme: "#6187FE",
+        secondary: "hsla(230, 00%, 0%, 70%)",
+        inverseSecondary: "hsla(180, 00%, 100%, 70%)",
+
+        tertiary: "hsla(230, 00%, 0%, 60%)",
+        inverseTertiary: "hsla(180, 00%, 100%, 60%)",
+
+        quaternary: "hsla(230, 00%, 0%, 40%)",
+        inverseQuaternary: "hsla(180, 00%, 100%, 40%)",
+
+        quinary: "hsla(230, 00%, 0%, 10%)",
+        inverseQuinary: "hsla(180, 00%, 100%, 10%)",
+
+        theme: "hsla(210, 100%, 50%, 100%)",
+        themeInverse: "hsla(206, 100%, 60%, 100%)",
+        themeSurface: "hsla(206, 100%, 95%, 100%)",
+
         warn: "rgb(255, 165, 0)",
 
         red: "#FF5800",
         green: "#00C843",
-        blue: "#008FFF",
+        blue: "hsla(206, 100%, 50%, 1)",
       },
       fontFamily: {
         sans: ["system-ui", "BlinkMacSystemFont", "Inter", "sans-serif"],
@@ -36,9 +52,8 @@ module.exports = {
         element: 8,
       },
       boxShadow: {
-        icon: "0px 4px 15px #6187FE40", //rgba(97, 135, 254, 0.3)
-        field: "0px 2px 8px #2B2F4310",
-        high: "0px 4px 12px rgba(43, 47, 67, 0.2);",
+        field: "0px 2px 8px hsla(180, 00%, 0%, 6%)",
+        high: "0px 4px 12px hsla(180, 00%, 0%, 6%)",
       },
       text: {
         xl: "1.5rem",

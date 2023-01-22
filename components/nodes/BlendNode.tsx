@@ -1,75 +1,60 @@
 import React, { memo } from "react";
-import { Position, useUpdateNodeInternals } from "reactflow";
-import {
-  StyledHandle,
-  NodeContainer,
-  NodeControlTray,
-  NodeHeader,
-  NodeTextInput,
-  PreviewFooter,
-  NodeRule,
-  NodeNumberInput,
-  NodeSelect,
-  SelectItem,
-  HandlePositioner,
-} from "./NodeParts";
-import blendModes from "../../lib/blendModes";
-import useStore, { NamedKey, RFState } from "../../store/store";
+import { Position } from "reactflow";
+import useStore, { NamedKey, State } from "../../stores/store";
+import { Container } from "../nodeParts/Container";
+import { ControlGroup } from "../nodeParts/ControlGroup";
+import { Footer } from "../nodeParts/Footer";
+import { Handle } from "../nodeParts/Handle";
+import { HandlePositioner } from "../nodeParts/HandlePositioner";
+import { Header } from "../nodeParts/Header";
+import { Select, SelectItem, Separator } from "../nodeParts/Select";
+import { blendModes, BlendNodeState, BlendMode } from "../../stores/blendNode";
 
-const selector = (state: RFState) => state.blendNode.updateMode;
+const selector = (state: State) => state.blendNode;
 
-type BlendNodeProps = {
-  id: string;
-  data: {
-    mode: NamedKey;
-  };
-};
+type BlendNodeProps = BlendNodeState & {};
 
-function BlendNode({ id, data }: BlendNodeProps) {
-  const updateBlendNode = useStore(selector);
+const mdn = "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend";
+
+function BlendNode({ id, data, selected }: BlendNodeProps) {
+  const { updateMode } = useStore(selector);
   return (
-    <NodeContainer className="w-[210px] h-[104px]">
-      <NodeHeader icon="􀟗" title="Blend" />
-      <NodeControlTray>
-        <NodeSelect
+    <Container className="w-[210px] h-[104px]" selected={selected}>
+      <Header icon="􀟗" title="Blend" mdn={mdn} />
+      <ControlGroup>
+        <Select
+          first
+          last
           value={data.mode.label}
           label="Mode"
-          onValueChange={(val: NamedKey) => updateBlendNode(id, val)}
+          className="rounded-lg"
+          onValueChange={(val: BlendMode) => updateMode(id, val)}
         >
-          {blendModes.map((mode) => (
-            <SelectItem key={id + "-" + mode.key} value={mode}>
-              {mode.label}
-            </SelectItem>
-          ))}
-        </NodeSelect>
-      </NodeControlTray>
+          {blendModes.map((mode, i) => (
+            <>
+              {mode.category !== blendModes[i - 1]?.category && i !== 0 && (
+                <Separator />
+              )}
 
-      <PreviewFooter />
+              <SelectItem key={id + "-" + mode.key} value={mode}>
+                {mode.label}
+              </SelectItem>
+            </>
+          ))}
+        </Select>
+      </ControlGroup>
+
+      <Footer />
 
       <HandlePositioner left>
-        <StyledHandle
-          type="target"
-          id="in1"
-          title="In 1"
-          position={Position.Left}
-        />
-        <StyledHandle
-          type="target"
-          id="in2"
-          title="In 2"
-          position={Position.Left}
-        />
+        <Handle type="target" id="in1" title="In 1" position={Position.Left} />
+        <Handle type="target" id="in2" title="In 2" position={Position.Left} />
       </HandlePositioner>
 
       <HandlePositioner right>
-        <StyledHandle
-          type="source"
-          id="out"
-          title="Out"
-          position={Position.Right}
-        />
+        <Handle type="source" id="out" title="Out" position={Position.Right} />
       </HandlePositioner>
-    </NodeContainer>
+    </Container>
   );
 }
 
