@@ -8,16 +8,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        surface: "hsla(180, 00%, 98%, 100%)",
-        elevatedSurface: "hsla(180, 00%, 100%, 100%)",
-        inverseSurface: "hsla(230, 00%, 7%, 100%)",
-        inverseElevatedSurface: "hsla(180, 00%, 10%, 100%)",
+        surface: "hsla(180, 00%, 0%, 2%)",
+        inverseSurface: "hsla(230, 00%, 100%, 4%)",
+
+        elevatedSurface: "hsla(180, 00%, 0%, 6%)",
+        inverseElevatedSurface: "hsla(180, 00%, 100%, 6%)",
 
         stroke: "hsla(230, 00%, 0%, 7%)",
         inverseStroke: "hsla(180, 00%, 100%, 10%)",
 
-        primary: "hsla(230, 00%, 0%, 85%)",
-        inversePrimary: "hsla(180, 00%, 100%, 85%)",
+        primary: "hsla(230, 00%, 0%, 100%)",
+        inversePrimary: "hsla(180, 00%, 100%, 100%)",
 
         secondary: "hsla(230, 00%, 0%, 70%)",
         inverseSecondary: "hsla(180, 00%, 100%, 70%)",
@@ -32,7 +33,7 @@ module.exports = {
         inverseQuinary: "hsla(180, 00%, 100%, 10%)",
 
         theme: "hsla(210, 100%, 50%, 100%)",
-        themeInverse: "hsla(206, 100%, 60%, 100%)",
+        themeInverse: "hsla(215, 100%, 65%, 100%)",
         themeSurface: "hsla(206, 100%, 95%, 100%)",
 
         warn: "rgb(255, 165, 0)",
@@ -42,9 +43,8 @@ module.exports = {
         blue: "hsla(206, 100%, 50%, 1)",
       },
       fontFamily: {
-        sans: ["system-ui", "BlinkMacSystemFont", "Inter", "sans-serif"],
+        sans: ["system-ui", "SF Pro Text", "BlinkMacSystemFont", "Inter", "sans-serif"],
         mono: ["system-mono", "SF Mono", "Roboto Mono", "monospace"],
-        icon: ["system-ui", "SF Pro Rounded", "sans-serif"],
       },
       borderRadius: {
         // for radii-20px, padding-12px pattern

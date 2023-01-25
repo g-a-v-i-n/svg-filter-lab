@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { State } from "./store";
+import { updateNodeProp } from "../lib/updateNodeProp";
 
 export const componentTransferTypes = [
   { label: "Identity", key: "identity", category: "preset" },
@@ -45,216 +45,77 @@ export type ComponentTransferNodeSlice = {
 export const createComponentTransferNodeSlice = (set) => ({
   componentTransferNode: {
     red: {
-      updateIsOn: (nodeId: string, newIsOn: boolean) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.isOn = newIsOn;
-        });
-      },
-      updateType: (nodeId: string, newType: ComponentTransferType) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.type = newType;
-        });
-      },
-      // Type = table or discrete
-      updateTableValues: (nodeId: string, newTableValues: number[][]) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.tableValues = newTableValues;
-        });
-      },
-      // Type = linear
-      updateSlope: (nodeId: string, newSlope: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.slope = newSlope;
-        });
-      },
-      updateIntercept: (nodeId: string, newIntercept: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.intercept = newIntercept;
-        });
-      },
-      // Type = Gamma
-      updateAmplitude: (nodeId: string, newAmplitude: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.amplitude = newAmplitude;
-        });
-      },
-      updateExponent: (nodeId: string, newExponent: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.exponent = newExponent;
-        });
-      },
-      updateOffset: (nodeId: string, newOffset: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.red.offset = newOffset;
-        });
-      },
+      updateIsOn: (nodeId: string, newIsOn: Boolean) => updateNodeProp(set, nodeId, "red.isOn", newIsOn),
+      updateType: (nodeId: string, newType: ComponentTransferType) => updateNodeProp(set, nodeId, "red.type", newType),
+      updateTableValues: (nodeId: string, newTableValues: number[][]) => updateNodeProp(set, nodeId, "red.tableValues", newTableValues),
+      updateSlope: (nodeId: string, newSlope: number) => updateNodeProp(set, nodeId, "red.slope", newSlope),
+      updateIntercept: (nodeId: string, newIntercept: number) => updateNodeProp(set, nodeId, "red.intercept", newIntercept),
+      updateAmplitude: (nodeId: string, newAmplitude: number) => updateNodeProp(set, nodeId, "red.amplitude", newAmplitude),
+      updateExponent: (nodeId: string, newExponent: number) => updateNodeProp(set, nodeId, "red.exponent", newExponent),
+      updateOffset: (nodeId: string, newOffset: number) => updateNodeProp(set, nodeId, "red.offset", newOffset),
     },
     green: {
-      updateIsOn: (nodeId: string, newIsOn: boolean) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.isOn = newIsOn;
-        });
-      },
-      updateType: (nodeId: string, newType: ComponentTransferType) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.type = newType;
-        });
-      },
-      // Type = table or discrete
-      updateTableValues: (nodeId: string, newTableValues: number[][]) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.tableValues = newTableValues;
-        });
-      },
-      // Type = linear
-      updateSlope: (nodeId: string, newSlope: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.slope = newSlope;
-        });
-      },
-      updateIntercept: (nodeId: string, newIntercept: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.intercept = newIntercept;
-        });
-      },
-      // Type = Gamma
-      updateAmplitude: (nodeId: string, newAmplitude: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.amplitude = newAmplitude;
-        });
-      },
-      updateExponent: (nodeId: string, newExponent: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.exponent = newExponent;
-        });
-      },
-      updateOffset: (nodeId: string, newOffset: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.green.offset = newOffset;
-        });
-      },
+      updateIsOn: (nodeId: string, newIsOn: Boolean) => updateNodeProp(set, nodeId, "green.isOn", newIsOn),
+      updateType: (nodeId: string, newType: ComponentTransferType) => updateNodeProp(set, nodeId, "green.type", newType),
+      updateTableValues: (nodeId: string, newTableValues: number[][]) => updateNodeProp(set, nodeId, "green.tableValues", newTableValues),
+      updateSlope: (nodeId: string, newSlope: number) => updateNodeProp(set, nodeId, "green.slope", newSlope),
+      updateIntercept: (nodeId: string, newIntercept: number) => updateNodeProp(set, nodeId, "green.intercept", newIntercept),
+      updateAmplitude: (nodeId: string, newAmplitude: number) => updateNodeProp(set, nodeId, "green.amplitude", newAmplitude),
+      updateExponent: (nodeId: string, newExponent: number) => updateNodeProp(set, nodeId, "green.exponent", newExponent),
+      updateOffset: (nodeId: string, newOffset: number) => updateNodeProp(set, nodeId, "green.offset", newOffset),
     },
     blue: {
-      updateIsOn: (nodeId: string, newIsOn: boolean) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.isOn = newIsOn;
-        });
-      },
-      updateType: (nodeId: string, newType: ComponentTransferType) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.type = newType;
-        });
-      },
-      // Type = table or discrete
-      updateTableValues: (nodeId: string, newTableValues: number[][]) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.tableValues = newTableValues;
-        });
-      },
-      // Type = linear
-      updateSlope: (nodeId: string, newSlope: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.slope = newSlope;
-        });
-      },
-      updateIntercept: (nodeId: string, newIntercept: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.intercept = newIntercept;
-        });
-      },
-      // Type = Gamma
-      updateAmplitude: (nodeId: string, newAmplitude: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.amplitude = newAmplitude;
-        });
-      },
-      updateExponent: (nodeId: string, newExponent: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.exponent = newExponent;
-        });
-      },
-      updateOffset: (nodeId: string, newOffset: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.blue.offset = newOffset;
-        });
-      },
+      updateIsOn: (nodeId: string, newIsOn: Boolean) => updateNodeProp(set, nodeId, "blue.isOn", newIsOn),
+      updateType: (nodeId: string, newType: ComponentTransferType) => updateNodeProp(set, nodeId, "blue.type", newType),
+      updateTableValues: (nodeId: string, newTableValues: number[][]) => updateNodeProp(set, nodeId, "blue.tableValues", newTableValues),
+      updateSlope: (nodeId: string, newSlope: number) => updateNodeProp(set, nodeId, "blue.slope", newSlope),
+      updateIntercept: (nodeId: string, newIntercept: number) => updateNodeProp(set, nodeId, "blue.intercept", newIntercept),
+      updateAmplitude: (nodeId: string, newAmplitude: number) => updateNodeProp(set, nodeId, "blue.amplitude", newAmplitude),
+      updateExponent: (nodeId: string, newExponent: number) => updateNodeProp(set, nodeId, "blue.exponent", newExponent),
+      updateOffset: (nodeId: string, newOffset: number) => updateNodeProp(set, nodeId, "blue.offset", newOffset),
     },
     alpha: {
-      updateIsOn: (nodeId: string, newIsOn: boolean) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.isOn = newIsOn;
-        });
-      },
-      updateType: (nodeId: string, newType: ComponentTransferType) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.type = newType;
-        });
-      },
-      // Type = table or discrete
-      updateTableValues: (nodeId: string, newTableValues: number[][]) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.tableValues = newTableValues;
-        });
-      },
-      // Type = linear
-      updateSlope: (nodeId: string, newSlope: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.slope = newSlope;
-        });
-      },
-      updateIntercept: (nodeId: string, newIntercept: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.intercept = newIntercept;
-        });
-      },
-      // Type = Gamma
-      updateAmplitude: (nodeId: string, newAmplitude: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.amplitude = newAmplitude;
-        });
-      },
-      updateExponent: (nodeId: string, newExponent: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.exponent = newExponent;
-        });
-      },
-      updateOffset: (nodeId: string, newOffset: number) => {
-        set((state: State) => {
-          const index = state.nodes.findIndex((node) => node.id === nodeId);
-          state.nodes[index].data.alpha.offset = newOffset;
-        });
-      },
+      updateIsOn: (nodeId: string, newIsOn: Boolean) => updateNodeProp(set, nodeId, "alpha.isOn", newIsOn),
+      updateType: (nodeId: string, newType: ComponentTransferType) => updateNodeProp(set, nodeId, "alpha.type", newType),
+      updateTableValues: (nodeId: string, newTableValues: number[][]) => updateNodeProp(set, nodeId, "alpha.tableValues", newTableValues),
+      updateSlope: (nodeId: string, newSlope: number) => updateNodeProp(set, nodeId, "alpha.slope", newSlope),
+      updateIntercept: (nodeId: string, newIntercept: number) => updateNodeProp(set, nodeId, "alpha.intercept", newIntercept),
+      updateAmplitude: (nodeId: string, newAmplitude: number) => updateNodeProp(set, nodeId, "alpha.amplitude", newAmplitude),
+      updateExponent: (nodeId: string, newExponent: number) => updateNodeProp(set, nodeId, "alpha.exponent", newExponent),
+      updateOffset: (nodeId: string, newOffset: number) => updateNodeProp(set, nodeId, "alpha.offset", newOffset),
     },
-  },
+  }
 });
+
+export const defaultComponentTransferNodeData: ComponentTransferNodeData = {
+  red: {
+    isOn: true,
+    type: componentTransferTypes[0],
+    amplitude: 1,
+    exponent: 1,
+    offset: 0,
+    slope: 1,
+    intercept: 0,
+    tableValues: [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+      ],
+  },
+  green: {
+    isOn: true,
+    type: componentTransferTypes[0],
+    amplitude: 1,
+    exponent: 1,
+    offset: 0,
+    slope: 1,
+    intercept: 0,
+    tableValues: [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+    ]
+  },
+}

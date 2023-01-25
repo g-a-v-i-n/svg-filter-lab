@@ -1,5 +1,5 @@
 import React from "react";
-import { getBezierPath } from "reactflow";
+import { getBezierPath, EdgeLabelRenderer } from "reactflow";
 import { theme } from "../../tailwind.config";
 
 export default function CustomEdge({
@@ -13,8 +13,9 @@ export default function CustomEdge({
   style = {},
   data,
   markerEnd,
+  removeEdge,
 }) {
-  const [edgePath] = getBezierPath({
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -31,7 +32,7 @@ export default function CustomEdge({
         d={edgePath}
         markerEnd={markerEnd}
         strokeWidth="4px"
-        className="stroke-quinary dark:stroke-inverseSecondary"
+        className="stroke-quinary dark:stroke-inverseTertiary"
         fill="none"
         strokeLinecap="round"
       />
@@ -45,6 +46,19 @@ export default function CustomEdge({
         fill="none"
         strokeDasharray="6 6"
       />
+
+        <EdgeLabelRenderer>
+        <button
+          style={{
+            position: 'absolute',
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+          }}
+          className="transition-none nodrag nopan bg-white dark:bg-[#080808] rounded-full w-6 h-6 flex items-center justify-center"
+          onClick={() => removeEdge(id)}>
+          <span className="cs-text font-extrabold text-primary dark:text-inversePrimary hover:text-primary dark:hover:text-inversePrimary ">􀁡</span>
+        </button>
+
+      </EdgeLabelRenderer>
     </>
   );
 }

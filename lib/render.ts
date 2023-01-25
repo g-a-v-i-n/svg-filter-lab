@@ -15,7 +15,7 @@ export function render(nodes, edges) {
     return node
   })
 
-  const tags = nodesInTopoOrder.map(node => {
+  const filterElementStrs = nodesInTopoOrder.map(node => {
     // Target edges will either === 1 or === 2. Some SVG filter tags have a single 'in' attribute, others have 2.
     // The ones with 2 targets (or inputs) are the following:
     // feBlend
@@ -30,16 +30,15 @@ export function render(nodes, edges) {
 
     if (typeof nodeRenderer === 'function') {
       const elementStr = nodeRenderer(node, targetEdges, sourceEdge)
-
-      console.log('render(): elementStr', elementStr)
+      return elementStr
     }
-
+    return ''
   })
 
-  // console.log(
-  //   'render(): nodes', nodes,
-  //   'render(): edges', edges,
-  // )
-
-  return ''
+  const filterStr = `
+    <filter id="filter">
+      ${filterElementStrs.join('\n')}
+    </filter>
+  `
+  return filterStr
   }

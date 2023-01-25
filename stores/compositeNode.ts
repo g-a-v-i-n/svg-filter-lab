@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { State } from "./store";
+import { updateNodeProp } from "../lib/updateNodeProp";
 
 export const compositeOperators = [
   { label: "Over", key: "over", category: "preset" },
@@ -35,35 +35,10 @@ export type CompositeNodeSlice = {
 
 export const createCompositeNodeSlice = (set) => ({
   compositeNode: {
-    updateOperator: (nodeId: string, newOperator: CompositeOperator) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.operator = newOperator;
-      });
-    },
-    updateK1: (nodeId: string, newK1: number) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.k1 = newK1;
-      });
-    },
-    updateK2: (nodeId: string, newK2: number) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.k2 = newK2;
-      });
-    },
-    updateK3: (nodeId: string, newK3: number) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.k3 = newK3;
-      });
-    },
-    updateK4: (nodeId: string, newK4: number) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.k4 = newK4;
-      });
-    },
+    updateOperator: (nodeId: string, newOperator: CompositeOperator) => updateNodeProp(set, nodeId, "operator", newOperator),
+    updateK1: (nodeId: string, newK1: number) => updateNodeProp(set, nodeId, "k1", newK1),
+    updateK2: (nodeId: string, newK2: number) => updateNodeProp(set, nodeId, "k2", newK2),
+    updateK3: (nodeId: string, newK3: number) => updateNodeProp(set, nodeId, "k3", newK3),
+    updateK4: (nodeId: string, newK4: number) => updateNodeProp(set, nodeId, "k4", newK4),
   },
 });

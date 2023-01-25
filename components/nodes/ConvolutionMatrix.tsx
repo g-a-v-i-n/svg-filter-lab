@@ -19,9 +19,11 @@ const mdn =
 
 function ConvolutionMatrixNode({ id, data, selected }: ConvolutionMatrixProps) {
   const { updateKernelMatrix } = useStore(selector);
+  const { deleteNode } = useStore((state) => state);
+
   return (
-    <Container className="w-[230px] min-h-[104px]" selected={selected}>
-      <Header icon="􀦸" title="Convolution Matrix" mdn={mdn} />
+    <Container className="w-[250px] min-h-[104px]" selected={selected}>
+      <Header icon="􀦸" title="Convolution Matrix" mdn={mdn} deleteNode={() => deleteNode(id)}/>
       <ControlGroup>
         <MatrixInput
           rows={3}

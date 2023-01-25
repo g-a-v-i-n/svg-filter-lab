@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { State } from "./store";
+import { updateNodeProp } from "../lib/updateNodeProp";
 
 export type ConvolutionMatrixNodeData = {
   kernelMatrix: number[][];
@@ -13,11 +13,6 @@ export type ConvolutionMatrixNodeSlice = {
 
 export const createConvolutionMatrixNodeSlice = (set) => ({
   convolutionMatrixNode: {
-    updateKernelMatrix: (nodeId: string, newKernelMatrix: number[][]) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.kernelMatrix = newKernelMatrix;
-      });
-    },
+    updateKernelMatrix: (nodeId: string, newKernalMatrix: number[][]) => updateNodeProp(set, nodeId, "values", newKernalMatrix),
   },
 });

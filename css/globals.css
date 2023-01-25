@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Sans */
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Regular.otf") format("opentype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Semibold.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Medium.otf") format("opentype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Bold.otf") format("opentype");
+  font-weight: 700;
+}
+
+
+/* Monospace */
+@font-face {
+  font-family: "SF Mono";
+  src: local("SF Mono"), url("fonts/SF-Mono-Regular.otf") format("opentype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "SF Mono";
+  src: local("SF Mono"), url("fonts/SF-Mono-Semibold.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "SF Mono";
+  src: local("SF Mono"), url("fonts/SF-Mono-Medium.otf") format("opentype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "SF Mono";
+  src: local("SF Mono"), url("fonts/SF-Mono-Bold.otf") format("opentype");
+  font-weight: 700;
+}
+
+
 /* Large - 16px */
 .cs-text-lg {
   font-size: 16px;
@@ -58,7 +110,7 @@
 
 html,
 body {
-  @apply text-primary dark:text-inversePrimary bg-white dark:bg-[#080808] font-sans cs-text;
+  @apply text-primary dark:text-inversePrimary bg-white dark:bg-[#080808] font-sans;
 }
 
 input {
@@ -66,39 +118,26 @@ input {
 }
 
 button {
-  @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-themeInverse transition-all rounded-none;
+  @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-themeInverse transition-all;
 }
 
-/* .primaryText {
-  @apply text-primary dark:text-darkPrimary;
+a {
+  @apply outline-none focus:ring-2  focus:ring-theme dark:focus:ring-themeInverse transition-all;
 }
 
-.secondaryText {
-  @apply text-secondary dark:text-darkSecondary;
-} */
-
-/* :root {
-  --shadow-color: 240deg 5% 80%;
-  --shadow-elevation-low: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
-    0px 0.8px 1.2px hsl(var(--shadow-color) / 0.11),
-    0px 1.5px 2.3px hsl(var(--shadow-color) / 0.22);
-  --shadow-elevation-medium: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
-    0px 1.6px 2.4px hsl(var(--shadow-color) / 0.06),
-    0px 2.7px 4.1px hsl(var(--shadow-color) / 0.11),
-    0px 4.4px 6.6px hsl(var(--shadow-color) / 0.17),
-    0px 7.4px 11.1px hsl(var(--shadow-color) / 0.22);
-  --shadow-elevation-high: 0px 0.5px 0.8px hsl(var(--shadow-color) / 0),
-    0px 2.3px 3.5px hsl(var(--shadow-color) / 0.03),
-    0px 3.9px 5.9px hsl(var(--shadow-color) / 0.05),
-    0px 5.4px 8.1px hsl(var(--shadow-color) / 0.08),
-    0px 7.1px 10.6px hsl(var(--shadow-color) / 0.1),
-    0px 9.2px 13.8px hsl(var(--shadow-color) / 0.13),
-    0px 11.7px 17.5px hsl(var(--shadow-color) / 0.16),
-    -0.1px 15.1px 22.7px hsl(var(--shadow-color) / 0.18),
-    -0.1px 19.3px 29px hsl(var(--shadow-color) / 0.21),
-    -0.1px 24.8px 37.2px hsl(var(--shadow-color) / 0.23);
+.react-flow__attribution {
+  display: none;
 }
 
-.perfect-shadow-md {
-  box-shadow: var(--shadow-elevation-medium);
-} */
+.react-flow__node {
+  @apply rounded-2xl outline-none;
+  &:focus-visible > :first-child {
+      @apply ring-2 ring-theme dark:ring-themeInverse border-theme;
+  }
+  &:focus-within > :first-child {
+    @apply ring-8 ring-theme/25 dark:ring-themeInverse/25 border-theme/50 dark:border-themeInverse/0;
+}
+  &:focus-visible > .flow__handle {
+      @apply bg-theme dark:bg-themeInverse;
+  }
+}

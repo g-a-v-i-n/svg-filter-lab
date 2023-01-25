@@ -22,9 +22,11 @@ const mdn =
 function CompositeNode({ id, data, selected }: CompositeNodeProps) {
   const { updateOperator, updateK1, updateK2, updateK3, updateK4 } =
     useStore(selector);
+    const { deleteNode } = useStore((state) => state);
+
   return (
     <Container className="w-[210px] min-h-[104px]" selected={selected}>
-      <Header icon="􀯮" title="Composite" mdn={mdn} />
+      <Header icon="􀯮" title="Composite" mdn={mdn} deleteNode={() => deleteNode(id)}/>
       <ControlGroup>
         <Select
           first

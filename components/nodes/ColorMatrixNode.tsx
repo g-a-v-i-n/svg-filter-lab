@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { NamedKey, NodeData, State } from "../../stores/store";
+import useStore, { NodeData, State } from "../../stores/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Divider } from "../nodeParts/Divider";
@@ -9,8 +9,8 @@ import { Handle } from "../nodeParts/Handle";
 import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
 import { MatrixInput } from "../nodeParts/MatrixInput";
-import { Select, SelectItem } from "../nodeParts/Select";
-import { colorMatrixTypes, BlendNodeState } from "../../stores/colorMatrixNode";
+import { Select, SelectItem, SelectWithCategories } from "../nodeParts/Select";
+import { colorMatrixTypes, ColorMatrixType, BlendNodeState, colorMatrixTypesByCategory } from "../../stores/colorMatrixNode";
 
 const selector = (state: State) => state.colorMatrixNode;
 
@@ -21,24 +21,20 @@ const mdn =
 
 function ColorMatrixNode({ id, data, selected }: ColorMatrixNodeProps) {
   const { updateValues, updateType } = useStore(selector);
+  const { deleteNode } = useStore((state) => state);
+
   return (
     <Container className="w-[270px]" selected={selected}>
-      <Header icon="􀮟" title="Color Matrix" mdn={mdn} />
+      <Header icon="􀮟" title="Color Matrix" mdn={mdn} deleteNode={() => deleteNode(id)} />
       <ControlGroup>
-        <Select
+      <SelectWithCategories
+          categories={colorMatrixTypesByCategory}
           first
           value={data.type.label}
           label="Type"
-          onValueChange={(val) => updateType(id, val)}
-        >
-          {colorMatrixTypes.map((type, i) => (
-            <>
-              <SelectItem key={id + "-" + type.key} value={type}>
-                {type.label}
-              </SelectItem>
-            </>
-          ))}
-        </Select>
+          className="rounded-lg"
+          onChange={(val: ColorMatrixType) => updateType(id, val)}
+        />
         <Divider />
         <MatrixInput
           last

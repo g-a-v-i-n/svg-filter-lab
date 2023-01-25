@@ -21,9 +21,11 @@ type ConvolutionMatrixProps = {
 
 function GaussianBlurNode({ id, data, selected }: ConvolutionMatrixProps) {
   const {} = useStore(selector);
+  const { deleteNode } = useStore((state) => state);
+
   return (
     <Container className="w-[230px] min-h-[104px]" selected={selected}>
-      <Header icon="􀦸" title="Convolution Matrix" />
+      <Header icon="􀦸" title="Convolution Matrix" deleteNode={() => deleteNode(id)}/>
       <ControlGroup>
         <NumberInput label="Std Deviation" />
         <Divider />

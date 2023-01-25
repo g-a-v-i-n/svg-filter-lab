@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { State } from "./store";
+import { updateNodeProp } from "../lib/updateNodeProp";
 
 export const blendModes = [
   {
@@ -84,6 +84,103 @@ export const blendModes = [
   },
 ];
 
+export const blendModesByCategory = [
+  {
+    "category": "Default",
+    "items": [
+      {
+        "key": "normal",
+        "label": "Normal"
+      }
+    ]
+  },
+  {
+    "category": "Darkener",
+    "items": [
+      {
+        "key": "darken",
+        "label": "Darken"
+      },
+      {
+        "key": "multiply",
+        "label": "Multiply"
+      },
+      {
+        "key": "color-burn",
+        "label": "Color Burn"
+      }
+    ]
+  },
+  {
+    "category": "Lightener",
+    "items": [
+      {
+        "key": "lighten",
+        "label": "Lighten"
+      },
+      {
+        "key": "screen",
+        "label": "Screen"
+      },
+      {
+        "key": "color-dodge",
+        "label": "Color Dodge"
+      }
+    ]
+  },
+  {
+    "category": "Contrast",
+    "items": [
+      {
+        "key": "overlay",
+        "label": "Overlay"
+      },
+      {
+        "key": "hard-light",
+        "label": "Hard Light"
+      },
+      {
+        "key": "soft-light",
+        "label": "Soft Light"
+      }
+    ]
+  },
+  {
+    "category": "Inversion",
+    "items": [
+      {
+        "key": "difference",
+        "label": "Difference"
+      },
+      {
+        "key": "exclusion",
+        "label": "Exclusion"
+      }
+    ]
+  },
+  {
+    "category": "Component",
+    "items": [
+      {
+        "key": "hue",
+        "label": "Hue"
+      },
+      {
+        "key": "saturation",
+        "label": "Saturation"
+      },
+      {
+        "key": "color",
+        "label": "Color"
+      },
+      {
+        "key": "luminosity",
+        "label": "Luminosity"
+      }
+    ]
+  }
+]
+
 export type BlendModes = typeof blendModes;
 
 export type BlendMode = BlendModes[number];
@@ -100,11 +197,12 @@ export type BlendNodeSlice = {
 
 export const createBlendNodeSlice = (set) => ({
   blendNode: {
-    updateMode: (nodeId: string, newMode: BlendMode) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.mode = newMode;
-      });
-    },
-  },
+    updateMode: (nodeId: string, newMode: BlendMode) => updateNodeProp(set, nodeId, "mode", newMode),
+  }
 });
+
+export const defaultBlendNodeData: BlendNodeData = {
+  mode: blendModes[0],
+};
+
+

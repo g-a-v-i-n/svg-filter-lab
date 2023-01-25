@@ -52,7 +52,7 @@ export function NumberInput({
                 },
               });
             }}
-            className="font-icon text-secondary cs-text-sm font-medium hover:text-primary"
+            className="text-secondary cs-text-sm font-medium hover:text-primary"
           >
             􀁏
           </button>
@@ -65,7 +65,7 @@ export function NumberInput({
                 },
               });
             }}
-            className="font-icon text-secondary cs-text-sm font-medium hover:text-primary"
+            className="text-secondary cs-text-sm font-medium hover:text-primary"
           >
             􀁍
           </button>

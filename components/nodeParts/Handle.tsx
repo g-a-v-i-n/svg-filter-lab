@@ -12,8 +12,8 @@ export type HandleProps = {
 };
 
 const handleCns = `
-    bg-inverseSurface
-    dark:bg-surface
+    bg-primary
+    dark:bg-inversePrimary
     rounded-full
     w-[5px] 
     h-6 

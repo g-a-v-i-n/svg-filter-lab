@@ -1,4 +1,9 @@
 import { blend } from "./blend";
 import { colorMatrix } from "./colorMatrix";
+import { componentTransfer } from "./componentTransfer";
 
-export { colorMatrix };
+export {
+    blend,
+    colorMatrix,
+    // componentTransfer,
+};

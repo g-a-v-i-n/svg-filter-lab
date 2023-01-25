@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { State } from "./store";
+import { updateNodeProp } from "../lib/updateNodeProp";
 
 export const colorMatrixTypes = [
   { label: "Matrix", key: "matrix", category: "custom" },
@@ -7,6 +7,35 @@ export const colorMatrixTypes = [
   { label: "Hue Rotate", key: "hueRotate", category: "preset" },
   { label: "Luminance to Alpha", key: "luminanceToAlpha", category: "preset" },
 ];
+
+export const colorMatrixTypesByCategory = [
+  {
+    "category": "custom",
+    "items": [
+      {
+        "key": "matrix",
+        "label": "Matrix"
+      }
+    ]
+  },
+  {
+    "category": "preset",
+    "items": [
+      {
+        "key": "saturate",
+        "label": "Saturate"
+      },
+      {
+        "key": "hueRotate",
+        "label": "Hue Rotate"
+      },
+      {
+        "key": "luminanceToAlpha",
+        "label": "Luminance to Alpha"
+      }
+    ]
+  }
+]
 
 export type ColorMatrixTypes = typeof colorMatrixTypes;
 
@@ -26,17 +55,17 @@ export type ColorMatrixNodeSlice = {
 
 export const createColorMatrixNodeSlice = (set) => ({
   colorMatrixNode: {
-    updateType: (nodeId: string, newType: ColorMatrixType) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.type = newType;
-      });
-    },
-    updateValues: (nodeId: string, newValues: number[][]) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === nodeId);
-        state.nodes[index].data.values = newValues;
-      });
-    },
+    updateType: (nodeId: string, newType: ColorMatrixType) => updateNodeProp(set, nodeId, "type", newType),
+    updateValues: (nodeId: string, newValues: number[][]) => updateNodeProp(set, nodeId, "values", newValues),
   },
 });
+
+export const defaultColorMatrixNodeData: ColorMatrixNodeData = {
+  type: colorMatrixTypes[0],
+  values: [
+    [1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0],
+  ],
+};

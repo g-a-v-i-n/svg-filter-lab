@@ -20,8 +20,8 @@ export function Select(props: SelectProps) {
         <RS.Trigger
           className={clsx(
             {
-              "rounded-t-xl": props.first,
-              "rounded-b-xl": props.last,
+              "rounded-t-lg": props.first,
+              "rounded-b-lg": props.last,
             },
             "w-full flex justify-between items-center h-8 text-sm p-2 cursor-default"
           )}
@@ -30,15 +30,15 @@ export function Select(props: SelectProps) {
           <FieldLabel>{props.label}</FieldLabel>
           <div className="flex items-center gap-x-1">
             <RS.Value>
-              <div className="cs-text">{props.value}</div>
+              <span className="cs-text">{props.value}</span>
             </RS.Value>
-            <div className="text-secondary dark:text-inverseSecondary font-icon cs-text-sm font-bold">
+            <span className="text-secondary dark:text-inverseSecondary cs-text-sm font-bold">
               􀆈
-            </div>
+            </span>
           </div>
         </RS.Trigger>
         <RS.Portal>
-          <RS.Content className="overflow-hidden bg-inverseSurface text-inversePrimary rounded-lg shadow-high">
+          <RS.Content className="overflow-hidden bg-primary text-inversePrimary rounded-lg shadow-high backdrop-blur-lg">
             <RS.Viewport className="p-1">
               <RS.Group>{props.children}</RS.Group>
             </RS.Viewport>
@@ -63,7 +63,7 @@ export const SelectItem = forwardRef(
     return (
       <RS.Item
         className={clsx(
-          "p-1 rounded w-full user-select-none outline-none flex items-center relative px-8 hover:bg-themeInverse",
+          "p-1 rounded w-full user-select-none cursor-pointer outline-none flex items-center relative px-8 hover:bg-themeInverse",
           className
         )}
         value={value}
@@ -72,7 +72,7 @@ export const SelectItem = forwardRef(
       >
         <RS.ItemText>{children}</RS.ItemText>
         <RS.ItemIndicator className="absolute left-0 h-8 w-8 flex items-center justify-center">
-          <div className="text-inversePrimary font-icon user-select-none">􀆅</div>
+          <span className="text-inversePrimary user-select-none">􀆅</span>
         </RS.ItemIndicator>
       </RS.Item>
     );
@@ -88,9 +88,49 @@ export const Separator = forwardRef(
     return (
       <RS.Separator
         ref={ref}
-        className="w-full bg-strokeInverse h-[1px] my-1"
+        className="w-full bg-inverseStroke h-[1px] my-1"
         {...props}
       />
     );
   }
 );
+
+export const Group = RS.Group;
+
+export const SelectWithCategories = forwardRef(
+  (
+    { id, value, label, onChange, categories, className = "", ...props }: SelectProps,
+    ref: Ref<HTMLDivElement>
+  ) => {
+    return (
+      <Select
+          value={value}
+          label={label}
+          className="rounded"
+          onValueChange={onChange}
+          {...props}
+        >
+          {
+            categories.map((category, i) => {
+              return (
+                <Group key={'group-' + category.category} >
+                  {
+                    i !== 0 && (<Separator />)
+                  }
+                  {
+                    category.items.map((item, i) => {
+                      return (
+                        <SelectItem key={id + "-" + item.key} value={item}>
+                          <span>{item.label}</span>
+                        </SelectItem>
+                      )
+                    })
+                  }
+                </Group>
+              )
+            })
+            }
+        </Select>
+    )
+  }
+)

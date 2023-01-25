@@ -1,6 +1,6 @@
 import { addProperty } from "../addProperty";
 
-export function colorMatrix(node, targetEdges, sourceEdge) {
+export function componentTransfer(node, targetEdges, sourceEdge) {
 
   const { id, data } = node;
   const { type, values } = data;
@@ -8,10 +8,10 @@ export function colorMatrix(node, targetEdges, sourceEdge) {
   const in1 = targetEdges[0]?.source || '';
   const result = sourceEdge.target;
   const str =  `
-        <feColorMatrix
+        <feComponentTransfer
             in="${in1}"
             type="${type.key}"
-            values="${values}"
+            values="${values.join(' ')}"
             result="${result}"
         />`;
   return str;

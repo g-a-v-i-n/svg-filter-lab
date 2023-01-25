@@ -1,14 +1,15 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { NamedKey, State } from "../../stores/store";
+import useStore, { State } from "../../stores/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Footer } from "../nodeParts/Footer";
 import { Handle } from "../nodeParts/Handle";
 import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
-import { Select, SelectItem, Separator } from "../nodeParts/Select";
-import { blendModes, BlendNodeState, BlendMode } from "../../stores/blendNode";
+import { Select, SelectItem, Separator, Group, SelectWithCategories } from "../nodeParts/Select";
+import { blendModesByCategory, BlendNodeState, BlendMode } from "../../stores/blendNode";
+import { groupBy } from 'lodash'
 
 const selector = (state: State) => state.blendNode;
 
@@ -18,30 +19,21 @@ const mdn = "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend";
 
 function BlendNode({ id, data, selected }: BlendNodeProps) {
   const { updateMode } = useStore(selector);
+  const { deleteNode } = useStore((state) => state);
+
   return (
     <Container className="w-[210px] h-[104px]" selected={selected}>
-      <Header icon="􀟗" title="Blend" mdn={mdn} />
+      <Header icon="􀟗" title="Blend" mdn={mdn} deleteNode={() => deleteNode(id)} />
       <ControlGroup>
-        <Select
+        <SelectWithCategories
+          categories={blendModesByCategory}
           first
           last
           value={data.mode.label}
           label="Mode"
           className="rounded-lg"
-          onValueChange={(val: BlendMode) => updateMode(id, val)}
-        >
-          {blendModes.map((mode, i) => (
-            <>
-              {mode.category !== blendModes[i - 1]?.category && i !== 0 && (
-                <Separator />
-              )}
-
-              <SelectItem key={id + "-" + mode.key} value={mode}>
-                {mode.label}
-              </SelectItem>
-            </>
-          ))}
-        </Select>
+          onChange={(val: BlendMode) => updateMode(id, val)}
+        />
       </ControlGroup>
 
       <Footer />
@@ -52,7 +44,7 @@ function BlendNode({ id, data, selected }: BlendNodeProps) {
       </HandlePositioner>
 
       <HandlePositioner right>
-        <Handle type="source" id="out" title="Out" position={Position.Right} />
+        <Handle type="source" id="result" title="Result" position={Position.Right} />
       </HandlePositioner>
     </Container>
   );

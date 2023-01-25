@@ -24,16 +24,18 @@ const mdn =
 
 function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProps) {
   const { red, green, blue, alpha } = useStore(selector);
+  const { deleteNode } = useStore((state) => state);
+
   return (
-    <Container className="w-[240px]" selected={selected}>
-      <Header icon="􀊝" title="Component Transfer" mdn={mdn} />
+    <Container className="w-[270px]" selected={selected}>
+      <Header icon="􀊝" title="Component Transfer" mdn={mdn} deleteNode={() => deleteNode(id)}/>
       <SwitchRow label="Red">
         <Switch
           label="red-channel"
           className={`${
             data.red.isOn ? "bg-red flex-row-reverse" : "bg-tertiary flex-row"
           } `}
-          isChecked={data.red.isOn}
+          checked={data.red.isOn}
           onCheckedChange={() => red.updateIsOn(id, !data.red.isOn)}
         />
       </SwitchRow>
@@ -50,7 +52,7 @@ function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProp
               ? "bg-green flex-row-reverse"
               : "bg-tertiary flex-row"
           } `}
-          isChecked={data.green.isOn}
+          checked={data.green.isOn}
           onCheckedChange={() => green.updateIsOn(id, !data.green.isOn)}
         />
       </SwitchRow>
@@ -65,7 +67,7 @@ function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProp
           className={`${
             data.blue.isOn ? "bg-blue flex-row-reverse" : "bg-tertiary flex-row"
           } `}
-          isChecked={data.blue.isOn}
+          checked={data.blue.isOn}
           onCheckedChange={() => blue.updateIsOn(id, !data.blue.isOn)}
         />
       </SwitchRow>
@@ -82,7 +84,7 @@ function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProp
               ? "bg-primary flex-row-reverse"
               : "bg-tertiary flex-row"
           } `}
-          isChecked={data.alpha.isOn}
+          checked={data.alpha.isOn}
           onCheckedChange={() => alpha.updateIsOn(id, !data.alpha.isOn)}
         />
       </SwitchRow>
