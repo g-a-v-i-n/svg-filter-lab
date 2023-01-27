@@ -27,12 +27,10 @@ const handleCns = `
 `;
 
 const tooltipContentCns = `
-    cs-text
-    bg-inverseSurface 
-    rounded-lg 
-    p-3 
+    bg-inverseSurfaceHigh
     text-inversePrimary
-    dark:text-inversePrimary
+    rounded-lg 
+    p-3
     font-medium 
     shadow-high
   `;
@@ -56,7 +54,7 @@ export function Handle({ className, type, position, ...props }: HandleProps) {
             className={tooltipContentCns}
             sideOffset={2}
           >
-            {props.title}
+            <span>{props.title}</span>
             <Tooltip.Arrow asChild>
               <svg
                 width="10"
@@ -68,7 +66,7 @@ export function Handle({ className, type, position, ...props }: HandleProps) {
                 <path
                   transform="translate(0,-1)"
                   d="M6.45216 6.18543C5.82919 7.27153 4.17081 7.27152 3.54784 6.18542L0 0H10L6.45216 6.18543Z"
-                  className="fill-primary dark:fill-inversePrimary"
+                  className="fill-inverseSurfaceHigh"
                 />
               </svg>
             </Tooltip.Arrow>

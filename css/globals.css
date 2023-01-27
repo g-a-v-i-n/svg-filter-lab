@@ -1,143 +1,28 @@
+@import "./type.css";
+@import "./color.css";
+@import "./reactFlow.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Sans */
-@font-face {
-  font-family: "SF Pro Text";
-  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Regular.otf") format("opentype");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "SF Pro Text";
-  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Semibold.otf") format("opentype");
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "SF Pro Text";
-  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Medium.otf") format("opentype");
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: "SF Pro Text";
-  src: local("SF Pro Text"), url("fonts/SF-Pro-Text-Bold.otf") format("opentype");
-  font-weight: 700;
-}
-
-
-/* Monospace */
-@font-face {
-  font-family: "SF Mono";
-  src: local("SF Mono"), url("fonts/SF-Mono-Regular.otf") format("opentype");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "SF Mono";
-  src: local("SF Mono"), url("fonts/SF-Mono-Semibold.otf") format("opentype");
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "SF Mono";
-  src: local("SF Mono"), url("fonts/SF-Mono-Medium.otf") format("opentype");
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: "SF Mono";
-  src: local("SF Mono"), url("fonts/SF-Mono-Bold.otf") format("opentype");
-  font-weight: 700;
-}
-
-
-/* Large - 16px */
-.cs-text-lg {
-  font-size: 16px;
-  line-height: 23.2734px;
-}
-
-.cs-text-lg::before {
-  content: "";
-  margin-bottom: -0.3962em;
-  display: table;
-}
-
-.cs-text-lg::after {
-  content: "";
-  margin-top: -0.3538em;
-  display: table;
-}
-
-/* Default - 14px */
-.cs-text {
-  font-size: 14px;
-  line-height: 19.8643px;
-}
-
-.cs-text::before {
-  content: "";
-  margin-bottom: -0.3784em;
-  display: table;
-}
-
-.cs-text::after {
-  content: "";
-  margin-top: -0.3359em;
-  display: table;
-}
-
-/* Small - 12px */
-.cs-text-sm {
-  font-size: 12px;
-  line-height: 22.4551px;
-}
-
-.cs-text-sm::before {
-  content: "";
-  margin-bottom: -0.6046em;
-  display: table;
-}
-
-.cs-text-sm::after {
-  content: "";
-  margin-top: -0.5621em;
-  display: table;
-}
-
 html,
 body {
-  @apply text-primary dark:text-inversePrimary bg-white dark:bg-[#080808] font-sans;
+  @apply textPrimary bg font-sans;
 }
 
 input {
-  @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-themeInverse transition-all rounded-none;
+  @apply elementRing transition-all rounded-none;
 }
 
 button {
-  @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-themeInverse transition-all;
+  @apply elementRing transition-all;
 }
 
 a {
-  @apply outline-none focus:ring-2  focus:ring-theme dark:focus:ring-themeInverse transition-all;
+  @apply cs-text elementRing transition-all;
 }
 
-.react-flow__attribution {
-  display: none;
-}
-
-.react-flow__node {
-  @apply rounded-2xl outline-none;
-  &:focus-visible > :first-child {
-      @apply ring-2 ring-theme dark:ring-themeInverse border-theme;
-  }
-  &:focus-within > :first-child {
-    @apply ring-8 ring-theme/25 dark:ring-themeInverse/25 border-theme/50 dark:border-themeInverse/0;
-}
-  &:focus-visible > .flow__handle {
-      @apply bg-theme dark:bg-themeInverse;
-  }
+span {
+  @apply cs-text;
 }

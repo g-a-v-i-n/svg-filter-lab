@@ -1,12 +1,22 @@
+import useStore, { State } from "../../state/store";
+
 export type HeaderProps = {
+  id: string;
   title: string;
   className?: string;
   icon?: string;
   mdn?: string;
-  deleteNode?: () => void;
 };
 
-export function Header({ className, title, icon, mdn, deleteNode, ...props }: HeaderProps) {
+export function Header({
+  className,
+  title,
+  icon,
+  mdn,
+  id,
+  ...props
+}: HeaderProps) {
+  const deleteNode = useStore((state: State) => state.deleteNode);
 
   return (
     <div
@@ -15,7 +25,7 @@ export function Header({ className, title, icon, mdn, deleteNode, ...props }: He
     >
       <div className="flex gap-x-1 items-baseline">
         <span className="cs-text-lg font-medium">{icon}</span>
-        <span className="font-sans font-medium cs-text-lg">{title}</span>
+        <span className="cs-text-lg font-medium">{title}</span>
       </div>
 
       <div className="flex gap-x-2">
@@ -24,13 +34,16 @@ export function Header({ className, title, icon, mdn, deleteNode, ...props }: He
           href={mdn}
           rel="noreferrer"
           target="_blank"
-          className="text-secondary dark:text-inverseSecondary cs-text font-extrabold hover:text-primary dark:hover:text-inversePrimary h-4 w-4 rounded flex items-center justify-center"
+          className="textSecondary hover:textPrimary font-extrabold h-4 w-4 rounded flex items-center justify-center"
         >
           􁊈
         </a>
 
-        <button onClick={deleteNode} className="text-secondary dark:text-inverseSecondary hover:text-primary dark:hover:text-inversePrimary h-4 w-4 rounded-full flex items-center justify-center">
-          <span className="cs-text font-extrabold">􀁡</span>
+        <button
+          onClick={deleteNode}
+          className="textSecondary hover:textPrimary h-4 w-4 rounded-full flex items-center justify-center"
+        >
+          <span className="font-extrabold">􀁡</span>
         </button>
       </div>
     </div>

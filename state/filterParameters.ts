@@ -1,7 +1,7 @@
 import { Node } from "reactflow";
 import { State } from "./store";
 
-export const 
+export const;
 
 export type BlendModes = typeof blendModes;
 
@@ -59,7 +59,6 @@ export const createBlendNodeSlice = (set) => ({
         const index = state.nodes.findIndex((node) => node.id === nodeId);
         state.nodes[index].data.primitiveUnits = primitiveUnits;
       });
-    }
-  }
+    },
+  },
 });
-

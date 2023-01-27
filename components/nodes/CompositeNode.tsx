@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { NamedKey, State } from "../../stores/store";
+import useStore, { State } from "../../state/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Divider } from "../nodeParts/Divider";
@@ -10,36 +10,38 @@ import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { Select, SelectItem } from "../nodeParts/Select";
-import { compositeOperators, CompositeNodeState } from "../../stores/compositeNode";
+import { NodeState, metadata } from "../../state/nodes/composite";
 
 const selector = (state: State) => state.compositeNode;
 
-type CompositeNodeProps = CompositeNodeState & {};
+type NodeProps = NodeState & {};
 
-const mdn =
-  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite";
-
-function CompositeNode({ id, data, selected }: CompositeNodeProps) {
+function CompositeNode({ id, data, selected }: NodeProps) {
   const { updateOperator, updateK1, updateK2, updateK3, updateK4 } =
     useStore(selector);
-    const { deleteNode } = useStore((state) => state);
 
   return (
     <Container className="w-[210px] min-h-[104px]" selected={selected}>
-      <Header icon="􀯮" title="Composite" mdn={mdn} deleteNode={() => deleteNode(id)}/>
+      <Header
+        icon={metadata.icon}
+        title={metadata.title}
+        mdn={metadata.mdn}
+        id={id}
+      />
       <ControlGroup>
         <Select
-          first
-          last={data.operator.key !== "arithmetic"}
-          value={data.operator.label}
-          label="Operator"
-          onValueChange={(val: NamedKey) => updateOperator(id, val)}
+          name="Operator"
+          value={data.type}
+          onValueChange={(val: string) => updateOperator(id, val)}
+          className="rounded-t-lg"
         >
-          {compositeOperators.map((operator) => (
-            <SelectItem key={id + "-" + operator.key} value={operator}>
-              {operator.label}
-            </SelectItem>
-          ))}
+          <SelectItem value="over">Over</SelectItem>
+          <SelectItem value="in">In</SelectItem>
+          <SelectItem value="out">Out</SelectItem>
+          <SelectItem value="atop">Atop</SelectItem>
+          <SelectItem value="xor">Xor</SelectItem>
+          <SelectItem value="arithmetic">Arithmetic</SelectItem>
+          <SelectItem value="lighter">Lighter</SelectItem>
         </Select>
 
         {data.operator.key === "arithmetic" && (
@@ -89,7 +91,12 @@ function CompositeNode({ id, data, selected }: CompositeNodeProps) {
       </HandlePositioner>
 
       <HandlePositioner right>
-        <Handle type="source" id="result" title="Result" position={Position.Right} />
+        <Handle
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
       </HandlePositioner>
     </Container>
   );

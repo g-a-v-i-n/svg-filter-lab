@@ -33,7 +33,7 @@ export default function CustomEdge({
         strokeWidth="4px"
         fill="none"
         strokeLinecap="round"
-        className="!stroke-quinary !dark:stroke-inverseQuinary"
+        className="stroke-connection dark:stroke-inverseConnection"
       />
       <path
         id={id}
@@ -43,7 +43,7 @@ export default function CustomEdge({
         strokeWidth="4px"
         fill="none"
         strokeDasharray="6 6"
-        className="stroke-quinary dark:stroke-inverseQuinary"
+        className="stroke-stroke dark:stroke-inverseStroke"
       />
     </>
   );

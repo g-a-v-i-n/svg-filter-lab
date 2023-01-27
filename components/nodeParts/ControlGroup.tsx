@@ -10,7 +10,7 @@ export function ControlGroup({
 }: ControlGroupProps) {
   return (
     <div {...props} className={`flex flex-col px-2 ${className}`}>
-      <div className="flex flex-col w-full rounded-lg bg-elevatedSurface dark:bg-inverseElevatedSurface border border-stroke dark:border-inverseStroke shadow-field nodrag">
+      <div className="surfaceMiddle border borderPrimary shadow-field flex flex-col w-full rounded-lg nodrag">
         {children}
       </div>
     </div>

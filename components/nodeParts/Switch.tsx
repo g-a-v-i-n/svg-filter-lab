@@ -11,10 +11,7 @@ export const Switch = forwardRef(
     return (
       <RS.Root
         ref={ref}
-        className={clsx(
-          "w-6 h-[14px] rounded-full flex p-[1px] ",
-          className
-        )}
+        className={clsx("w-6 h-[14px] rounded-full flex p-[1px] ", className)}
         {...props}
       >
         <RS.Thumb className="bg-inversePrimary dark:bg-inversePrimary w-[12px] h-[12px] rounded-full content-none" />

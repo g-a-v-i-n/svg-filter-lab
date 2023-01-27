@@ -34,7 +34,7 @@ export function MatrixInput({
     >
       <FieldLabel>{props.label}</FieldLabel>
       <div
-        className={`flex flex-col border-stroke dark:border-inverseStroke border rounded ${
+        className={`flex flex-col borderPrimary border rounded ${
           disabled ? "opacity-50" : ""
         }`}
       >
@@ -51,7 +51,7 @@ export function MatrixInput({
                     "rounded-bl-sm": i === rows - 1 && j === 0,
                     "rounded-br-sm": i === rows - 1 && j === cols - 1,
                   },
-                  "w-8 h-5 text-center font-mono bg-transparent border-stroke dark:border-inverseStroke relative focus:z-10"
+                  "w-8 h-5 text-center font-mono bg-transparent borderPrimary relative focus:z-10"
                 );
                 return (
                   <NumericFormat

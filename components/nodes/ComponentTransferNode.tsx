@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { State } from "../../stores/store";
+import useStore, { State } from "../../state/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Divider } from "../nodeParts/Divider";
@@ -10,25 +10,27 @@ import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
 import { MatrixInput } from "../nodeParts/MatrixInput";
 import { NumberInput } from "../nodeParts/NumberInput";
-import { Select, SelectItem } from "../nodeParts/Select";
+import { Select, SelectItem, Separator } from "../nodeParts/Select";
 import { Switch } from "../nodeParts/Switch";
 import { SwitchRow } from "../nodeParts/SwitchRow";
-import { componentTransferTypes, ComponentTransferNodeState } from "../../stores/componentTransferNode";
+import { NodeState, metadata } from "../../state/nodes/componentTransfer";
+import clsx from "clsx";
 
 const selector = (state: State) => state.componentTransferNode;
 
-type ComponentTransferNodeProps = ComponentTransferNodeState & {}
+type NodeProps = NodeState & {};
 
-const mdn =
-  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer";
-
-function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProps) {
+function ComponentTransferNode({ id, data, selected }: NodeProps) {
   const { red, green, blue, alpha } = useStore(selector);
-  const { deleteNode } = useStore((state) => state);
 
   return (
     <Container className="w-[270px]" selected={selected}>
-      <Header icon="􀊝" title="Component Transfer" mdn={mdn} deleteNode={() => deleteNode(id)}/>
+      <Header
+        icon={metadata.icon}
+        title={metadata.title}
+        mdn={metadata.mdn}
+        id={id}
+      />
       <SwitchRow label="Red">
         <Switch
           label="red-channel"
@@ -100,7 +102,12 @@ function ComponentTransferNode({ id, data, selected }: ComponentTransferNodeProp
       </HandlePositioner>
 
       <HandlePositioner right>
-        <Handle type="source" id="result" title="Result" position={Position.Right} />
+        <Handle
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
       </HandlePositioner>
     </Container>
   );
@@ -110,17 +117,19 @@ function ChannelGroup({ id, channel, label, data, store }) {
   return (
     <ControlGroup>
       <Select
-        first
-        last={data[channel].type.key === "identity"}
-        value={data[channel].type.label}
-        label="Type"
-        onValueChange={(val) => store.updateType(id, val)}
+        name="Type"
+        value={data[channel].type}
+        onValueChange={(val: string) => store.updateType(id, val)}
+        className={clsx({
+          "rounded-b-xl": data[channel].type.key === "identity",
+        })}
       >
-        {componentTransferTypes.map((type) => (
-          <SelectItem key={id + "-" + channel + "-" + type.key} value={type}>
-            {type.label}
-          </SelectItem>
-        ))}
+        <SelectItem value="identity">Identity</SelectItem>
+        <Separator />
+        <SelectItem value="table">Table</SelectItem>
+        <SelectItem value="linear">Linear</SelectItem>
+        <SelectItem value="discrete">Discrete</SelectItem>
+        <SelectItem value="gamma">Gamma</SelectItem>
       </Select>
 
       {data[channel].type.key === "linear" && (

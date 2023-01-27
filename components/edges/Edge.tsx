@@ -31,22 +31,22 @@ export default function CustomEdge({
         style={style}
         d={edgePath}
         markerEnd={markerEnd}
-        strokeWidth="4px"
-        className="stroke-quinary dark:stroke-inverseTertiary"
+        strokeWidth="5px"
+        className="stroke-connection dark:stroke-inverseConnection"
         fill="none"
         strokeLinecap="round"
       />
-      <path
+      {/* <path
         id={id}
         style={style}
         d={edgePath}
         markerEnd={markerEnd}
-        strokeWidth="4px"
+        strokeWidth="5px"
         className="stroke-primary dark:stroke-inversePrimary"
         fill="none"
         strokeDasharray="6 6"
-      />
-
+      /> */}
+      {/* 
         <EdgeLabelRenderer>
         <button
           style={{
@@ -58,7 +58,7 @@ export default function CustomEdge({
           <span className="cs-text font-extrabold text-primary dark:text-inversePrimary hover:text-primary dark:hover:text-inversePrimary ">􀁡</span>
         </button>
 
-      </EdgeLabelRenderer>
+      </EdgeLabelRenderer> */}
     </>
   );
 }

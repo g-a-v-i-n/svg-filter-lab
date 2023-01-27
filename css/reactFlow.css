@@ -1,0 +1,16 @@
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__node {
+  @apply rounded-2xl outline-none;
+  &:focus-visible > :first-child {
+    @apply ring-2 ring-theme dark:ring-inverseTheme border-theme;
+  }
+  &:focus-within > :first-child {
+    @apply ring-8 ring-theme/25 dark:ring-inverseTheme/25 border-theme/50 dark:border-inverseTheme/0;
+  }
+  &:focus-visible > .flow__handle {
+    @apply bg-theme dark:bg-inverseTheme;
+  }
+}

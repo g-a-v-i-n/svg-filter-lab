@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { State } from "../../stores/store";
+import useStore, { State } from "../../state/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Footer } from "../nodeParts/Footer";
@@ -8,22 +8,23 @@ import { Handle } from "../nodeParts/Handle";
 import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
 import { MatrixInput } from "../nodeParts/MatrixInput";
-import { ConvolutionMatrixNodeState } from "../../stores/convolutionMatrixNode";
+import { NodeState, metadata } from "../../state/nodes/convolveMatrix";
 
-const selector = (state: State) => state.convolutionMatrixNode;
+const selector = (state: State) => state.convolveMatrixNode;
 
-type ConvolutionMatrixProps = ConvolutionMatrixNodeState & {}
+type NodeProps = NodeState & {};
 
-const mdn =
-  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feConvolutionMatrix";
-
-function ConvolutionMatrixNode({ id, data, selected }: ConvolutionMatrixProps) {
+function ConvolveMatrixNode({ id, data }: NodeProps) {
   const { updateKernelMatrix } = useStore(selector);
-  const { deleteNode } = useStore((state) => state);
 
   return (
-    <Container className="w-[250px] min-h-[104px]" selected={selected}>
-      <Header icon="􀦸" title="Convolution Matrix" mdn={mdn} deleteNode={() => deleteNode(id)}/>
+    <Container className="w-[250px] min-h-[104px]">
+      <Header
+        icon={metadata.icon}
+        title={metadata.title}
+        mdn={metadata.mdn}
+        id={id}
+      />
       <ControlGroup>
         <MatrixInput
           rows={3}
@@ -47,10 +48,15 @@ function ConvolutionMatrixNode({ id, data, selected }: ConvolutionMatrixProps) {
       </HandlePositioner>
 
       <HandlePositioner right>
-        <Handle type="source" id="result" title="Result" position={Position.Right} />
+        <Handle
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
       </HandlePositioner>
     </Container>
   );
 }
 
-export default memo(ConvolutionMatrixNode);
+export default memo(ConvolveMatrixNode);

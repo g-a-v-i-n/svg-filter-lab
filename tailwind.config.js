@@ -8,33 +8,35 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        surface: "hsla(180, 00%, 0%, 2%)",
-        inverseSurface: "hsla(230, 00%, 100%, 4%)",
+        // Light mode
+        primary: "hsla(0, 0%, 0%, 100%)",
+        secondary: "hsla(0, 0%, 20%, 100%)",
+        tertiary: "hsla(0, 0%, 30%, 100%)",
 
-        elevatedSurface: "hsla(180, 00%, 0%, 6%)",
-        inverseElevatedSurface: "hsla(180, 00%, 100%, 6%)",
+        background: "hsla(0, 0%, 100%, 100%)",
+        surfaceBase: "hsla(0, 0%, 98%, 100%)",
+        surfaceMiddle: "hsla(0, 0%, 94%, 100%)",
+        surfaceHigh: "hsla(0, 0%, 90%, 100%)",
 
-        stroke: "hsla(230, 00%, 0%, 7%)",
-        inverseStroke: "hsla(180, 00%, 100%, 10%)",
-
-        primary: "hsla(230, 00%, 0%, 100%)",
-        inversePrimary: "hsla(180, 00%, 100%, 100%)",
-
-        secondary: "hsla(230, 00%, 0%, 70%)",
-        inverseSecondary: "hsla(180, 00%, 100%, 70%)",
-
-        tertiary: "hsla(230, 00%, 0%, 60%)",
-        inverseTertiary: "hsla(180, 00%, 100%, 60%)",
-
-        quaternary: "hsla(230, 00%, 0%, 40%)",
-        inverseQuaternary: "hsla(180, 00%, 100%, 40%)",
-
-        quinary: "hsla(230, 00%, 0%, 10%)",
-        inverseQuinary: "hsla(180, 00%, 100%, 10%)",
+        stroke: "hsla(0, 0%, 93%, 100%)",
+        connection: "hsla(0, 0%, 80%, 100%)",
 
         theme: "hsla(210, 100%, 50%, 100%)",
-        themeInverse: "hsla(215, 100%, 65%, 100%)",
-        themeSurface: "hsla(206, 100%, 95%, 100%)",
+
+        // Dark mode
+        inversePrimary: "hsla(0, 0%, 100%, 100%)",
+        inverseSecondary: "hsla(0, 0%, 80%, 100%)",
+        inverseTertiary: "hsla(0, 0%, 60%, 100%)",
+
+        inverseBackground: "hsla(0, 0%, 2%, 100%)",
+        inverseSurfaceBase: "hsla(0, 0%, 8%, 100%)",
+        inverseSurfaceMiddle: "hsla(0, 0%, 11%, 100%)",
+        inverseSurfaceHigh: "hsla(0, 0%, 14%, 100%)",
+
+        inverseStroke: "hsla(0, 0%, 15%, 100%)",
+        inverseConnection: "hsla(0, 0%, 40%, 100%)",
+
+        inverseTheme: "hsla(215, 100%, 65%, 100%)",
 
         warn: "rgb(255, 165, 0)",
 
@@ -43,7 +45,13 @@ module.exports = {
         blue: "hsla(206, 100%, 50%, 1)",
       },
       fontFamily: {
-        sans: ["system-ui", "SF Pro Text", "BlinkMacSystemFont", "Inter", "sans-serif"],
+        sans: [
+          "system-ui",
+          "SF Pro Text",
+          "BlinkMacSystemFont",
+          "Inter",
+          "sans-serif",
+        ],
         mono: ["system-mono", "SF Mono", "Roboto Mono", "monospace"],
       },
       borderRadius: {

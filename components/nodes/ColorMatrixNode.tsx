@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Position } from "reactflow";
-import useStore, { NodeData, State } from "../../stores/store";
+import useStore, { State } from "../../state/store";
 import { Container } from "../nodeParts/Container";
 import { ControlGroup } from "../nodeParts/ControlGroup";
 import { Divider } from "../nodeParts/Divider";
@@ -9,36 +9,41 @@ import { Handle } from "../nodeParts/Handle";
 import { HandlePositioner } from "../nodeParts/HandlePositioner";
 import { Header } from "../nodeParts/Header";
 import { MatrixInput } from "../nodeParts/MatrixInput";
-import { Select, SelectItem, SelectWithCategories } from "../nodeParts/Select";
-import { colorMatrixTypes, ColorMatrixType, BlendNodeState, colorMatrixTypesByCategory } from "../../stores/colorMatrixNode";
+import { Select, SelectItem, Separator } from "../nodeParts/Select";
+import { NodeState, metadata } from "../../state/nodes/colorMatrix";
 
 const selector = (state: State) => state.colorMatrixNode;
 
-type ColorMatrixNodeProps = BlendNodeState & {}
+type NodeProps = NodeState & {};
 
-const mdn =
-  "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix";
-
-function ColorMatrixNode({ id, data, selected }: ColorMatrixNodeProps) {
+function ColorMatrixNode({ id, data, selected }: NodeProps) {
   const { updateValues, updateType } = useStore(selector);
-  const { deleteNode } = useStore((state) => state);
 
   return (
-    <Container className="w-[270px]" selected={selected}>
-      <Header icon="􀮟" title="Color Matrix" mdn={mdn} deleteNode={() => deleteNode(id)} />
+    <Container className="w-[270px]">
+      <Header
+        icon={metadata.icon}
+        title={metadata.title}
+        mdn={metadata.mdn}
+        id={id}
+      />
       <ControlGroup>
-      <SelectWithCategories
-          categories={colorMatrixTypesByCategory}
-          first
-          value={data.type.label}
-          label="Type"
-          className="rounded-lg"
-          onChange={(val: ColorMatrixType) => updateType(id, val)}
-        />
+        <Select
+          name="Type"
+          value={data.type}
+          onValueChange={(val: string) => updateType(id, val)}
+          className="rounded-t-lg"
+        >
+          <SelectItem value="matrix">Matrix</SelectItem>
+          <Separator />
+          <SelectItem value="saturate">Saturate</SelectItem>
+          <SelectItem value="hueRotate">Hue Rotate</SelectItem>
+          <SelectItem value="luminanceToAlpha">Luminance to Alpha</SelectItem>
+        </Select>
         <Divider />
         <MatrixInput
           last
-          disabled={data.type.key !== "matrix"}
+          disabled={data.type !== "matrix"}
           label="Values"
           rows={4}
           cols={5}
@@ -58,7 +63,12 @@ function ColorMatrixNode({ id, data, selected }: ColorMatrixNodeProps) {
       </HandlePositioner>
 
       <HandlePositioner right>
-        <Handle type="source" id="result" title="Result" position={Position.Right} />
+        <Handle
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
       </HandlePositioner>
     </Container>
   );

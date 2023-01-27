@@ -1,0 +1,42 @@
+/* Text */
+@layer components {
+  .textPrimary {
+    @apply text-primary dark:text-inversePrimary;
+  }
+
+  .textSecondary {
+    @apply text-secondary dark:text-inverseSecondary;
+  }
+
+  .textTertiary {
+    @apply text-tertiary dark:text-inverseTertiary;
+  }
+
+  /* Backgrounds */
+  .bg {
+    @apply bg-background dark:bg-inverseBackground;
+  }
+
+  /* Surfaces */
+  .surfaceBase {
+    @apply bg-surfaceBase dark:bg-inverseSurfaceBase;
+  }
+
+  .surfaceMiddle {
+    @apply bg-surfaceMiddle dark:bg-inverseSurfaceMiddle;
+  }
+
+  .surfaceHigh {
+    @apply bg-surfaceHigh dark:bg-inverseSurfaceHigh;
+  }
+
+  /* Borders */
+  .borderPrimary {
+    @apply border-stroke dark:border-inverseStroke;
+  }
+
+  /* focus */
+  .elementRing {
+    @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-inverseTheme;
+  }
+}

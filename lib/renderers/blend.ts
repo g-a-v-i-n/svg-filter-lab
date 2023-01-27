@@ -1,12 +1,11 @@
 import { addProperty } from "../addProperty";
 
 export function blend(node, targetEdges, sourceEdge) {
-  
   const { id, data } = node;
   const { mode } = data;
 
-  const in1 = targetEdges[0]?.source || '';
-  const in2 = targetEdges[1]?.source || '';
+  const in1 = targetEdges[0]?.source || "";
+  const in2 = targetEdges[1]?.source || "";
   const result = sourceEdge.target;
 
   const str = `
