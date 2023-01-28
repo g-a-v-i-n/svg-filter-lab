@@ -1,9 +1,9 @@
-import "reactflow/dist/base.css";
-import "../css/globals.css";
-import type { AppProps } from "next/app";
+import "reactflow/dist/base.css"
+import "../css/globals.css"
+import type { AppProps } from "next/app"
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+    return <Component {...pageProps} />
 }
 
-export default MyApp;
+export default MyApp

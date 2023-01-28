@@ -8,21 +8,21 @@
 
 html,
 body {
-  @apply textPrimary bg font-sans;
+    @apply textPrimary bg font-sans;
 }
 
 input {
-  @apply elementRing transition-all rounded-none;
+    @apply elementRing transition-all rounded-none;
 }
 
 button {
-  @apply elementRing transition-all;
+    @apply elementRing transition-all;
 }
 
 a {
-  @apply cs-text elementRing transition-all;
+    @apply cs-text elementRing transition-all;
 }
 
 span {
-  @apply cs-text;
+    @apply cs-text;
 }

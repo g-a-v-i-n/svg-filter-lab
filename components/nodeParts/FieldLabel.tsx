@@ -1,23 +1,23 @@
 export type FieldLabelProps = {
-  className?: string;
-  children: React.ReactNode;
-};
+    className?: string
+    children: React.ReactNode
+}
 
 export default function FieldLabel({
-  className,
-  children,
-  ...props
+    className,
+    children,
+    ...props
 }: FieldLabelProps) {
-  return (
-    <label
-      {...props}
-      className={`textSecondary cs-text w-16 flex-none text-left ${className}`}
-    >
-      {children}
-    </label>
-  );
+    return (
+        <label
+            {...props}
+            className={`textSecondary cs-text w-16 flex-none text-left ${className}`}
+        >
+            {children}
+        </label>
+    )
 }
 
 FieldLabel.defaultProps = {
-  className: "",
-};
+    className: "",
+}
