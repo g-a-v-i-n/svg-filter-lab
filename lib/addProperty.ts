@@ -1,3 +1,3 @@
 export function addProperty(property, value) {
-    return typeof value !== "undefined" ? `${value}="${property}"` : ""
+  return typeof value !== "undefined" ? `${value}="${property}"` : ""
 }

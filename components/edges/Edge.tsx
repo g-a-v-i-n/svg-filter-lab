@@ -3,40 +3,40 @@ import { getBezierPath, EdgeLabelRenderer } from "reactflow"
 import { theme } from "../../tailwind.config"
 
 export default function CustomEdge({
-    id,
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  style = {},
+  data,
+  markerEnd,
+  removeEdge,
+}) {
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
+    sourcePosition,
     targetX,
     targetY,
-    sourcePosition,
     targetPosition,
-    style = {},
-    data,
-    markerEnd,
-    removeEdge,
-}) {
-    const [edgePath, labelX, labelY] = getBezierPath({
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetX,
-        targetY,
-        targetPosition,
-    })
+  })
 
-    return (
-        <>
-            <path
-                id={id}
-                style={style}
-                d={edgePath}
-                markerEnd={markerEnd}
-                strokeWidth="5px"
-                className="stroke-connection dark:stroke-inverseConnection"
-                fill="none"
-                strokeLinecap="round"
-            />
-            {/* <path
+  return (
+    <>
+      <path
+        id={id}
+        style={style}
+        d={edgePath}
+        markerEnd={markerEnd}
+        strokeWidth="5px"
+        className="stroke-connection dark:stroke-inverseConnection"
+        fill="none"
+        strokeLinecap="round"
+      />
+      {/* <path
         id={id}
         style={style}
         d={edgePath}
@@ -46,7 +46,7 @@ export default function CustomEdge({
         fill="none"
         strokeDasharray="6 6"
       /> */}
-            {/* 
+      {/* 
         <EdgeLabelRenderer>
         <button
           style={{
@@ -59,6 +59,6 @@ export default function CustomEdge({
         </button>
 
       </EdgeLabelRenderer> */}
-        </>
-    )
+    </>
+  )
 }

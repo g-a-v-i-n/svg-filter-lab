@@ -8,7 +8,7 @@ export type SourceNodeState = Node<SourceNodeData>
 export type SourceNodeSlice = {}
 
 export const createOutputNodeSlice = (set) => ({
-    outputNode: {},
+  outputNode: {},
 })
 
 export const defaultSourceNodeData: SourceNodeData = {}

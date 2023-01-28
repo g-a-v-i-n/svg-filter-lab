@@ -15,50 +15,44 @@ const selector = (state: State) => state.sourceNode
 type NodeProps = NodeState & {}
 
 function SourceNode({ id, data, selected }: NodeProps) {
-    const { updateSource } = useStore(selector)
+  const { updateSource } = useStore(selector)
 
-    console.log(data)
+  console.log(data)
 
-    return (
-        <Container className="w-[250px] h-[104px]" selected={selected} >
-            <Header metadata={metadata} id={id} />
-            <ControlGroup>
-                <Select
-                    name="Source"
-                    value={data.source}
-                    onValueChange={(val: string) => updateSource(id, val)}
-                    className="rounded-t-lg"
-                >
-                    <SelectItem value="SourceGraphic">
-                        Source Graphic
-                    </SelectItem>
-                    <SelectItem value="SourceAlpha">Source Alpha</SelectItem>
-                    <Separator />
-                    <SelectItem value="BackgroundImage">
-                        Background Image
-                    </SelectItem>
-                    <SelectItem value="BackgroundAlpha">
-                        Background Alpha
-                    </SelectItem>
-                    <Separator />
-                    <SelectItem value="FillPaint">Fill Paint</SelectItem>
-                    <SelectItem value="StrokePaint">Stroke Paint</SelectItem>
-                </Select>
-            </ControlGroup>
+  return (
+    <Container className="w-[250px] h-[104px]" selected={selected}>
+      <Header metadata={metadata} id={id} />
+      <ControlGroup>
+        <Select
+          name="Source"
+          value={data.source}
+          onValueChange={(val: string) => updateSource(id, val)}
+          className="rounded-t-lg"
+        >
+          <SelectItem value="SourceGraphic">Source Graphic</SelectItem>
+          <SelectItem value="SourceAlpha">Source Alpha</SelectItem>
+          <Separator />
+          <SelectItem value="BackgroundImage">Background Image</SelectItem>
+          <SelectItem value="BackgroundAlpha">Background Alpha</SelectItem>
+          <Separator />
+          <SelectItem value="FillPaint">Fill Paint</SelectItem>
+          <SelectItem value="StrokePaint">Stroke Paint</SelectItem>
+        </Select>
+      </ControlGroup>
 
-            <Footer />
+      <Footer />
 
-            <HandlePositioner right>
-                <Handle
-                    selected={selected} 
-                    type="source"
-                    id="result"
-                    title="Result"
-                    position={Position.Right}
-                />
-            </HandlePositioner>
-        </Container>
-    )
+      <HandlePositioner right>
+        <Handle
+          selected={selected}
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
+      </HandlePositioner>
+    </Container>
+  )
 }
 
 export default memo(SourceNode)

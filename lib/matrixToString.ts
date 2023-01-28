@@ -1,3 +1,3 @@
 export function matrixToString(matrix: number[][]) {
-    return matrix.map((row) => row.join(" ")).join(" ")
+  return matrix.map((row) => row.join(" ")).join(" ")
 }

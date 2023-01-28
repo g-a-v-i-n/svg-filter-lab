@@ -15,50 +15,48 @@ const selector = (state: State) => state.convolveMatrixNode
 type NodeProps = NodeState & {}
 
 function ConvolveMatrixNode({ id, data, selected }: NodeProps) {
-    const { updateKernelMatrix } = useStore(selector)
+  const { updateKernelMatrix } = useStore(selector)
 
-    return (
-        <Container selected={selected }className="w-[250px] min-h-[104px]">
-            <Header metadata={metadata} id={id} />
-            <ControlGroup>
-                <MatrixInput
-                    rows={3}
-                    cols={3}
-                    label="Kernel Matrix"
-                    values={data.kernelMatrix}
-                    onChange={(value: number, i, j) => {
-                        const newValues = data.kernelMatrix.map(
-                            (row: number[]) => [...row]
-                        )
-                        newValues[i][j] = value
-                        updateKernelMatrix(id, newValues)
-                    }}
-                />
-            </ControlGroup>
+  return (
+    <Container selected={selected} className="w-[250px] min-h-[104px]">
+      <Header metadata={metadata} id={id} />
+      <ControlGroup>
+        <MatrixInput
+          rows={3}
+          cols={3}
+          label="Kernel Matrix"
+          values={data.kernelMatrix}
+          onChange={(value: number, i, j) => {
+            const newValues = data.kernelMatrix.map((row: number[]) => [...row])
+            newValues[i][j] = value
+            updateKernelMatrix(id, newValues)
+          }}
+        />
+      </ControlGroup>
 
-            <Footer />
+      <Footer />
 
-            <HandlePositioner left>
-                <Handle
-                    selected={selected} 
-                    type="target"
-                    id="in1"
-                    title="In"
-                    position={Position.Left}
-                />
-            </HandlePositioner>
+      <HandlePositioner left>
+        <Handle
+          selected={selected}
+          type="target"
+          id="in1"
+          title="In"
+          position={Position.Left}
+        />
+      </HandlePositioner>
 
-            <HandlePositioner right>
-                <Handle
-                    selected={selected} 
-                    type="source"
-                    id="result"
-                    title="Result"
-                    position={Position.Right}
-                />
-            </HandlePositioner>
-        </Container>
-    )
+      <HandlePositioner right>
+        <Handle
+          selected={selected}
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
+      </HandlePositioner>
+    </Container>
+  )
 }
 
 export default memo(ConvolveMatrixNode)

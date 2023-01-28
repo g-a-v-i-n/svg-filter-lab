@@ -1,14 +1,14 @@
 import { addProperty } from "../addProperty"
 
 export function blend(node, targetEdges, sourceEdge) {
-    const { id, data } = node
-    const { mode } = data
+  const { id, data } = node
+  const { mode } = data
 
-    const in1 = targetEdges[0]?.source || ""
-    const in2 = targetEdges[1]?.source || ""
-    const result = sourceEdge.target
+  const in1 = targetEdges[0]?.source || ""
+  const in2 = targetEdges[1]?.source || ""
+  const result = sourceEdge.target
 
-    const str = `
+  const str = `
         <feBlend
             id="${id}"
             mode="${mode.key}"
@@ -16,5 +16,5 @@ export function blend(node, targetEdges, sourceEdge) {
             in2="${in2}"
             result="${result}"
         />`
-    return str
+  return str
 }

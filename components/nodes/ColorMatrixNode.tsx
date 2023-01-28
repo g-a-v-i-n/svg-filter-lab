@@ -19,103 +19,101 @@ const selector = (state: State) => state.colorMatrixNode
 type NodeProps = NodeState & {}
 
 function ColorMatrixNode({ id, data, selected }: NodeProps) {
-    const {
-        updateMatrixValues,
-        updateSaturateValues,
-        updateHueRotateValues,
-        updateType,
-    } = useStore(selector)
+  const {
+    updateMatrixValues,
+    updateSaturateValues,
+    updateHueRotateValues,
+    updateType,
+  } = useStore(selector)
 
-    return (
-        <Container selected={selected} className="w-[270px]">
-            <Header metadata={metadata} id={id} />
-            <ControlGroup>
-                <Select
-                    name="Type"
-                    value={data.type}
-                    onValueChange={(val: string) => updateType(id, val)}
-                    className={clsx({
-                        "rounded-t-lg": data.type !== "luminanceToAlpha",
-                        "rounded-lg": data.type === "luminanceToAlpha",
-                    })}
-                >
-                    <SelectItem value="matrix">Matrix</SelectItem>
-                    <Separator />
-                    <SelectItem value="saturate">Saturate</SelectItem>
-                    <SelectItem value="hueRotate">Hue Rotate</SelectItem>
-                    <SelectItem value="luminanceToAlpha">
-                        Luminance to Alpha
-                    </SelectItem>
-                </Select>
+  return (
+    <Container selected={selected} className="w-[270px]">
+      <Header metadata={metadata} id={id} />
+      <ControlGroup>
+        <Select
+          name="Type"
+          value={data.type}
+          onValueChange={(val: string) => updateType(id, val)}
+          className={clsx({
+            "rounded-t-lg": data.type !== "luminanceToAlpha",
+            "rounded-lg": data.type === "luminanceToAlpha",
+          })}
+        >
+          <SelectItem value="matrix">Matrix</SelectItem>
+          <Separator />
+          <SelectItem value="saturate">Saturate</SelectItem>
+          <SelectItem value="hueRotate">Hue Rotate</SelectItem>
+          <SelectItem value="luminanceToAlpha">Luminance to Alpha</SelectItem>
+        </Select>
 
-                {data.type === "matrix" && (
-                    <>
-                        <Divider />
-                        <MatrixInput
-                            className="rounded-b-lg"
-                            disabled={data.type !== "matrix"}
-                            label="Values"
-                            rows={4}
-                            cols={5}
-                            onValueChange={(value, i, j) =>
-                                updateMatrixValues(id, i, j, value)
-                            }
-                            values={data.matrixValues}
-                        />
-                    </>
-                )}
+        {data.type === "matrix" && (
+          <>
+            <Divider />
+            <MatrixInput
+              className="rounded-b-lg"
+              disabled={data.type !== "matrix"}
+              label="Values"
+              rows={4}
+              cols={5}
+              onValueChange={(value, i, j) =>
+                updateMatrixValues(id, i, j, value)
+              }
+              values={data.matrixValues}
+            />
+          </>
+        )}
 
-                {data.type === "saturate" && (
-                    <>
-                        <Divider />
-                        <NumberInput
-                            label="Values"
-                            className="rounded-b-lg"
-                            value={data.saturateValues}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => updateSaturateValues(id, e.target.value)}
-                        />
-                    </>
-                )}
-                {data.type === "hueRotate" && (
-                    <>
-                        <Divider />
-                        <NumberInput
-                            label="Values"
-                            className="rounded-b-lg"
-                            value={data.hueRotateValues}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => updateHueRotateValues(id, e.target.value)}
-                        />
-                    </>
-                )}
-            </ControlGroup>
+        {data.type === "saturate" && (
+          <>
+            <Divider />
+            <NumberInput
+              label="Values"
+              className="rounded-b-lg"
+              value={data.saturateValues}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                updateSaturateValues(id, e.target.value)
+              }
+            />
+          </>
+        )}
+        {data.type === "hueRotate" && (
+          <>
+            <Divider />
+            <NumberInput
+              label="Values"
+              className="rounded-b-lg"
+              value={data.hueRotateValues}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                updateHueRotateValues(id, e.target.value)
+              }
+            />
+          </>
+        )}
+      </ControlGroup>
 
-            <Footer />
+      <Footer />
 
-            <HandlePositioner left>
-                <Handle
-                    selected={selected} 
-                    type="target"
-                    id="in"
-                    title="In"
-                    position={Position.Left}
-                />
-            </HandlePositioner>
+      <HandlePositioner left>
+        <Handle
+          selected={selected}
+          type="target"
+          id="in"
+          title="In"
+          position={Position.Left}
+        />
+      </HandlePositioner>
 
-            <HandlePositioner right>
-                <Handle
-                    selected={selected} 
-                    type="source"
-                    id="result"
-                    title="Result"
-                    position={Position.Right}
-                />
-            </HandlePositioner>
-        </Container>
-    )
+      <HandlePositioner right>
+        <Handle
+          selected={selected}
+          type="source"
+          id="result"
+          title="Result"
+          position={Position.Right}
+        />
+      </HandlePositioner>
+    </Container>
+  )
 }
 
 export default memo(ColorMatrixNode)
