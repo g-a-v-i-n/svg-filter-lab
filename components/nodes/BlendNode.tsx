@@ -8,7 +8,7 @@ import { Handle } from "../nodeParts/Handle"
 import { HandlePositioner } from "../nodeParts/HandlePositioner"
 import { Header } from "../nodeParts/Header"
 import { Select, SelectItem, Separator } from "../nodeParts/Select"
-import { NodeState, metadata } from "../../state/nodes/blend"
+import { NodeState, metadata, BlendModeKey } from "../../state/nodes/blend"
 
 const selector = (state: State) => state.blendNode
 
@@ -16,18 +16,19 @@ type NodeProps = NodeState & {}
 
 function BlendNode(props: NodeProps) {
   const { id, data, selected } = props
-  const { updateMode } = useStore(selector)
+  const { mode } = useStore(selector)
 
   return (
-    <Container selected={selected} className="w-[210px] h-[104px]">
+    <Container id={id} selected={selected} className="w-[210px] h-[104px]">
       <Header metadata={metadata} id={id} />
       <ControlGroup>
         <Select
           name="Mode"
           value={data.mode}
-          onValueChange={(val: string) => updateMode(id, val)}
+          onValueChange={(val: string) => mode.set(id, val as BlendModeKey)}
           className="rounded-lg"
         >
+          <SelectItem value="unset">Unset</SelectItem>
           <SelectItem value="normal">Normal</SelectItem>
           <Separator />
           <SelectItem value="darken">Darken</SelectItem>
@@ -63,7 +64,7 @@ function BlendNode(props: NodeProps) {
           selected={selected}
           type="target"
           id="in1"
-          title="In 1"
+          title="In"
           position={Position.Left}
         />
         <Handle
@@ -77,6 +78,7 @@ function BlendNode(props: NodeProps) {
 
       <HandlePositioner right>
         <Handle
+          onConnect={(params) => console.log("handle onConnect", params)}
           selected={selected}
           type="source"
           id="result"

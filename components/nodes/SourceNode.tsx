@@ -15,19 +15,17 @@ const selector = (state: State) => state.sourceNode
 type NodeProps = NodeState & {}
 
 function SourceNode({ id, data, selected }: NodeProps) {
-  const { updateSource } = useStore(selector)
-
-  console.log(data)
+  const { source } = useStore(selector)
 
   return (
-    <Container className="w-[250px] h-[104px]" selected={selected}>
+    <Container id={id} className="w-[250px] h-[104px]" selected={selected}>
       <Header metadata={metadata} id={id} />
       <ControlGroup>
         <Select
           name="Source"
           value={data.source}
-          onValueChange={(val: string) => updateSource(id, val)}
-          className="rounded-t-lg"
+          onValueChange={(val: string) => source.set(id, val)}
+          className="rounded-lg"
         >
           <SelectItem value="SourceGraphic">Source Graphic</SelectItem>
           <SelectItem value="SourceAlpha">Source Alpha</SelectItem>

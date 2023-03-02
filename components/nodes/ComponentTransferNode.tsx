@@ -8,12 +8,12 @@ import { Footer } from "../nodeParts/Footer"
 import { Handle } from "../nodeParts/Handle"
 import { HandlePositioner } from "../nodeParts/HandlePositioner"
 import { Header } from "../nodeParts/Header"
-import { MatrixInput } from "../nodeParts/MatrixInput"
 import { NumberInput } from "../nodeParts/NumberInput"
 import { Select, SelectItem, Separator } from "../nodeParts/Select"
 import { Switch } from "../nodeParts/Switch"
 import { SwitchRow } from "../nodeParts/SwitchRow"
-import { NodeState, metadata } from "../../state/nodes/componentTransfer"
+import { TextInput } from "../nodeParts/TextInput"
+import { NodeState, metadata, ChannelSlice, Channel } from "../../state/nodes/componentTransfer"
 import clsx from "clsx"
 
 const selector = (state: State) => state.componentTransferNode
@@ -24,7 +24,7 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
   const { red, green, blue, alpha } = useStore(selector)
 
   return (
-    <Container className="w-[270px]" selected={selected}>
+    <Container id={id} className="w-[270px]" selected={selected}>
       <Header metadata={metadata} id={id} />
       <SwitchRow label="Red">
         <Switch
@@ -32,61 +32,58 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
             data.red.isOn ? "bg-red flex-row-reverse" : "bg-tertiary flex-row"
           } `}
           checked={data.red.isOn}
-          onCheckedChange={() => red.updateIsOn(id, !data.red.isOn)}
+          onCheckedChange={() => red.isOn.set(id, !data.red.isOn)}
         />
       </SwitchRow>
 
       {data.red.isOn && (
-        <ChannelGroup id={id} channel="red" data={data} store={red} />
+        <ChannelGroup id={id} data={data.red} slice={red} />
       )}
 
       <SwitchRow label="Green">
         <Switch
-          label="green-channel"
           className={`${
             data.green.isOn
               ? "bg-green flex-row-reverse"
               : "bg-tertiary flex-row"
           } `}
           checked={data.green.isOn}
-          onCheckedChange={() => green.updateIsOn(id, !data.green.isOn)}
+          onCheckedChange={() => green.isOn.set(id, !data.green.isOn)}
         />
       </SwitchRow>
 
       {data.green.isOn && (
-        <ChannelGroup id={id} channel="green" data={data} store={green} />
+        <ChannelGroup id={id} data={data.green} slice={green} />
       )}
 
       <SwitchRow label="Blue">
         <Switch
-          label="blue-channel"
           className={`${
             data.blue.isOn ? "bg-blue flex-row-reverse" : "bg-tertiary flex-row"
           } `}
           checked={data.blue.isOn}
-          onCheckedChange={() => blue.updateIsOn(id, !data.blue.isOn)}
+          onCheckedChange={() => blue.isOn.set(id, !data.blue.isOn)}
         />
       </SwitchRow>
 
       {data.blue.isOn && (
-        <ChannelGroup id={id} channel="blue" data={data} store={blue} />
+        <ChannelGroup id={id} data={data.blue} slice={blue} />
       )}
 
       <SwitchRow label="Alpha">
         <Switch
-          label="alpha-channel"
           className={`${
             data.alpha.isOn
               ? "bg-primary flex-row-reverse"
               : "bg-tertiary flex-row"
           } `}
           checked={data.alpha.isOn}
-          onCheckedChange={() => alpha.updateIsOn(id, !data.alpha.isOn)}
+          onCheckedChange={() => alpha.isOn.set(id, !data.alpha.isOn)}
         />
       </SwitchRow>
 
       {data.alpha.isOn && (
-        <ChannelGroup id={id} channel="alpha" data={data} store={alpha} />
+        <ChannelGroup id={id} data={data.alpha} slice={alpha} />
       )}
 
       <Footer />
@@ -95,7 +92,7 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
         <Handle
           selected={selected}
           type="target"
-          id="in"
+          id="in1"
           title="In"
           position={Position.Left}
         />
@@ -114,17 +111,24 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
   )
 }
 
-function ChannelGroup({ id, channel, label, data, store }) {
+export type ChannelGroupProps = {
+  id: string
+  data: Channel
+  slice: ChannelSlice
+}
+
+function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
   return (
     <ControlGroup>
       <Select
         name="Type"
-        value={data[channel].type}
-        onValueChange={(val: string) => store.updateType(id, val)}
+        value={data.type}
+        onValueChange={(val: string) => slice.type.set(id, val)}
         className={clsx({
-          "rounded-b-xl": data[channel].type.key === "identity",
+          "rounded-b-xl": data.type === "identity",
         })}
       >
+        <SelectItem value="unset">Unset</SelectItem>
         <SelectItem value="identity">Identity</SelectItem>
         <Separator />
         <SelectItem value="table">Table</SelectItem>
@@ -133,73 +137,78 @@ function ChannelGroup({ id, channel, label, data, store }) {
         <SelectItem value="gamma">Gamma</SelectItem>
       </Select>
 
-      {data[channel].type.key === "linear" && (
+      {data.type === "linear" && (
         <>
           <Divider />
           <NumberInput
             label="Slope"
-            value={data[channel].slope}
+            value={data.slope}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              store.updateSlope(id, e.target.value)
+              slice.slope.set(id, e.target.value)
             }
           />
           <Divider />
           <NumberInput
-            last
+            className="rounded-b-lg"
             label="Intercept"
-            value={data[channel].intercept}
+            value={data.intercept}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              store.updateIntercept(id, e.target.value)
+              slice.intercept.set(id, e.target.value)
             }
           />
         </>
       )}
 
-      {data[channel].type.key === "gamma" && (
+      {data.type === "gamma" && (
         <>
           <Divider />
           <NumberInput
             label="Amplitude"
-            value={data[channel].amplitude}
+            value={data.amplitude}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              store.updateAmplitude(id, e.target.value)
+              slice.amplitude.set(id, e.target.value)
             }
           />
           <Divider />
           <NumberInput
             label="Exponent"
-            value={data[channel].exponent}
+            value={data.exponent}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              store.updateExponent(id, e.target.value)
+              slice.exponent.set(id, e.target.value)
             }
           />
           <Divider />
           <NumberInput
-            last
+            className="rounded-b-lg"
             label="Offset"
-            value={data[channel].offset}
+            value={data.offset}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              store.updateOffset(id, e.target.value)
+              slice.offset.set(id, e.target.value)
             }
           />
         </>
       )}
 
-      {(data[channel].type.key === "table" ||
-        data[channel].type.key === "discrete") && (
+      {(data.type === "table" &&
         <>
           <Divider />
-          <MatrixInput
-            last
-            rows={4}
-            cols={4}
+          <TextInput
+            className="rounded-b-lg"
             label="Table Values"
-            values={data[channel].tableValues}
-            onChange={(value: number, i, j) => {
-              const newValues = data.values.map((row: number[]) => [...row])
-              newValues[i][j] = value
-              store.updateTableValues(id, newValues)
-            }}
+            value={data.values.table}
+            onChange={slice.values.table.set}
+          />
+        </>
+      )}
+
+      {(data.type === "discrete" &&
+        <>
+          <Divider />
+          <TextInput
+            className="rounded-b-lg"
+            label="Table Values"
+            value={data.values.discrete}
+            onChange={slice.values.table.set}
           />
         </>
       )}

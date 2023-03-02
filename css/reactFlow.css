@@ -2,6 +2,10 @@
   display: none;
 }
 
+.react-flow__pane {
+  cursor: default;
+}
+
 .react-flow__node {
   @apply rounded-2xl outline-none;
   &:focus-visible > :first-child {

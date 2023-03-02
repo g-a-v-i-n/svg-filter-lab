@@ -61,7 +61,7 @@ export const SelectItem = forwardRef(
     forwardedRef: Ref<HTMLDivElement>
   ) => {
     return (
-      <div className="px-1 py-0.5">
+      <div className="p-1">
         <SelectPrimitive.Item
           {...props}
           ref={forwardedRef}

@@ -14,11 +14,14 @@ module.exports = {
         tertiary: "hsla(0, 0%, 30%, 100%)",
 
         background: "hsla(0, 0%, 100%, 100%)",
-        surfaceBase: "hsla(0, 0%, 98%, 100%)",
-        surfaceMiddle: "hsla(0, 0%, 94%, 100%)",
+        surfaceBase: "hsla(0, 0%, 97%, 100%)",
+        surfaceMiddle: "hsla(0, 0%, 100%, 100%)",
         surfaceHigh: "hsla(0, 0%, 90%, 100%)",
 
-        stroke: "hsla(0, 0%, 93%, 100%)",
+        surfaceBaseTheme: "hsla(210, 100%, 90%, 100%)",
+
+
+        stroke: "hsla(0, 0%, 0%, 10%)",
         connection: "hsla(0, 0%, 80%, 100%)",
 
         theme: "hsla(210, 100%, 50%, 100%)",
@@ -30,10 +33,13 @@ module.exports = {
 
         inverseBackground: "hsla(0, 0%, 2%, 100%)",
         inverseSurfaceBase: "hsla(0, 0%, 8%, 100%)",
-        inverseSurfaceMiddle: "hsla(0, 0%, 11%, 100%)",
+        inverseSurfaceMiddle: "hsla(0, 0%, 100%, 5%)",
         inverseSurfaceHigh: "hsla(0, 0%, 14%, 100%)",
 
-        inverseStroke: "hsla(0, 0%, 16%, 100%)",
+        inverseSurfaceBaseTheme: "hsla(210, 100%, 10%, 100%)",
+
+
+        inverseStroke: "hsla(0, 0%, 100%, 10%)",
         inverseConnection: "hsla(0, 0%, 40%, 100%)",
 
         inverseTheme: "hsla(215, 100%, 65%, 100%)",

@@ -16,6 +16,9 @@ import CompositeNode from "../components/nodes/CompositeNode"
 import ConvolveMatrixNode from "../components/nodes/ConvolveMatrixNode"
 import { Tray } from "../components/tray/Tray"
 import pkg from "../package.json"
+import { render } from '../state/render/render'
+import { lizardSkin } from "../lib/inkscape/lizard-skin"
+import { importer } from "../state/import/importer"
 
 const nodeTypes = {
   source: SourceNode,
@@ -34,6 +37,22 @@ function Flow(props) {
   return <ReactFlow {...props} />
 }
 
+function logState(nodes, edges) {
+  const initialNodes = JSON.stringify(nodes, null, 2)
+  const initialEdges = JSON.stringify(edges, null, 2)
+  console.log("initialNodes", initialNodes)
+  console.log("initialEdges", initialEdges)
+}
+
+function logRender(nodes, edges) {
+  console.log('RENDER', render(nodes, edges))
+}
+
+function importFilter() {
+  importer(lizardSkin)
+}
+
+
 const Home: NextPage = () => {
   const RFWrapper = useRef(null)
 
@@ -43,11 +62,15 @@ const Home: NextPage = () => {
     onNodesChange,
     onEdgesChange,
     onConnect,
+    onSelectionChange,
     onDrop,
     onDragOver,
     setReactFlowInstance,
+    // filterText,
   } = useStore()
-  console.log("nodes", nodes)
+
+  const filterText = render(nodes, edges).at(-1).data.filterText
+  console.log(filterText)
   return (
     <Div100vh>
       <ReactFlowProvider>
@@ -58,14 +81,18 @@ const Home: NextPage = () => {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onSelectionChange={onSelectionChange}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             connectionLineComponent={ConnectionLine}
             onDrop={(event) => onDrop(event, RFWrapper)}
             onInit={setReactFlowInstance}
             onDragOver={onDragOver}
+            elevateEdgesOnSelect
             fitView
+            selectionOnDrag
             panOnScroll
+            panOnDrag={false}
             // maxZoom={1}
             attributionPosition="bottom-center"
           />
@@ -73,11 +100,45 @@ const Home: NextPage = () => {
       </ReactFlowProvider>
       <Tray />
 
-      <div className="fixed right-4 top-4">
+      <div className="fixed right-4 top-4 flex flex-col gap-y-2">
         <div className="bg-green cs-text text-inversePrimary dark:text-primary p-2 rounded-full">
           {pkg.version}
         </div>
+        <button onClick={() => logState(nodes, edges)}>log state</button>
+        <button onClick={() => logRender(nodes, edges)}>render</button>
+        <button onClick={() => importFilter()}>import</button>
+
       </div>
+
+      <div className="fixed right-4 bottom-20 flex borderPrimary surfaceBase rounded-xl p-2">
+
+        <svg width="200" height="200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs
+            dangerouslySetInnerHTML={{
+              __html: `
+              <filter id="filter" x="0" y="0" width="100%" height="100%">
+               ${filterText}
+              </filter>
+              `
+            }}
+          />
+
+          <g filter="url(#filter)">
+            <circle cx="50" cy="50" r="50" fill="orangered" />
+          </g>
+
+
+        </svg>
+
+        <svg width="200" height="200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g >
+            <circle cx="50" cy="50" r="50" fill="orangered" />
+          </g>
+
+
+        </svg>
+      </div>
+        
     </Div100vh>
   )
 }

@@ -30,6 +30,10 @@
     @apply bg-surfaceHigh dark:bg-inverseSurfaceHigh;
   }
 
+  .surfaceBaseTheme {
+    @apply bg-surfaceBaseTheme dark:bg-inverseSurfaceBaseTheme;
+  }
+
   /* Borders */
   .borderPrimary {
     @apply border-stroke dark:border-inverseStroke;

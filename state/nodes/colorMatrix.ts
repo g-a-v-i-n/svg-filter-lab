@@ -1,6 +1,7 @@
 import { Node } from "reactflow"
-import { setNodeProp } from "../../lib/setNodeProp"
-import { State } from "../../state/store"
+import { createNodeMatrixSetter, createNodePropSetter } from "../setters"
+import { matrixToString } from "../../lib/matrixToString"
+import { UnsetValue } from "../../lib/unset"
 
 export const metadata = {
   type: "colorMatrix",
@@ -10,65 +11,111 @@ export const metadata = {
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix",
 }
 
-// The value is a list of numbers, which is interpreted differently depending on the value of the type attribute:
-// For type="matrix", values is a list of 20 matrix values (a00 a01 a02 a03 a04 a10 a11 … a34), separated by whitespace and/or a comma.
-// For type="saturate", values is a single real number value (0 to 1).
-// For type="hueRotate", values is a single one real number value (degrees).
-// For type="luminanceToAlpha", values is not applicable.
+export type MatrixTypeKey = UnsetValue | "matrix" | "saturate" | "hueRotate" | "luminanceToAlpha"
+
 export type NodeData = {
-  type: string
-  matrixValues: number[][]
-  saturateValues: number
-  hueRotateValues: number
+  in1: string | null,
+  result: string | null,
+  type: MatrixTypeKey
+  values: {
+    matrix: number[][] | UnsetValue
+    saturate: number | UnsetValue
+    hueRotate: number | UnsetValue
+  }
 }
 
 export type NodeState = Node<NodeData> & { selected: boolean }
 
 export type Slice = {
-  updateType: (id: string, type: string) => void
-  updateMatrixValues: (
-    id: string,
-    i: number,
-    j: number,
-    newValue: number
-  ) => void
-  updateSaturateValues: (id: string, newValues: string) => void
-  updateHueRotateValues: (id: string, newValues: string) => void
+  type: {
+    set: Function,
+  }
+  values: {
+    matrix: {
+      set: Function,
+    }
+    saturate: {
+      set: Function,
+    }
+    hueRotate: {
+      set: Function,
+    }
+  }
 }
 
-export const createSlice = (set) => ({
+export const createSlice = (set:Function) => ({
   colorMatrixNode: {
-    updateType: (id: string, newValue: string) => {
-      setNodeProp(set, id, "type", newValue)
+    type: {
+      set: createNodePropSetter(set, "type"),
     },
-    updateMatrixValues: (
-      id: string,
-      i: number,
-      j: number,
-      newValue: number
-    ) => {
-      set((state: State) => {
-        const index = state.nodes.findIndex((node) => node.id === id)
-        state.nodes[index].data.matrixValues[i][j] = newValue
-      })
-    },
-    updateSaturateValues: (id: string, newValue: number) => {
-      setNodeProp(set, id, "saturateValues", newValue)
-    },
-    updateHueRotateValues: (id: string, newValue: number) => {
-      setNodeProp(set, id, "hueRotateValues", newValue)
-    },
+    values: {
+      matrix: {
+        set: createNodeMatrixSetter(set, "values.matrix"),
+      },
+      saturate: {
+        set: createNodePropSetter(set, "values.saturate"),
+      },
+      hueRotate: {
+        set: createNodePropSetter(set, "values.hueRotate"),
+      }
+    }
   },
 })
 
 export const defaultData: NodeData = {
   type: "matrix",
-  matrixValues: [
-    [1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0],
-  ],
-  saturateValues: 1,
-  hueRotateValues: 0,
+  values: {
+    matrix: [
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+    saturate: 0,
+    hueRotate: 0,
+  }
+}
+
+export function render(node:NodeState) {
+  const { id, data } = node
+  const { type, in1, result } = data
+
+  // The value is a list of numbers, which is interpreted differently depending on the value of the type attribute:
+  let valuesStr = ""
+
+  // For type="matrix", values is a list of 20 matrix values (a00 a01 a02 a03 a04 a10 a11 … a34), separated by whitespace and/or a comma.
+  if (type === "matrix") {
+    const values = matrixToString(data.values.matrix)
+    valuesStr = `values="${values}"`
+  }
+
+  // For type="saturate", values is a single real number value (0 to 1).
+  if (type === "saturate") {
+    const values = data.values.saturate
+    valuesStr = `values="${values}"`
+  }
+  // For type="hueRotate", values is a single one real number value (degrees).
+  if (type === "hueRotate") {
+    const values = data.values.hueRotate
+    valuesStr = `values="${values}"`
+  }
+
+  // For type="luminanceToAlpha", values is not applicable.
+
+  const str = `<feColorMatrix id="${id}" in="${in1}" type="${type}" ${valuesStr} result="${result}" />`
+  return str
+}
+
+export function importer(attributes):NodeState {
+  const valuesKey = attributes.type === "hueRotate"
+    ? "hueRotateValues"
+    : attributes.type === "saturate"
+    ? "saturateValues"  
+    : "matrixValues"
+
+  return {
+    ...defaultData,
+    ...attributes,
+    [valuesKey]: attributes.values,
+  }
 }
