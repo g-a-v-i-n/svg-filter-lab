@@ -7,13 +7,13 @@ import * as composite from "../nodes/composite"
 import * as convolveMatrix from "../nodes/convolveMatrix"
 import { topologicalSort } from "../../lib/topologicalSort"
 
-export const renderers = {
-    source: source.render,
-    blend: blend.render,
-    colorMatrix: colorMatrix.render,
-    componentTransfer: componentTransfer.render,
-    composite: composite.render,
-    convolveMatrix: convolveMatrix.render,
+export const stringifiers = {
+    source: source.stringify,
+    blend: blend.stringify,
+    colorMatrix: colorMatrix.stringify,
+    componentTransfer: componentTransfer.stringify,
+    composite: composite.stringify,
+    convolveMatrix: convolveMatrix.stringify,
 }
 
 function getAncestors(n:string, ejs:Edge[], acc:Set<string> = new Set()) {
@@ -32,39 +32,39 @@ function getAncestors(n:string, ejs:Edge[], acc:Set<string> = new Set()) {
   return acc
 }
 
-function getNodeTargets(edges:Edge[], nodeId:string) {
-  return edges
-      .filter((edge) => edge.target === nodeId)
-      .reduce((acc, edge) => {
-        console.log(edge)
-        if (edge.data?.source) {
-          acc[edge.targetHandle] = edge.data.source
-        } else {
-          acc[edge.targetHandle] = edge.source
-        }
-        return acc
-      }, {})
-}
+// function getNodeTargets(edges:Edge[], nodeId:string) {
+//   return edges
+//       .filter((edge) => edge.target === nodeId)
+//       .reduce((acc, edge) => {
+//         // console.log(edge)
+//         if (edge.data?.source) {
+//           acc[edge.targetHandle] = edge.data.source
+//         } else {
+//           acc[edge.targetHandle] = edge.source
+//         }
+//         return acc
+//       }, {})
+// }
 
 
-export function render(nodes:Node[], edges:Edge[]) {
+export function stringify(nodes:Node[], edges:Edge[]) {
 
   const order = topologicalSort(edges)
 
   // console.log(order)
 
-  nodes = nodes.map((n) => {
-   // insert edge data into node data
-    return {
-      ...n,
-      // order: order.indexOf(n.id),
-      data: {
-        ...n.data,
-        ...getNodeTargets(edges, n.id),
-        result: n.id,
-      }
-    } as Node & {edges: {in: string | null, in2: string | null, result: string}}
-  })
+  // nodes = nodes.map((n) => {
+  //  // insert edge data into node data
+  //   return {
+  //     ...n,
+  //     // order: order.indexOf(n.id),
+  //     data: {
+  //       ...n.data,
+  //       ...getNodeTargets(edges, n.id),
+  //       result: n.id,
+  //     }
+  //   } as Node & {edges: {in: string | null, in2: string | null, result: string}}
+  // })
 
 
   return nodes.map((n) => {
@@ -79,7 +79,7 @@ export function render(nodes:Node[], edges:Edge[]) {
 
         const ancestorNode = nodes.find((n) => n.id === ancestor)
 
-        const renderer = renderers[ancestorNode.type]
+        const renderer = stringifiers[ancestorNode.type]
 
         return renderer ? renderer(ancestorNode) : `<${ancestorNode.type} no-render />`
       })

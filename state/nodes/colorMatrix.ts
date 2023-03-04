@@ -1,7 +1,8 @@
 import { Node } from "reactflow"
 import { createNodeMatrixSetter, createNodePropSetter } from "../setters"
-import { matrixToString } from "../../lib/matrixToString"
-import { UnsetValue } from "../../lib/unset"
+import { UNSET, UnsetValue } from "../../lib/unset"
+import { stringifyProp } from "../stringify/stringifyProp"
+import { stringifyMatrixProp } from "../stringify/stringifyMatrixProp"
 
 export const metadata = {
   type: "colorMatrix",
@@ -15,7 +16,6 @@ export type MatrixTypeKey = UnsetValue | "matrix" | "saturate" | "hueRotate" | "
 
 export type NodeData = {
   in1: string | null,
-  result: string | null,
   type: MatrixTypeKey
   values: {
     matrix: number[][] | UnsetValue
@@ -64,6 +64,7 @@ export const createSlice = (set:Function) => ({
 
 export const defaultData: NodeData = {
   type: "matrix",
+  in1: null,
   values: {
     matrix: [
       [1, 0, 0, 0, 0],
@@ -76,46 +77,44 @@ export const defaultData: NodeData = {
   }
 }
 
-export function render(node:NodeState) {
+export function stringify(node:NodeState) {
   const { id, data } = node
-  const { type, in1, result } = data
+  const { type, in1, values } = data
 
   // The value is a list of numbers, which is interpreted differently depending on the value of the type attribute:
   let valuesStr = ""
 
   // For type="matrix", values is a list of 20 matrix values (a00 a01 a02 a03 a04 a10 a11 … a34), separated by whitespace and/or a comma.
   if (type === "matrix") {
-    const values = matrixToString(data.values.matrix)
-    valuesStr = `values="${values}"`
+    valuesStr = stringifyMatrixProp('values', values.matrix)
   }
 
   // For type="saturate", values is a single real number value (0 to 1).
   if (type === "saturate") {
-    const values = data.values.saturate
-    valuesStr = `values="${values}"`
+    valuesStr = stringifyProp('values', values.saturate)
   }
+
   // For type="hueRotate", values is a single one real number value (degrees).
   if (type === "hueRotate") {
-    const values = data.values.hueRotate
-    valuesStr = `values="${values}"`
+    valuesStr = stringifyProp('values', values.hueRotate)
   }
 
   // For type="luminanceToAlpha", values is not applicable.
 
-  const str = `<feColorMatrix id="${id}" in="${in1}" type="${type}" ${valuesStr} result="${result}" />`
+  const str = `<feColorMatrix ${stringifyProp('type', type)} ${valuesStr} in="${in1}" result="${id}" />`
   return str
 }
 
-export function importer(attributes):NodeState {
-  const valuesKey = attributes.type === "hueRotate"
-    ? "hueRotateValues"
-    : attributes.type === "saturate"
-    ? "saturateValues"  
-    : "matrixValues"
+// export function importer(attributes):NodeState {
+//   const valuesKey = attributes.type === "hueRotate"
+//     ? "hueRotateValues"
+//     : attributes.type === "saturate"
+//     ? "saturateValues"  
+//     : "matrixValues"
 
-  return {
-    ...defaultData,
-    ...attributes,
-    [valuesKey]: attributes.values,
-  }
-}
+//   return {
+//     ...defaultData,
+//     ...attributes,
+//     [valuesKey]: attributes.values,
+//   }
+// }

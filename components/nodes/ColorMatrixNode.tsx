@@ -57,7 +57,7 @@ function ColorMatrixNode({ id, data, selected }: NodeProps) {
               onValueChange={(value, i, j) =>
                 values.matrix.set(id, value, i, j)
               }
-              values={data.values.matrix as number[][]}
+              values={data.values.matrix}
             />
           </>
         )}

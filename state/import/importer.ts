@@ -18,8 +18,6 @@ export function importer(str) {
         // @ts-ignore
         options
       );
-
-      console.log(ast)
     
       // Very simple. just a reduce function that vists each node of the tree
     //   visit(

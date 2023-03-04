@@ -16,7 +16,7 @@ import CompositeNode from "../components/nodes/CompositeNode"
 import ConvolveMatrixNode from "../components/nodes/ConvolveMatrixNode"
 import { Tray } from "../components/tray/Tray"
 import pkg from "../package.json"
-import { render } from '../state/render/render'
+import { stringify } from '../state/stringify/stringify'
 import { lizardSkin } from "../lib/inkscape/lizard-skin"
 import { importer } from "../state/import/importer"
 
@@ -69,8 +69,8 @@ const Home: NextPage = () => {
     // filterText,
   } = useStore()
 
-  const filterText = render(nodes, edges).at(-1).data.filterText
-  console.log(filterText)
+  const filterText = stringify(nodes, edges).at(-1).data.filterText
+
   return (
     <Div100vh>
       <ReactFlowProvider>

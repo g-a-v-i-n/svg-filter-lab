@@ -1,6 +1,8 @@
 import { Node } from "reactflow"
 import { createNodePropSetter } from "../setters"
 import { UnsetValue } from "../../lib/unset"
+import { stringifyArrayProp } from "../stringify/stringifyArrayProp"
+import { stringifyProp } from "../stringify/stringifyProp"
 
 export const metadata = {
   type: "componentTransfer",
@@ -30,7 +32,6 @@ export type ChannelLabel = "red" | "green" | "blue" | "alpha"
 
 export type NodeData = {
   in1: string | null,
-  result: string | null,
   red: Channel
   green: Channel
   blue: Channel
@@ -136,22 +137,23 @@ export const defaultChannel = {
 };
 
 export const defaultData = {
+  in1: null,
   red: { ...defaultChannel },
   green: { ...defaultChannel },
   blue: { ...defaultChannel },
   alpha: { ...defaultChannel },
 };
 
-export function render(node:NodeState) {
+export function stringify(node:NodeState) {
   const { id, data } = node
-  const { red, green, blue, alpha, in1, result } = data
+  const { red, green, blue, alpha, in1 } = data
 
   const str = `
-  <feComponentTransfer id="${id}" in="${in1}" result="${result}">
-    ${renderChannel(id, "R", red)}
-    ${renderChannel(id, "G", green)}
-    ${renderChannel(id, "B", blue)}
-    ${renderChannel(id, "A", alpha)}
+  <feComponentTransfer in="${in1}" result="${id}">
+    ${stringifyChannel(id, "R", red)}
+    ${stringifyChannel(id, "G", green)}
+    ${stringifyChannel(id, "B", blue)}
+    ${stringifyChannel(id, "A", alpha)}
   </feComponentTransfer>`
   return str
 }
@@ -166,29 +168,29 @@ export function render(node:NodeState) {
 // For gamma, the function is defined by the following exponential function:
 // The initial value for type is identity.
 
-function renderChannel(id, channel, data) {
-  const { isOn, type, amplitude, exponent, offset, slope, intercept, tableValues, discreteTableValues } = data
+function stringifyChannel(id:string, channel:string, data:Channel) {
+  const { isOn, type, amplitude, exponent, offset, slope, intercept, values } = data
 
   if (!isOn) return ""
 
   let properties = ""
   if (type === "table") {
-    properties = `tableValues="${tableValues.join(' ')}"`
+    properties = stringifyArrayProp('tableValues', values.table)
   } 
 
   if (type === "discrete") {
-    properties = `tableValues="${discreteTableValues.join(' ')}"`
+    properties =  stringifyArrayProp('tableValues', values.discrete)
   }
 
   if (type === "linear") {
-    properties = `slope="${slope}" intercept="${intercept}"`
+    properties = `${stringifyProp('slope', slope)} ${stringifyProp('intercept', intercept)}`
   }
 
   if (type === "gamma") {
-    properties = `amplitude="${amplitude}" exponent="${exponent}" offset="${offset}"`
+    properties = `${stringifyProp('amplitude', amplitude)} ${stringifyProp('exponent', exponent)} ${stringifyProp('offset', offset)}`
   }
 
-  const str = `<feFunc${channel} type="${type}" ${properties} />`
+  const str = `<feFunc${channel} ${stringifyProp('type', type)} ${properties} />`
 
   return str
 }

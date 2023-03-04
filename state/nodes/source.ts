@@ -1,12 +1,12 @@
 import { Node } from "reactflow"
-import { setNodeProp } from "../../lib/setNodeProp"
-import { createNodePropSetter } from "../setters"
+import { State } from "../store"
+
 
 export const metadata = {
   type: "source",
   title: "Source",
   tagName: "",
-  icon: "􀮟",
+  icon: "􀏅",
   mdn: "",
 }
 
@@ -21,43 +21,33 @@ export type Slice = {
   updateSVG: (nodeId: string, svg: string) => void
 }
 
-function applyImageSourceToEdgeData(edges: Edges[], nodeId: string, newSource: string) {
-  return edges.map((edge) => {
-    if (edge.source === nodeId) {
-      return {
-        ...edge,
-        data: {
-          source: newSource, // the key for the image source
-        }
-      }
-     } else  {
-      return edge
-     }
-  })
-}
-
-export const createSlice = (set) => ({
+export const createSlice = (set:Function) => ({
   sourceNode: {
-    updateSource: (nodeId: string, newSource: string) => {
-      set((state: State) => {
+    source: {
+      set: (nodeId: string, newSource: string) => {
+        set((state: State) => {
 
-        state.edges = applyImageSourceToEdgeData(state.edges, nodeId, newSource)
-
+        // get downstream nodes connected to this node and update their input properties
+        state.edges
+          .filter((edge) => edge.source === nodeId)
+          .forEach((edge) => {
+            const index = state.nodes.findIndex((node) => node.id === edge.target)
+            state.nodes[index].data[edge.targetHandle] = newSource
+          })
+        
+        // update the source node's UI itself
         const index = state.nodes.findIndex((node) => node.id === nodeId)
         state.nodes[index].data.source = newSource
       })
-      
-      // here we should update the metadata of the edge
-    },
-    updateSVG: (nodeId: string, newSVG: string) =>
-      setNodeProp(set, nodeId, "svg", newSVG),
-  },
+    }
+  }
+},
 })
 
 export const defaultData: NodeData = {
   source: "SourceGraphic",
 }
 
-export function render(node) {
+export function stringify(node) {
   return ''
 }

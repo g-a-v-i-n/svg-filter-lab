@@ -1,5 +1,6 @@
 import clsx from "clsx"
 import { NumericFormat } from "react-number-format"
+import { UNSET, UnsetValue } from "../../lib/unset"
 import FieldLabel from "./FieldLabel"
 
 type MatrixInputProps = {
@@ -9,7 +10,7 @@ type MatrixInputProps = {
   label: string
   disabled?: boolean
   onValueChange: (v: number, i: number, j: number) => void
-  values: number[][]
+  values: number[][] | UnsetValue
 }
 
 export function MatrixInput({
@@ -30,24 +31,27 @@ export function MatrixInput({
     >
       <FieldLabel>{props.label}</FieldLabel>
       <div
-        className={`flex flex-col borderPrimary border rounded ${
+        className={`flex flex-col border borderPrimary divide-y dividePrimary rounded ${
           disabled ? "opacity-50" : ""
         }`}
       >
-        {[...Array(rows)].map((_, i) => {
+        {values === UNSET && (
+          <div className="flex divide-x dividePrimary">
+            <span>Unset</span>
+          </div>
+        )}
+        {values !== UNSET && [...Array(rows)].map((_, i) => {
           return (
-            <div className="flex" key={props.label + "-" + "rows" + "-" + i}>
+            <div className="flex divide-x dividePrimary" key={props.label + "-" + "rows" + "-" + i}>
               {[...Array(cols)].map((_, j) => {
                 const inputCns = clsx(
                   {
-                    "border-r": j !== cols - 1,
-                    "border-b": i !== rows - 1,
                     "rounded-tl-sm": i === 0 && j === 0,
                     "rounded-tr-sm": i === 0 && j === cols - 1,
                     "rounded-bl-sm": i === rows - 1 && j === 0,
                     "rounded-br-sm": i === rows - 1 && j === cols - 1,
                   },
-                  "w-8 h-5 text-center font-mono bg-transparent borderPrimary relative focus:z-10"
+                  "w-full h-6 text-center font-mono bg-transparent relative focus:z-10"
                 )
                 return (
                   <NumericFormat

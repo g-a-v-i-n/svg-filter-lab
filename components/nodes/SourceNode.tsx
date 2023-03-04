@@ -18,7 +18,7 @@ function SourceNode({ id, data, selected }: NodeProps) {
   const { source } = useStore(selector)
 
   return (
-    <Container id={id} className="w-[250px] h-[104px]" selected={selected}>
+    <Container id={id} className="w-[240px] h-[104px]" selected={selected}>
       <Header metadata={metadata} id={id} />
       <ControlGroup>
         <Select

@@ -1,7 +1,6 @@
 import { Node } from "reactflow"
-
-import { setNodeProp } from "../../lib/setNodeProp"
 import { UnsetValue } from "../../lib/unset"
+import { stringifyProp } from "../stringify/stringifyProp"
 import { createNodePropSetter } from "../setters"
 
 export const metadata = {
@@ -32,7 +31,6 @@ export type BlendModeKey = UnsetValue
 export type NodeData = {
   in1: string | null,
   in2: string | null,
-  result: string | null,
   mode: BlendModeKey
 }
 
@@ -53,28 +51,15 @@ export const createSlice = (set:Function) => ({
 })
 
 export const defaultData: NodeData = {
+  in1: null,
+  in2: null,
   mode: 'normal',
 }
 
-export function render(node:NodeState) {
+export function stringify(node:NodeState) {
   const { id, data } = node
-  const { mode, in1, in2, result } = data
+  const { mode, in1, in2 } = data
 
-    // The value is a list of numbers, which is interpreted differently depending on the value of the type attribute:
-    let modeStr = ""
-
-    // For type="matrix", values is a list of 20 matrix values (a00 a01 a02 a03 a04 a10 a11 … a34), separated by whitespace and/or a comma.
-    if (mode !== 'unset') {
-      modeStr = `mode="${mode}"`
-    }
-
-  const str = `<feBlend id="${id}" ${modeStr} in="${in1}" in2="${in2}" result="${result}" />`
+  const str = `<feBlend ${stringifyProp('mode', mode)} in="${in1}" in2="${in2}" result="${id}" />`
   return str
-}
-
-export function importer(ast) {
-  // console.log(ast)
-  // const { id, mode, in: in1, in2, result } = ast
-  // const data = { mode, in1, in2, result }
-  // return { id, data }
 }

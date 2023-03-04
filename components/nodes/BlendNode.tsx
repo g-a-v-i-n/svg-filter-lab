@@ -78,7 +78,6 @@ function BlendNode(props: NodeProps) {
 
       <HandlePositioner right>
         <Handle
-          onConnect={(params) => console.log("handle onConnect", params)}
           selected={selected}
           type="source"
           id="result"

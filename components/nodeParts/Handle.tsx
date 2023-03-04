@@ -1,16 +1,13 @@
 import * as Tooltip from "@radix-ui/react-tooltip"
-import { Handle as RFHandle, Position, HandleType } from "reactflow"
+import { Handle as RFHandle, Position, HandleProps as RFHandleProps } from "reactflow"
 import clsx from "clsx"
-import { theme } from "../../tailwind.config"
 
 export type HandleProps = {
-  type: HandleType
-  position: Position
   selected: boolean
   id?: string
   title: string
   className?: string
-}
+} & RFHandleProps
 
 const handleCns = `
     rounded-full
@@ -34,17 +31,15 @@ const tooltipContentCns = `
     shadow-high
   `
 
-export function Handle({ className, type, position, ...props }: HandleProps) {
+export function Handle({ className, selected, title, ...props }: HandleProps) {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
           <RFHandle
-            type={type}
-            position={position}
             className={clsx(handleCns, className, {
-              "bg-theme dark:bg-inverseTheme": props.selected,
-              "bg-Tertiary dark:bg-inverseTertiary": !props.selected,
+              "bg-theme dark:bg-inverseTheme": selected,
+              "bg-Tertiary dark:bg-inverseTertiary": !selected,
             })}
             {...props}
             title={undefined} // Removing the title because of custom tooltip
@@ -52,11 +47,11 @@ export function Handle({ className, type, position, ...props }: HandleProps) {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
-            side={position === Position.Left ? "left" : "right"}
+            side={props.position === Position.Left ? "left" : "right"}
             className={tooltipContentCns}
             sideOffset={2}
           >
-            <span>{props.title}</span>
+            <span>{title}</span>
             <Tooltip.Arrow asChild>
               <svg
                 width="10"

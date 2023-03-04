@@ -1,7 +1,7 @@
 import { Node } from "reactflow"
-import { setNodeProp } from "../../lib/setNodeProp"
 import { addProperty } from "../../lib/addProperty"
-import { UnsetValue } from "../../types"
+import { UnsetValue } from "../../lib/unset"
+import { stringifyProp } from "../stringify/stringifyProp"
 import { createNodePropSetter } from "../setters"
 
 export const metadata = {
@@ -93,17 +93,17 @@ export function exporter({ data }: NodeState) {
 }
 
 
-export function render(node:NodeState) {
+export function stringify(node:NodeState) {
   const { id, data } = node
-  const { in1, in2, result, operator, k1, k2, k3, k4 } = data
+  const { in1, in2, operator, k1, k2, k3, k4 } = data
 
   let kProperties = ""
 
   if (operator === "arithmetic") {
-    kProperties = `k1="${k1}" k2="${k2}" k3="${k3}" k4="${k4}"`
+    kProperties = `${stringifyProp('k1', k1)} ${stringifyProp('k2', k2)} ${stringifyProp('k3', k3)} ${stringifyProp('k4', k4)} `
   }
 
 
-  const str = `<feComposite id="${id}" in2="${in2}" operator="${operator}" kProperties in="${in1}" result="${result}" />`
+  const str = `<feComposite in2="${in2}" operator="${operator}" kProperties in="${in1}" result="${id}" />`
   return str
 }

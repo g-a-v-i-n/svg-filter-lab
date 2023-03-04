@@ -28,7 +28,7 @@ export function Container({
       )}
     >
       {children}
-      <div className="absolute bottom-[-16px] text-xs text-secondary">{id}</div>
+      <div className="absolute bottom-[-16px] text-xs text-secondary pl-3">{id}</div>
     </div>
   )
 }

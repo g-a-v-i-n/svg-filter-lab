@@ -1,7 +1,9 @@
 import { Node } from "reactflow"
-import { matrixToString } from "../../lib/matrixToString"
 import { UnsetValue } from "../../lib/unset"
+import { stringifyProp } from "../stringify/stringifyProp"
 import { createNodePropSetter } from "../setters"
+import { stringifyMatrixProp } from "../stringify/stringifyMatrixProp"
+import { stringifyBooleanProp } from "../stringify/stringifyBooleanProp"
 
 export const metadata = {
   type: "convolveMatrix",
@@ -12,12 +14,13 @@ export const metadata = {
 }
 
 export type NodeData = {
+  in1: string | null,
   kernelMatrix: number[][] | UnsetValue
   order: number | UnsetValue
   bias: number | UnsetValue
   divisor: number | UnsetValue
   edgeMode: string | UnsetValue
-  kernelUnitLength: number | UnsetValue
+  // kernelUnitLength: number | UnsetValue // deprecated
   preserveAlpha: boolean | UnsetValue
   targetX: number | UnsetValue
   targetY: number | UnsetValue
@@ -88,6 +91,7 @@ export const createSlice = (set:Function) => ({
 })
 
 export const defaultData: NodeData = {
+  in1: null,
   kernelMatrix: [
     [1, 0, 0, 0, 0],
     [0, 1, 0, 0, 0],
@@ -104,39 +108,13 @@ export const defaultData: NodeData = {
   targetY: 0, // floor(orderY / 2)
 }
 
-export const defaultState = {
-  kernelMatrix: null,
-  order: null,
-  bias: null,
-  divisor: null, // Sum of all values in kernelMatrix or 1 if sum is 0
-  edgeMode: null,
-  // kernelUnitLength: 1, deprecated
-  preserveAlpha: null,
-  targetX: null, // floor(orderX / 2)
-  targetY: null, // floor(orderY / 2)
-}
-
-export const placeholders = {
-  order: 3,
-  bias: 0,
-  divisor: 1, // Sum of all values in kernelMatrix or 1 if sum is 0
-  edgeMode: "duplicate",
-  // kernelUnitLength: 1, deprecated
-  preserveAlpha: false,
-  targetX: 0, // floor(orderX / 2)
-  targetY: 0, // floor(orderY / 2)
-}
-
-
 // if the value value in state === null
 // in the renderer, do not add the attribute
 // in the node component, use a HTML `placeholder` instead of value
-
-
-export function render(node:NodeState) {
+export function stringify(node:NodeState) {
   const { id, data } = node
-  const { kernelMatrix, in1, result } = data
+  const { in1, kernelMatrix, order, bias, divisor, edgeMode, preserveAlpha, targetX, targetY } = data
 
-  const str = `<feConvolveMatrix id="${id}" kernelMatrix="${matrixToString(kernelMatrix)}" in="${in1}" result="${result}" />`
+  const str = `<feConvolveMatrix in="${in1}" ${stringifyMatrixProp('kernelMatrix', kernelMatrix)} ${stringifyProp('order', order)} ${stringifyProp('bias', bias)} ${stringifyProp('divisor', divisor)} ${stringifyProp('edgeMode', edgeMode)} ${stringifyBooleanProp('preserveAlpha', preserveAlpha)} ${stringifyProp('targetX', targetX)} ${stringifyProp('targetY', targetY)} result="${id}" />`
   return str
 }

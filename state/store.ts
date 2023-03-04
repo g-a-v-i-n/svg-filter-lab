@@ -1,21 +1,15 @@
 import {create} from "zustand"
 import { immer } from "zustand/middleware/immer"
+// import {uuid} from "../lib/uuid"
 import {
-  Connection,
-  Edge,
+  Edge as RFEdge,
   EdgeChange,
   NodeChange,
-  addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
+  Connection,
   applyNodeChanges,
   applyEdgeChanges,
   ReactFlowInstance,
-  getConnectedEdges,
 } from "reactflow"
-
-
 
 import { initialNodes, initialEdges } from "./defaultStates/cliques"
 
@@ -26,12 +20,11 @@ import * as colorMatrix from "./nodes/colorMatrix"
 import * as componentTransfer from "./nodes/componentTransfer"
 import * as convolveMatrix from "./nodes/convolveMatrix"
 
-import { render } from "./render/render"
 import { uuid } from "../lib/uuid"
 import { createDragAndDropSlice, OnDragOver,
   OnDrop } from "./panels/dragAndDrog"
 
-export type Edge = Edge
+export type Edge = RFEdge
 
 export type Node = (
   source.NodeState
@@ -52,14 +45,16 @@ export type State = {
   nodes: Nodes | []
   edges: Edges | []
 
+  setEdge: Function
+
   onNodeSelect: (node: Node) => void
 
   filterText: string
 
   // RF Events
-  onNodesChange: (changes: NodeChange[]) => void
-  onEdgesChange: (changes: EdgeChange[]) => void
-  onConnect: OnConnect
+  onNodesChange: Function
+  onEdgesChange: Function
+  onConnect: Function
 
   // Actions
   deleteNode: (nodeId: string) => void
@@ -78,8 +73,8 @@ export type State = {
 }
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = create<State>()(
-  immer((set, get) => ({
+const useStore = create<any>()(
+  immer((set) => ({
     rfInstance: null,
 
     setReactFlowInstance: (instance: ReactFlowInstance) =>
@@ -87,44 +82,72 @@ const useStore = create<State>()(
         state.rfInstance = instance
       }),
       
-
     nodes: initialNodes,
     edges: initialEdges,
 
-    // svg: render(initialNodes, initialEdges),
-
+    // Called on drag, select and remove - handler for adding interactivity for a controlled flow
     onNodesChange: (changes: NodeChange[]) => {
       set((state: State) => {
         state.nodes = applyNodeChanges(changes, state.nodes)
       })
     },
 
+    // Called when user connects two nodes in a controlled flow
+    onConnect: (params:Connection) => {
+      const { source, target, sourceHandle, targetHandle } = params
+
+      set((state: State) => {
+        const edge = {
+          ...params, 
+          id: uuid('edge'),
+          type: 'custom'
+        }
+
+        // when two nodes get connected, the target node's in1 or in2 property is set to the source node's id
+        // get the source node
+        const sourceNode = state.nodes.find((node) => node.id === source) as Node
+
+        // get the index of the target node
+        const index = state.nodes.findIndex((node) => node.id === target)
+
+        // if the source node's type is `source`.
+        if (sourceNode.type === 'source') {
+          // set the target node's in1 or in2 property to the source node's source property
+          state.nodes[index].data[targetHandle] = sourceNode.data.source
+        } else {
+          // set the target node's in1 or in2 property to the source node's id
+          state.nodes[index].data[targetHandle] = source
+        }
+
+        // add the edge to state
+        state.edges.push(edge)
+      })
+    },
+
+    // Called on select and remove - handler for adding interactivity for a controlled flow
     onEdgesChange: (changes: EdgeChange[]) => {
       set((state: State) => {
+
+        // when a connection is deleted, the target node's in1 or in2 property is set to null
+        changes
+          .filter((change) => change.type === "remove")
+          .forEach((removalChange) => {
+            const edge = state.edges.find((edge) => edge.id === removalChange.id) as Edge
+
+            // find all nodes with which this edge is connected as a target
+            state.nodes
+              .filter((node) => node.id === edge.target)
+              .forEach((node) => {
+                console.log(node)
+                node.data[edge.targetHandle] = null
+              })
+        })
+
         state.edges = applyEdgeChanges(changes, state.edges)
       })
     },
 
-    onConnect: (params: Connection) => {
-      // console.log("onConnect: ", "fired")
-      set((state: State) => {
-
-        // check if the new connection is from a source node
-        const sourceIdx = state.nodes.findIndex((node) => node.id === params.source)
-        // if so, we need to update the edge data to include the source key
-        if (state.nodes[sourceIdx].type === 'source') {
-          params.data = {
-            source: state.nodes[sourceIdx].data.source
-          }
-        }
-
-        const newEdges = addEdge({ ...params, type: "custom" }, state.edges)
-        state.edges = newEdges
-      })
-    },
-
     deleteNode: (nodeId: string) => {
-      // console.log("deleteNode: ", "fired")
       set((state: State) => {
         state.nodes = state.nodes.filter((node) => node.id !== nodeId)
         state.edges = state.edges.filter(
@@ -133,26 +156,26 @@ const useStore = create<State>()(
       })
     },
 
-    onSelectionChange: ({ nodes, edges }: OnSelectionChangeParams) => {
-      console.log("onSelectionChange: ", "fired", nodes, edges)
-      set((state: State) => {
-        if (nodes.length !== 0) {
-          // console.log(nodes)
-          state.filterText = nodes[0]?.data.filterText || "none"
-        }
-      })
-    },
+    // onSelectionChange: ({ nodes, edges }: OnSelectionChangeParams) => {
+    //   // console.log("onSelectionChange: ", "fired", nodes, edges)
+    //   set((state: State) => {
+    //     if (nodes.length !== 0) {
+    //       // console.log(nodes)
+    //       state.filterText = nodes[0]?.data.filterText || "none"
+    //     }
+    //   })
+    // },
     
     // Panel slices
-    ...createDragAndDropSlice(set, get),
+    ...createDragAndDropSlice(set),
 
     // Node-specific slices
-    ...source.createSlice(set, get),
-    ...blend.createSlice(set, get),
-    ...colorMatrix.createSlice(set, get),
-    ...componentTransfer.createSlice(set, get),
-    ...composite.createSlice(set, get),
-    ...convolveMatrix.createSlice(set, get),
+    ...source.createSlice(set),
+    ...blend.createSlice(set),
+    ...colorMatrix.createSlice(set),
+    ...componentTransfer.createSlice(set),
+    ...composite.createSlice(set),
+    ...convolveMatrix.createSlice(set),
   }))
 )
 
