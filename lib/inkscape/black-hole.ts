@@ -7,4 +7,4 @@ export const blackHole = `
   <feBlend mode="multiply" in="result1" in2="fbSourceGraphic" result="result91" />
   <feBlend mode="screen" in="fbSourceGraphic" in2="result91" />
 </filter>
-`;
+`

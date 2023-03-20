@@ -14,4 +14,4 @@ export const erodedMetal = `
   <feComposite k1="-1" in="fbSourceGraphic" result="result4" operator="arithmetic" k2="2.5" k3="3.5" in2="result2" />
   <feBlend mode="multiply" in2="result4" />
 </filter>
-`;
+`

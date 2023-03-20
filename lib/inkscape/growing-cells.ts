@@ -10,4 +10,4 @@ export const growingCells = `
   <feBlend mode="normal" in2="SourceGraphic" result="result9" />
   <feComposite in="result9" in2="SourceGraphic" operator="atop" result="result2" />
 </filter>
-`;
+`

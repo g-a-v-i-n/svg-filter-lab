@@ -4,4 +4,4 @@ export const ripple = `
   <feColorMatrix values="2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.5" result="result91" />
   <feDisplacementMap yChannelSelector="A" xChannelSelector="R" scale="14.3" in="SourceGraphic" in2="result91" />
 </filter>
-`;
+`

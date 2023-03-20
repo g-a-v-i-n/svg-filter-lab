@@ -15,11 +15,11 @@ export function SwitchRow({
   return (
     <div
       className={clsx(
-        "flex w-full items-center justify-between py-2 px-4",
+        "flex w-full items-center justify-between py-1 px-2",
         className
       )}
     >
-      <label {...props} className={"w-16 flex-none font-medium"}>
+      <label {...props} className={"flex-none font-medium text-sm"}>
         {label}
       </label>
       {children}

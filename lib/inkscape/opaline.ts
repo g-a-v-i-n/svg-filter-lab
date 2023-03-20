@@ -11,4 +11,4 @@ export const opaline = `
   <feComposite in2="SourceGraphic" operator="in" result="result14" />
   <feComposite result="result15" in2="SourceGraphic" operator="in" in="result14" />
 </filter>
-`;
+`

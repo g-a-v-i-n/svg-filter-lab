@@ -12,4 +12,4 @@ export const smearTransparency = `
   <feComposite in2="result4" result="result2" operator="arithmetic" in="result8" k1="2" />
   <feComposite result="fbSourceGraphic" in="fbSourceGraphic" operator="in" in2="result2" />
 </filter>
-`;
+`

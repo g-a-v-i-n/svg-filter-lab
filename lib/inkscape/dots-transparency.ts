@@ -7,4 +7,4 @@ export const dotsTransparency = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 5 -3.2 " result="result91" />
   <feComposite operator="out" in="SourceGraphic" result="result4" in2="result91" />
 </filter>
-`;
+`

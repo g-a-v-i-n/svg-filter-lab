@@ -15,4 +15,4 @@ export const oldPostcard = `
   <feColorMatrix type="saturate" values="1" result="result7" />
   <feComposite in2="SourceGraphic" operator="in" result="fbSourceGraphic" />
 </filter>
-`;
+`

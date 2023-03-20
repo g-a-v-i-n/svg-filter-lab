@@ -11,4 +11,4 @@ export const organic = `
   <feComposite operator="arithmetic" in="result1" k2="1" k3="1" in2="result91" />
   <feComposite in2="SourceAlpha" operator="in" result="result2" />
 </filter>
-`;
+`

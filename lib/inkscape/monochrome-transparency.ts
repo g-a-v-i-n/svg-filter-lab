@@ -5,4 +5,4 @@ export const monochromeTransparency = `
   <feComposite operator="out" in2="fbSourceGraphic" result="result2" />
   <feComposite operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

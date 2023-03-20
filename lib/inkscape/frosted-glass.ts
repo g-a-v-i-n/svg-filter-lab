@@ -11,4 +11,4 @@ export const frostedGlass = `
   <feComposite result="result14" operator="over" in2="fbSourceGraphic" in="fbSourceGraphic" />
   <feComposite in="result14" operator="in" in2="SourceGraphic" result="result15" />
 </filter>
-`;
+`

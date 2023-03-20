@@ -1,16 +1,15 @@
 import React from "react"
 
 type CardProps = {
-    metadata: {
-        type: string
-        title: string
-        icon: string
-        mdn: string | null
-    }
+  metadata: {
+    type: string
+    title: string
+    icon: string
+    mdn: string | null
+  }
 }
 
-
-export default function Card({ metadata }:CardProps) {
+export default function Card({ metadata }: CardProps) {
   return (
     <div
       draggable

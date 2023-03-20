@@ -7,4 +7,4 @@ export const basicDiffuseBump = `
   <feComposite result="result9" operator="arithmetic" k2="1" k3="0.8" in2="SourceGraphic" />
   <feComposite in2="SourceGraphic" result="result7" operator="in" in="result9" />
 </filter>
-`;
+`

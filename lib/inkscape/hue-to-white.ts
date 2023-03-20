@@ -5,4 +5,4 @@ export const hueToWhite = `
   <feBlend in="result13" mode="normal" result="result6" in2="SourceGraphic" />
   <feComposite result="result3" operator="in" in="result6" in2="SourceGraphic" />
 </filter>
-`;
+`

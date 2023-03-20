@@ -11,7 +11,7 @@ export default function FieldLabel({
   return (
     <label
       {...props}
-      className={`textSecondary cs-text w-16 flex-none text-left ${className}`}
+      className={`textTertiary cs-text flex-none text-left pr-2 ${className}`}
     >
       {children}
     </label>

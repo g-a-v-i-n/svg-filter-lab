@@ -10,14 +10,24 @@ export const metadata = {
   tagName: "feComposite",
   icon: "􀯮",
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite",
+  inputs: ['in1', 'in2'],
+  outputs: ['result'],
+  width: 200,
 }
 
-export type OperatorKey = UnsetValue | "over" | "in" | "out" | "atop" | "xor" | "arithmetic"
+export type OperatorKey =
+  | UnsetValue
+  | "over"
+  | "in"
+  | "out"
+  | "atop"
+  | "xor"
+  | "arithmetic"
 
 export type NodeData = {
-  in1: string | null,
-  in2: string | null,
-  result: string | null,
+  in1: string | null
+  in2: string | null
+  result: string | null
   operator: OperatorKey
   k1: number | UnsetValue
   k2: number | UnsetValue
@@ -29,23 +39,23 @@ export type NodeState = Node<NodeData> & { selected: boolean }
 
 export type Slice = {
   operator: {
-    set: Function,
+    set: Function
   }
   k1: {
-    set: Function,
+    set: Function
   }
   k2: {
-    set: Function,
+    set: Function
   }
   k3: {
-    set: Function,
+    set: Function
   }
   k4: {
-    set: Function,
+    set: Function
   }
 }
 
-export const createSlice = (set:Function) => ({
+export const createSlice = (set: Function) => ({
   compositeNode: {
     operator: {
       set: createNodePropSetter(set, "operator"),
@@ -92,18 +102,25 @@ export function exporter({ data }: NodeState) {
   return ""
 }
 
-
-export function stringify(node:NodeState) {
+export function stringify(node: NodeState) {
   const { id, data } = node
   const { in1, in2, operator, k1, k2, k3, k4 } = data
 
   let kProperties = ""
 
   if (operator === "arithmetic") {
-    kProperties = `${stringifyProp('k1', k1)} ${stringifyProp('k2', k2)} ${stringifyProp('k3', k3)} ${stringifyProp('k4', k4)} `
+    kProperties = `${stringifyProp("k1", k1)} ${stringifyProp(
+      "k2",
+      k2
+    )} ${stringifyProp("k3", k3)} ${stringifyProp("k4", k4)} `
   }
-
 
   const str = `<feComposite in2="${in2}" operator="${operator}" kProperties in="${in1}" result="${id}" />`
   return str
+}
+
+export function parse(node):NodeState {
+  return {
+    ...node.attributes
+  }
 }

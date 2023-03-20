@@ -7,4 +7,4 @@ export const chewingGum = `
   <feComposite operator="in" in="result4" result="fbSourceGraphic" in2="result2" />
   <feBlend in2="SourceGraphic" in="fbSourceGraphic" mode="normal" result="result5" />
 </filter>
-`;
+`

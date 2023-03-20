@@ -15,4 +15,4 @@ export const thinMembrane = `
   <feComposite operator="in" in="result4" result="result9" in2="result4" />
   <feBlend mode="multiply" in="result9" in2="result4" />
 </filter>
-`;
+`

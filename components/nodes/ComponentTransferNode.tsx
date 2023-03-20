@@ -1,19 +1,19 @@
 import React, { memo } from "react"
-import { Position } from "reactflow"
 import useStore, { State } from "../../state/store"
 import { Container } from "../nodeParts/Container"
 import { ControlGroup } from "../nodeParts/ControlGroup"
 import { Divider } from "../nodeParts/Divider"
-import { Footer } from "../nodeParts/Footer"
-import { Handle } from "../nodeParts/Handle"
-import { HandlePositioner } from "../nodeParts/HandlePositioner"
-import { Header } from "../nodeParts/Header"
 import { NumberInput } from "../nodeParts/NumberInput"
 import { Select, SelectItem, Separator } from "../nodeParts/Select"
 import { Switch } from "../nodeParts/Switch"
 import { SwitchRow } from "../nodeParts/SwitchRow"
 import { TextInput } from "../nodeParts/TextInput"
-import { NodeState, metadata, ChannelSlice, Channel } from "../../state/nodes/componentTransfer"
+import {
+  NodeState,
+  metadata,
+  ChannelSlice,
+  Channel,
+} from "../../state/nodes/componentTransfer"
 import clsx from "clsx"
 
 const selector = (state: State) => state.componentTransferNode
@@ -24,8 +24,7 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
   const { red, green, blue, alpha } = useStore(selector)
 
   return (
-    <Container id={id} className="w-[270px]" selected={selected}>
-      <Header metadata={metadata} id={id} />
+    <Container id={id} metadata={metadata} selected={selected} className="w-[210px]">
       <SwitchRow label="Red">
         <Switch
           className={`${
@@ -36,10 +35,8 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
         />
       </SwitchRow>
 
-      {data.red.isOn && (
-        <ChannelGroup id={id} data={data.red} slice={red} />
-      )}
-
+      {data.red.isOn && <ChannelGroup id={id} data={data.red} slice={red} />}
+      <Divider />
       <SwitchRow label="Green">
         <Switch
           className={`${
@@ -55,7 +52,7 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
       {data.green.isOn && (
         <ChannelGroup id={id} data={data.green} slice={green} />
       )}
-
+<Divider />
       <SwitchRow label="Blue">
         <Switch
           className={`${
@@ -66,10 +63,8 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
         />
       </SwitchRow>
 
-      {data.blue.isOn && (
-        <ChannelGroup id={id} data={data.blue} slice={blue} />
-      )}
-
+      {data.blue.isOn && <ChannelGroup id={id} data={data.blue} slice={blue} />}
+      <Divider />
       <SwitchRow label="Alpha">
         <Switch
           className={`${
@@ -86,27 +81,6 @@ function ComponentTransferNode({ id, data, selected }: NodeProps) {
         <ChannelGroup id={id} data={data.alpha} slice={alpha} />
       )}
 
-      <Footer />
-
-      <HandlePositioner left>
-        <Handle
-          selected={selected}
-          type="target"
-          id="in1"
-          title="In"
-          position={Position.Left}
-        />
-      </HandlePositioner>
-
-      <HandlePositioner right>
-        <Handle
-          selected={selected}
-          type="source"
-          id="result"
-          title="Result"
-          position={Position.Right}
-        />
-      </HandlePositioner>
     </Container>
   )
 }
@@ -117,16 +91,13 @@ export type ChannelGroupProps = {
   slice: ChannelSlice
 }
 
-function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
+function ChannelGroup({ id, data, slice }: ChannelGroupProps) {
   return (
-    <ControlGroup>
+    <div className="flex flex-col">
       <Select
         name="Type"
         value={data.type}
         onValueChange={(val: string) => slice.type.set(id, val)}
-        className={clsx({
-          "rounded-b-xl": data.type === "identity",
-        })}
       >
         <SelectItem value="unset">Unset</SelectItem>
         <SelectItem value="identity">Identity</SelectItem>
@@ -139,7 +110,7 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
 
       {data.type === "linear" && (
         <>
-          <Divider />
+
           <NumberInput
             label="Slope"
             value={data.slope}
@@ -147,9 +118,8 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
               slice.slope.set(id, e.target.value)
             }
           />
-          <Divider />
+
           <NumberInput
-            className="rounded-b-lg"
             label="Intercept"
             value={data.intercept}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -161,7 +131,6 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
 
       {data.type === "gamma" && (
         <>
-          <Divider />
           <NumberInput
             label="Amplitude"
             value={data.amplitude}
@@ -169,7 +138,6 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
               slice.amplitude.set(id, e.target.value)
             }
           />
-          <Divider />
           <NumberInput
             label="Exponent"
             value={data.exponent}
@@ -177,7 +145,6 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
               slice.exponent.set(id, e.target.value)
             }
           />
-          <Divider />
           <NumberInput
             className="rounded-b-lg"
             label="Offset"
@@ -189,11 +156,9 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
         </>
       )}
 
-      {(data.type === "table" &&
+      {data.type === "table" && (
         <>
-          <Divider />
           <TextInput
-            className="rounded-b-lg"
             label="Table Values"
             value={data.values.table}
             onChange={slice.values.table.set}
@@ -201,18 +166,16 @@ function ChannelGroup({ id, data, slice }:ChannelGroupProps) {
         </>
       )}
 
-      {(data.type === "discrete" &&
+      {data.type === "discrete" && (
         <>
-          <Divider />
           <TextInput
-            className="rounded-b-lg"
             label="Table Values"
             value={data.values.discrete}
             onChange={slice.values.table.set}
           />
         </>
       )}
-    </ControlGroup>
+    </div>
   )
 }
 

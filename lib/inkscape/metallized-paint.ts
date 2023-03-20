@@ -15,4 +15,4 @@ export const metallizedPaint = `
   <feComposite operator="in" in="result9" in2="result4" result="result91" />
   <feBlend mode="multiply" in2="result91" />
 </filter>
-`;
+`

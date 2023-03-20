@@ -12,4 +12,4 @@ export const roughAndGlossy = `
   <feComposite in2="SourceAlpha" operator="in" in="result4" result="fbSourceGraphic" />
   <feDisplacementMap scale="7" yChannelSelector="G" xChannelSelector="R" in2="result0" />
 </filter>
-`;
+`

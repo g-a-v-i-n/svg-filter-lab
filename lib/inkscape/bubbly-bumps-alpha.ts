@@ -15,4 +15,4 @@ export const bubblyBumpsAlpha = `
   <feComposite in2="result6" in="SourceGraphic" result="result2" operator="in" />
   <feComposite in="result2" result="result4" operator="arithmetic" k2="1" k3="1" in2="result2" />
 </filter>
-`;
+`

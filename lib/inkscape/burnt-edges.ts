@@ -8,4 +8,4 @@ export const burntEdges = `
   <feComposite in2="result6" operator="atop" in="fbSourceGraphic" result="result8" />
   <feComposite in="result8" in2="fbSourceGraphicAlpha" operator="atop" result="result9" />
 </filter>
-`;
+`

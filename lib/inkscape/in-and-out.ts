@@ -4,4 +4,4 @@ export const inAndOut = `
   <feOffset dx="5" dy="5" result="result4" />
   <feComposite in="SourceGraphic" in2="result4" operator="xor" result="result3" />
 </filter>
-`;
+`

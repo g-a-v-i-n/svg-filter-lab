@@ -24,4 +24,4 @@ export const plasterColor = `
   <feComposite in="result12" in2="fbSourceGraphic" result="result9" operator="arithmetic" k2="1" k3="1" />
   <feComposite in2="SourceGraphic" result="result7" operator="in" />
 </filter>
-`;
+`

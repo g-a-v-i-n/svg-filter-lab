@@ -7,4 +7,4 @@ export const basicSpecularBump = `
   <feComposite in2="SourceGraphic" k3="1" k2="1" operator="arithmetic" result="result9" in="result10" />
   <feComposite in="result9" operator="in" result="result7" in2="SourceGraphic" />
 </filter>
-`;
+`

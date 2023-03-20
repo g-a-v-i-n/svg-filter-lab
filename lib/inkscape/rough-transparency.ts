@@ -11,4 +11,4 @@ export const roughTransparency = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 6.5 -4.5 " result="result92" />
   <feComposite in="fbSourceGraphic" operator="out" in2="result92" />
 </filter>
-`;
+`

@@ -15,4 +15,4 @@ export const matteRidge = `
   <feComposite operator="over" in="result9" in2="result4" result="result91" />
   <feBlend mode="screen" in2="result91" />
 </filter>
-`;
+`

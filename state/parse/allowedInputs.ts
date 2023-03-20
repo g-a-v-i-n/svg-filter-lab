@@ -1,0 +1,18 @@
+export const allowedInputs = {
+    feBlend: ["in1", "in2"],
+    feColorMatrix: ["in1"],
+    feComponentTransfer: ["in1"],
+    feComposite: ["in1", "in2"],
+    feConvolveMatrix: ["in1"],
+    feDiffuseLighting: ["in1"],
+    feDisplacementMap: ["in1", "in2"],
+    feFlood: [],
+    feGaussianBlur: ["in1"],
+    feImage: [],
+    feMerge: [],
+    feMorphology: ["in1"],
+    feOffset: ["in1"],
+    feSpecularLighting: ["in1"],
+    feTile: ["in1"],
+    feTurbulence: [],
+  }

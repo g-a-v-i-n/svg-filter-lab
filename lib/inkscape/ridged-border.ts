@@ -9,4 +9,4 @@ export const ridgedBorder = `
   <feBlend mode="multiply" in2="SourceGraphic" />
   <feComposite operator="in" in2="SourceAlpha" />
 </filter>
-`;
+`

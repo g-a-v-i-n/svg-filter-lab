@@ -1,16 +1,19 @@
 import { uuid } from "../../lib/uuid"
-import { defaultNodeData } from '../store'
+import { defaultNodeData } from "../store"
 
-  export type OnDragOver = (event: React.DragEvent) => void
-    export type OnDrop = (event: React.DragEvent, RFWrapper: React.Ref<HTMLDivElement>) => void
-  
-  export const createDragAndDropSlice = (set:Function) => ({
-    onDragOver: (event: React.DragEvent) => {
-        event.preventDefault()
-        event.dataTransfer.dropEffect = "move"
-      },
-    
-    onDrop: (event: React.DragEvent, RFWrapper:React.Ref<HTMLDivElement>) => {
+export type OnDragOver = (event: React.DragEvent) => void
+export type OnDrop = (
+  event: React.DragEvent,
+  RFWrapper: React.Ref<HTMLDivElement>
+) => void
+
+export const createDragAndDropSlice = (set: Function) => ({
+  onDragOver: (event: React.DragEvent) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = "move"
+  },
+
+  onDrop: (event: React.DragEvent, RFWrapper: React.Ref<HTMLDivElement>) => {
     event.preventDefault()
 
     const reactFlowBounds = RFWrapper.current.getBoundingClientRect()
@@ -18,23 +21,23 @@ import { defaultNodeData } from '../store'
 
     // check if the dropped element is valid
     if (typeof type === "undefined" || !type) {
-        return
+      return
     }
 
     set((state: State) => {
-        const position = state.rfInstance.project({
+      const position = state.rfInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
-        })
+      })
 
-        const newNode = {
+      const newNode = {
         id: uuid(type),
         type,
         position,
         data: structuredClone(defaultNodeData[type]),
-        }
+      }
 
-        state.nodes.push(newNode)
+      state.nodes.push(newNode)
     })
-    },
-  })
+  },
+})

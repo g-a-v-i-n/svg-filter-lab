@@ -10,4 +10,4 @@ export const embossShader = `
   <feComposite result="result15" operator="in" in2="fbSourceGraphic" />
   <feComposite in="result15" operator="in" in2="result8" result="result16" />
 </filter>
-`;
+`

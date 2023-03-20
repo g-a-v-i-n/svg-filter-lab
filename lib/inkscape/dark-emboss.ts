@@ -9,4 +9,4 @@ export const darkEmboss = `
   <feComposite result="result5" operator="arithmetic" k2="1.2" in2="result4" />
   <feComposite operator="in" in="result5" in2="SourceGraphic" />
 </filter>
-`;
+`

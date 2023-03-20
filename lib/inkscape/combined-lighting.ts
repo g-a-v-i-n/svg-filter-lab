@@ -12,4 +12,4 @@ export const combinedLighting = `
   <feComposite k3="1" k2="1" operator="arithmetic" in="fbSourceGraphic" in2="result1" result="result4" />
   <feComposite operator="in" result="result2" in2="SourceGraphic" in="result4" />
 </filter>
-`;
+`

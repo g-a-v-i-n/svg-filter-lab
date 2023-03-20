@@ -16,4 +16,4 @@ export const lightContour = `
   <feBlend in2="result1" in="result3" mode="normal" result="result8" />
   <feComposite in2="SourceGraphic" in="result8" operator="in" result="result7" />
 </filter>
-`;
+`

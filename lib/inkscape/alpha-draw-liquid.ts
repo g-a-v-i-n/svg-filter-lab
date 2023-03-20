@@ -15,4 +15,4 @@ export const alphaDrawLiquid = `
   <feComposite operator="in" in="result10" in2="result13" />
   <feComposite operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

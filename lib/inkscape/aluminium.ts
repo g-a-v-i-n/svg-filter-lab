@@ -11,4 +11,4 @@ export const aluminium = `
   <feComposite in2="SourceGraphic" operator="in" result="result18" />
   <feComposite result="result19" in2="SourceGraphic" operator="in" in="result18" />
 </filter>
-`;
+`

@@ -6,4 +6,4 @@ export const filmGrain = `
   <feBlend result="result5" mode="normal" in="result2" in2="SourceGraphic" />
   <feComposite in="result5" in2="SourceGraphic" operator="in" result="result3" />
 </filter>
-`;
+`

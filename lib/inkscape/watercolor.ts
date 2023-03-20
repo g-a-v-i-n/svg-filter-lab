@@ -10,4 +10,4 @@ export const watercolor = `
   <feComposite operator="arithmetic" k2="1" k1="0.5" in="fbSourceGraphic" in2="fbSourceGraphic" result="result91" />
   <feBlend in="fbSourceGraphic" mode="multiply" in2="result91" />
 </filter>
-`;
+`

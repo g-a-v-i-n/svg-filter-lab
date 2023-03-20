@@ -4,4 +4,4 @@ export const evanescent = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 " result="result7" in="SourceGraphic" />
   <feComposite operator="in" in="result6" in2="result7" />
 </filter>
-`;
+`

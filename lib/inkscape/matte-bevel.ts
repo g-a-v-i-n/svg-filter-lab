@@ -14,4 +14,4 @@ export const matteBevel = `
   <feComposite result="result9" in2="result8" />
   <feBlend mode="normal" in2="result9" />
 </filter>
-`;
+`

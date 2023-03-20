@@ -14,4 +14,4 @@ export const refractiveGelB = `
   <feBlend mode="screen" in2="result91" />
   <feConvolveMatrix order="3 3" kernelMatrix="2 0 1 0 1 0 0 0 0 " targetX="1" targetY="1" divisor="3" />
 </filter>
-`;
+`

@@ -35,7 +35,7 @@ export default function CustomEdge({
         strokeLinecap="round"
         className="stroke-connection dark:stroke-inverseConnection"
       />
-      <path
+      {/* <path
         id={id}
         style={style}
         d={edgePath}
@@ -44,7 +44,7 @@ export default function CustomEdge({
         fill="none"
         strokeDasharray="6 6"
         className="stroke-stroke dark:stroke-inverseStroke"
-      />
+      /> */}
     </>
   )
 }

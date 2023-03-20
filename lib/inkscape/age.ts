@@ -7,4 +7,4 @@ export const age = `
   <feGaussianBlur stdDeviation="1" />
   <feComposite in2="result0" operator="atop" />
 </filter>
-`;
+`

@@ -6,4 +6,4 @@ export const velvetBumps = `
   <feConvolveMatrix order="3 3" kernelMatrix="2 0 0 1 1 -1 0 0 -2 " targetX="1" targetY="1" result="result8" />
   <feBlend mode="darken" in="result7" result="result6" in2="result8" />
 </filter>
-`;
+`

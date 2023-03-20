@@ -16,4 +16,4 @@ export const bumpEngraving = `
   <feBlend in2="SourceGraphic" mode="normal" result="result14" />
   <feComposite in2="SourceGraphic" in="result14" operator="in" result="fbSourceGraphic" />
 </filter>
-`;
+`

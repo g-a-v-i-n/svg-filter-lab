@@ -9,4 +9,4 @@ export const hslBumpsAlpha = `
   <feComposite result="result4" operator="in" in="SourceGraphic" in2="result1" />
   <feComposite operator="arithmetic" k2="1" k3="1" in2="result4" />
 </filter>
-`;
+`

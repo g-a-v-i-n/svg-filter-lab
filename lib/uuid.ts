@@ -5,6 +5,6 @@ const nanoid = customAlphabet(
   8
 )
 
-export function uuid(type:string) {
+export function uuid(type: string) {
   return type + "-" + nanoid()
 }

@@ -18,4 +18,4 @@ export const riddled = `
   <feComposite in2="fbSourceGraphic" in="result10" result="result2" operator="in" />
   <feComposite k3="0.9" k2="1" operator="arithmetic" in2="fbSourceGraphic" />
 </filter>
-`;
+`

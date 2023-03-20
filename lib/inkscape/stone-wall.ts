@@ -12,4 +12,4 @@ export const stoneWall = `
   <feComposite k2="1" in="result2" operator="arithmetic" in2="SourceAlpha" k1="1" result="result6" />
   <feBlend mode="multiply" in2="result6" in="result6" />
 </filter>
-`;
+`

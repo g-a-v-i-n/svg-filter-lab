@@ -6,4 +6,4 @@ export const darkAndGlow = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 " result="result10" />
   <feBlend in="result10" mode="normal" in2="result6" />
 </filter>
-`;
+`

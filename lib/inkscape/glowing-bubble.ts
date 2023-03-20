@@ -14,4 +14,4 @@ export const glowingBubble = `
   <feComposite operator="atop" in="result9" in2="result4" result="result91" />
   <feBlend mode="multiply" in2="result91" />
 </filter>
-`;
+`

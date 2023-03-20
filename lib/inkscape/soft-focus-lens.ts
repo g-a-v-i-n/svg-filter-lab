@@ -8,4 +8,4 @@ export const softFocusLens = `
   <feBlend in2="result5" mode="darken" in="result5" result="result6" />
   <feComposite in2="SourceGraphic" operator="in" result="result8" />
 </filter>
-`;
+`

@@ -6,4 +6,4 @@ export const warpedRainbow = `
   <feComposite in="result10" operator="atop" result="result2" in2="result8" />
   <feComposite in2="result2" operator="arithmetic" in="result10" result="fbSourceGraphic" k1="2.5" k3="0.5" />
 </filter>
-`;
+`

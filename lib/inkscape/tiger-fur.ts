@@ -9,4 +9,4 @@ export const tigerFur = `
   <feComposite in2="result4" result="result2" operator="arithmetic" k1="1" in="SourceGraphic" />
   <feComposite operator="out" in="SourceGraphic" in2="result2" />
 </filter>
-`;
+`

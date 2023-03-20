@@ -16,4 +16,4 @@ export const embossedLeather = `
   <feComposite result="result11" in2="SourceGraphic" operator="in" />
   <feBlend in2="result11" in="result11" result="result9" mode="normal" />
 </filter>
-`;
+`

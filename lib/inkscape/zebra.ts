@@ -5,4 +5,4 @@ export const zebra = `
   <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 -0.8" />
   <feComposite operator="atop" in2="result0" />
 </filter>
-`;
+`

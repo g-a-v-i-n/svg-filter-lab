@@ -4,4 +4,4 @@ export const tornEdges = `
   <feDisplacementMap scale="25" result="result5" xChannelSelector="R" in="SourceGraphic" in2="result91" />
   <feComposite in="SourceGraphic" operator="atop" in2="result5" />
 </filter>
-`;
+`

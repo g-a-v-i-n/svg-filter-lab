@@ -1,12 +1,6 @@
 import React, { memo } from "react"
-import { Position } from "reactflow"
 import useStore, { State } from "../../state/store"
 import { Container } from "../nodeParts/Container"
-import { ControlGroup } from "../nodeParts/ControlGroup"
-import { Footer } from "../nodeParts/Footer"
-import { Handle } from "../nodeParts/Handle"
-import { HandlePositioner } from "../nodeParts/HandlePositioner"
-import { Header } from "../nodeParts/Header"
 import { MatrixInput } from "../nodeParts/MatrixInput"
 import { NodeState, metadata } from "../../state/nodes/convolveMatrix"
 
@@ -18,9 +12,7 @@ function ConvolveMatrixNode({ id, data, selected }: NodeProps) {
   const { kernalMatrix } = useStore(selector)
 
   return (
-    <Container id={id} selected={selected} className="w-[250px] min-h-[104px]">
-      <Header metadata={metadata} id={id} />
-      <ControlGroup>
+    <Container id={id} metadata={metadata} selected={selected} className="w-[210px]">
         <MatrixInput
           rows={3}
           cols={3}
@@ -32,29 +24,6 @@ function ConvolveMatrixNode({ id, data, selected }: NodeProps) {
             kernalMatrix.set(id, newValues)
           }}
         />
-      </ControlGroup>
-
-      <Footer />
-
-      <HandlePositioner left>
-        <Handle
-          selected={selected}
-          type="target"
-          id="in1"
-          title="In"
-          position={Position.Left}
-        />
-      </HandlePositioner>
-
-      <HandlePositioner right>
-        <Handle
-          selected={selected}
-          type="source"
-          id="result"
-          title="Result"
-          position={Position.Right}
-        />
-      </HandlePositioner>
     </Container>
   )
 }

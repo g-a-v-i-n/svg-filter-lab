@@ -11,4 +11,4 @@ export const aluminiumEmboss = `
   <feComposite in2="fbSourceGraphic" operator="xor" result="result14" />
   <feComposite result="result15" in2="result2" operator="in" in="result14" />
 </filter>
-`;
+`

@@ -7,4 +7,4 @@ export const jigsawPiece = `
   <feMorphology radius="2" result="result1" in="SourceAlpha" operator="dilate" />
   <feComposite in="result0" in2="result1" />
 </filter>
-`;
+`

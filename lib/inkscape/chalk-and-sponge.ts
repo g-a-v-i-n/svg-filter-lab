@@ -3,4 +3,4 @@ export const chalkAndSponge = `
   <feTurbulence baseFrequency="0.4" type="fractalNoise" seed="0" numOctaves="5" result="result1" />
   <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="result1" />
 </filter>
-`;
+`

@@ -4,4 +4,4 @@ export const lapping = `
   <feGaussianBlur stdDeviation="2" result="result2" />
   <feDisplacementMap scale="50" yChannelSelector="B" xChannelSelector="R" in="SourceGraphic" in2="result2" />
 </filter>
-`;
+`

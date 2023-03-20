@@ -18,4 +18,4 @@ export const trichrome = `
   <feComposite in2="result17" result="result18" k3="1" k2="1" operator="arithmetic" />
   <feComposite in2="SourceGraphic" operator="in" />
 </filter>
-`;
+`

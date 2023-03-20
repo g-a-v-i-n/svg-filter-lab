@@ -16,4 +16,4 @@ export const emergence = `
   </feMerge>
   <feComposite in2="SourceGraphic" operator="in" result="result7" />
 </filter>
-`;
+`

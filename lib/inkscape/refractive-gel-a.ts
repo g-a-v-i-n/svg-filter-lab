@@ -13,4 +13,4 @@ export const refractiveGelA = `
   <feComposite in="fbSourceGraphic" operator="arithmetic" k2="2" k3="2" in2="result2" result="result91" />
   <feBlend mode="multiply" in2="result91" />
 </filter>
-`;
+`

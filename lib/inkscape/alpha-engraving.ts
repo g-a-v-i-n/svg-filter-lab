@@ -13,4 +13,4 @@ export const alphaEngraving = `
   <feComposite in2="result9" in="result10" operator="in" />
   <feComposite in2="SourceGraphic" operator="in" />
 </filter>
-`;
+`

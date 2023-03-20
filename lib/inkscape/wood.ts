@@ -16,4 +16,4 @@ export const wood = `
   <feConvolveMatrix order="3 3" kernelMatrix="2 0 0 0 2 0 0 0 -2 " targetX="2" targetY="2" result="result10" />
   <feBlend mode="multiply" in="result10" in2="result10" />
 </filter>
-`;
+`

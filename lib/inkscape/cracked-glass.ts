@@ -14,4 +14,4 @@ export const crackedGlass = `
   <feComposite in="result2" result="result4" operator="arithmetic" k2="2" k3="2" in2="fbSourceGraphic" />
   <feBlend mode="screen" in="result4" in2="result4" />
 </filter>
-`;
+`

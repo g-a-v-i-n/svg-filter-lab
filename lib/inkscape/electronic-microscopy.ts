@@ -14,4 +14,4 @@ export const electronicMicroscopy = `
   <feComposite operator="arithmetic" k2="0.1" k3="1" in="result5" in2="result93" result="result94" />
   <feBlend mode="multiply" in2="result94" />
 </filter>
-`;
+`

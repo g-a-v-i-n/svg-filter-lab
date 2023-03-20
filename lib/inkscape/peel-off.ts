@@ -16,4 +16,4 @@ export const peelOff = `
   <feBlend in2="fbSourceGraphic" in="result3" mode="darken" result="result7" />
   <feComposite in2="fbSourceGraphic" operator="in" in="result7" />
 </filter>
-`;
+`

@@ -9,4 +9,4 @@ export const warmInside = `
   <feConvolveMatrix order="3 3" kernelMatrix="-2 0 2 0 4 0 2 0 2" divisor="2" bias="0" targetX="0" in="result4" result="result5" />
   <feComposite operator="atop" in="result2" in2="result5" />
 </filter>
-`;
+`

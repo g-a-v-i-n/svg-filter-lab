@@ -9,28 +9,32 @@ export const metadata = {
   tagName: "feBlend",
   icon: "􀟗",
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
+  inputs: ['in1', 'in2'],
+  outputs: ['result'],
+  width: 200,
 }
 
-export type BlendModeKey = UnsetValue
-| 'normal' 
-| 'multiply' 
-| 'screen' 
-| 'darken' 
-| 'lighten'
-| 'color-dodge'
-| 'color-burn'
-| 'hard-light'
-| 'soft-light'
-| 'difference'
-| 'exclusion'
-| 'hue'
-| 'saturation'
-| 'color'
-| 'luminosity'
+export type BlendModeKey =
+  | UnsetValue
+  | "normal"
+  | "multiply"
+  | "screen"
+  | "darken"
+  | "lighten"
+  | "color-dodge"
+  | "color-burn"
+  | "hard-light"
+  | "soft-light"
+  | "difference"
+  | "exclusion"
+  | "hue"
+  | "saturation"
+  | "color"
+  | "luminosity"
 
 export type NodeData = {
-  in1: string | null,
-  in2: string | null,
+  in1: string | null
+  in2: string | null
   mode: BlendModeKey
 }
 
@@ -42,24 +46,33 @@ export type Slice = {
   }
 }
 
-export const createSlice = (set:Function) => ({
+export const createSlice = (set: Function) => ({
   blendNode: {
     mode: {
       set: createNodePropSetter(set, "mode"),
-    }
+    },
   },
 })
 
 export const defaultData: NodeData = {
   in1: null,
   in2: null,
-  mode: 'normal',
+  mode: "normal",
 }
 
-export function stringify(node:NodeState) {
+export function stringify(node: NodeState) {
   const { id, data } = node
   const { mode, in1, in2 } = data
 
-  const str = `<feBlend ${stringifyProp('mode', mode)} in="${in1}" in2="${in2}" result="${id}" />`
+  const str = `<feBlend ${stringifyProp(
+    "mode",
+    mode
+  )} in="${in1}" in2="${in2}" result="${id}" />`
   return str
+}
+
+export function parse(node):NodeState {
+  return {
+    ...node.attributes
+  }
 }

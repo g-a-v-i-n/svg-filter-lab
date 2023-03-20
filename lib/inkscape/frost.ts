@@ -10,4 +10,4 @@ export const frost = `
   <feComposite result="result2" operator="in" in2="result4" />
   <feComposite in="result2" operator="over" in2="SourceGraphic" />
 </filter>
-`;
+`

@@ -5,4 +5,4 @@ export const roughenInside = `
   <feDisplacementMap scale="20" yChannelSelector="G" xChannelSelector="R" in="SourceGraphic" result="result1" in2="result91" />
   <feComposite in="result1" in2="SourceGraphic" operator="atop" />
 </filter>
-`;
+`

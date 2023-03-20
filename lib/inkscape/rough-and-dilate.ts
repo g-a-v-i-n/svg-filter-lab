@@ -6,4 +6,4 @@ export const roughAndDilate = `
   <feDisplacementMap result="result12" in2="result11" in="result10" xChannelSelector="R" scale="10" />
   <feComposite operator="arithmetic" result="result13" in="SourceGraphic" in2="result12" k1="0.25" k2="0.25" k3="0.75" />
 </filter>
-`;
+`

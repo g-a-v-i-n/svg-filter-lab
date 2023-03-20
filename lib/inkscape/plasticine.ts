@@ -15,4 +15,4 @@ export const plasticine = `
   <feComposite in2="result6" k2="0.5" result="result3" k3="0.8" k1="0.2" in="result1" operator="arithmetic" />
   <feComposite in2="SourceGraphic" result="result7" operator="in" k2="1" in="result3" />
 </filter>
-`;
+`

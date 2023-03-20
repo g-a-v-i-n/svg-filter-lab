@@ -4,4 +4,4 @@ export const fluorescence = `
   <feColorMatrix type="saturate" values="1" />
   <feColorMatrix type="matrix" values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 " />
 </filter>
-`;
+`

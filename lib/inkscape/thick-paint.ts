@@ -11,4 +11,4 @@ export const thickPaint = `
   <feComposite result="result3" k3="0.5" k1="1.37" in="result1" operator="arithmetic" in2="fbSourceGraphic" />
   <feComposite result="result5" operator="in" in="result3" in2="result3" />
 </filter>
-`;
+`

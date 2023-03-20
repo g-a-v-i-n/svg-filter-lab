@@ -18,4 +18,4 @@ export const paintChannels = `
   <feBlend in2="result9" mode="normal" in="result14" result="result10" />
   <feComposite in2="SourceGraphic" operator="in" result="result11" in="result10" />
 </filter>
-`;
+`

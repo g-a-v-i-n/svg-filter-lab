@@ -20,4 +20,4 @@ export const barbedWire = `
   <feComposite in="result5" in2="SourceGraphic" operator="atop" result="result7" />
   <feComposite in2="result7" in="result6" />
 </filter>
-`;
+`

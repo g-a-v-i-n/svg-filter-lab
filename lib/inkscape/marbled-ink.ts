@@ -10,4 +10,4 @@ export const marbledInk = `
   <feComposite in2="SourceGraphic" operator="in" in="result2" result="fbSourceGraphic" />
   <feBlend in2="result2" mode="multiply" />
 </filter>
-`;
+`

@@ -12,4 +12,4 @@ export const liquidDrawing = `
   <feBlend mode="screen" in2="result12" />
   <feComposite operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

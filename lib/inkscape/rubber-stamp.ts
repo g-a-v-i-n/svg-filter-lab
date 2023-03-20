@@ -9,4 +9,4 @@ export const rubberStamp = `
   <feTurbulence baseFrequency="0.032" numOctaves="1" result="result92" />
   <feDisplacementMap scale="4.1" yChannelSelector="G" xChannelSelector="R" in="result1" in2="result92" />
 </filter>
-`;
+`

@@ -11,4 +11,4 @@ export const paperBump = `
   <feBlend in="result3" mode="normal" result="result6" in2="result1" />
   <feComposite operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

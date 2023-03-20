@@ -13,4 +13,4 @@ export const bark = `
   <feComposite k3="1" k2="1" operator="arithmetic" result="result4" in="result4" in2="result2" />
   <feBlend mode="multiply" in2="result4" />
 </filter>
-`;
+`

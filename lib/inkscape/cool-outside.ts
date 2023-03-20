@@ -8,4 +8,4 @@ export const coolOutside = `
   <feBlend mode="multiply" result="result4" in="fbSourceGraphic" in2="result3" />
   <feComposite operator="in" result="result6" in="fbSourceGraphic" in2="result4" />
 </filter>
-`;
+`

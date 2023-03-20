@@ -17,4 +17,4 @@ export const enamelJewelry = `
   <feComposite in="fbSourceGraphic" result="result4" operator="arithmetic" k2="0.5" k3="2" in2="result2" />
   <feBlend mode="multiply" in2="result4" />
 </filter>
-`;
+`

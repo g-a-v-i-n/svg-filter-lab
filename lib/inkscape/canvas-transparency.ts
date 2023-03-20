@@ -9,4 +9,4 @@ export const canvasTransparency = `
   <feGaussianBlur stdDeviation="0.7" />
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 " />
 </filter>
-`;
+`

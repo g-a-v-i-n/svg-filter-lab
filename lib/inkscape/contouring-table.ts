@@ -13,4 +13,4 @@ export const contouringTable = `
   <feFlood flood-color="rgb(128,128,128)" result="result8" />
   <feComposite in2="result6" result="result12" operator="in" />
 </filter>
-`;
+`

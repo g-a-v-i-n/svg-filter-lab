@@ -11,4 +11,4 @@ export const sharpDeco = `
   <feComposite in2="result18" operator="xor" result="result15" />
   <feComposite result="result16" in2="SourceGraphic" operator="in" in="result15" />
 </filter>
-`;
+`

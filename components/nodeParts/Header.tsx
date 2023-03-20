@@ -12,11 +12,23 @@ export function Header({ className, metadata, id, ...props }: HeaderProps) {
   return (
     <div
       {...props}
-      className={`flex items-center justify-between pl-4 pr-[16px] pt-4 pb-3 ${className}`}
+      className={`flex items-center justify-between pl-2 pr-2 pt-2 pb-2 border-b borderPrimary ${className}`}
     >
       <div className="flex gap-x-1 items-center">
-        <span className="cs-text-lg font-medium">{metadata.icon}</span>
-        <span className="cs-text-lg font-medium">{metadata.title}</span>
+        {/* <span className="cs-text font-medium ">
+          {metadata.icon}
+        </span> */}
+        <span className="cs-text font-medium">
+          {metadata.title}
+        </span>
+        <a
+          href={metadata.mdn}
+          rel="noreferrer"
+          target="_blank"
+          className="inline textTertiary hover:textPrimary cs-text rounded"
+        >
+          􀅴
+        </a>
         {/* <a
           href={metadata.mdn}
           rel="noreferrer"
@@ -31,7 +43,7 @@ export function Header({ className, metadata, id, ...props }: HeaderProps) {
         {/* <button className="text-secondary cs-text hover:">􀁭</button> */}
         <button
           onClick={() => deleteNode(id)}
-          className="textSecondary hover:textPrimary h-4 w-4 rounded-full flex items-center justify-center"
+          className="textTertiary hover:textPrimary h-4 w-4 rounded-full flex items-center justify-center"
         >
           <span className="font-extrabold">􀁡</span>
         </button>

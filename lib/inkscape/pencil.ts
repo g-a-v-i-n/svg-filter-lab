@@ -3,4 +3,4 @@ export const pencil = `
   <feConvolveMatrix bias="0" result="result0" preserveAlpha="true" targetY="1" targetX="1" divisor="1" in="SourceGraphic" kernelMatrix="1 1 1 1 -8 1 1 1 1" order="3 3" />
   <feColorMatrix values="-0.15 -0.3 -0.05 0 1 -0.15 -0.3 -0.05 0 1 -0.15 -0.3 -0.05 0 1 0 0 0 1 0" result="result3" />
 </filter>
-`;
+`

@@ -11,4 +11,4 @@ export const posterizedLightEraser = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -0.21 -0.72 -0.07 1 0 " result="result2" in="result7" />
   <feComposite in2="SourceGraphic" operator="in" result="result9" in="result2" />
 </filter>
-`;
+`

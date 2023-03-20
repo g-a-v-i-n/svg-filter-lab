@@ -13,4 +13,4 @@ export const neon = `
   <feComposite operator="over" in="result9" in2="result4" result="result9" />
   <feBlend mode="screen" in2="result9" />
 </filter>
-`;
+`

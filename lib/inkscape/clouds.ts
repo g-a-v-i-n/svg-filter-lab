@@ -6,4 +6,4 @@ export const clouds = `
   <feComposite operator="in" in2="result0" />
   <feComposite operator="atop" in2="SourceGraphic" />
 </filter>
-`;
+`

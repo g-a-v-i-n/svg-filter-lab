@@ -9,4 +9,4 @@ export const roughPaper = `
   <feComposite in2="result1" result="result5" operator="arithmetic" k1="1.7" />
   <feBlend in="result5" in2="result3" mode="normal" />
 </filter>
-`;
+`

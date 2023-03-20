@@ -15,14 +15,34 @@ export default function CustomEdge({
   markerEnd,
   removeEdge,
 }) {
-  const [edgePath, labelX, labelY] = getBezierPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  })
+  // const [edgePath, labelX, labelY] = getBezierPath({
+  //   sourceX,
+  //   sourceY,
+  //   sourcePosition,
+  //   targetX,
+  //   targetY,
+  //   targetPosition,
+  // })
+
+  // console.log(edgePath, sourceX, sourceY, targetX, targetY)
+
+  // const edgePath = `M0 0H27.2727L122.727 95H150`
+//   Q x1 y1, x y
+// (or)
+// q dx1 dy1, dx dy
+
+  const edgePath = `
+    M${sourceX} ${sourceY}
+    H${sourceX + 32}
+    L${targetX - 32} ${targetY}
+    H${targetX}`
+
+  //   ctx.quadraticCurveTo(
+  //     x + w, 
+  //     y, 
+  //     x + w,
+  //     y + r
+  // )
 
   return (
     <>
@@ -62,3 +82,5 @@ export default function CustomEdge({
     </>
   )
 }
+
+

@@ -11,4 +11,4 @@ export const smartJelly = `
   <feComposite result="result2" in2="result0" operator="atop" />
   <feComposite operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

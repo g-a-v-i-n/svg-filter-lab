@@ -10,4 +10,4 @@ export const scotland = `
   <feComposite in2="result2" operator="over" in="result2" result="result93" />
   <feBlend mode="multiply" in2="result93" />
 </filter>
-`;
+`

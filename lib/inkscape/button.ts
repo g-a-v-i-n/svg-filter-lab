@@ -16,4 +16,4 @@ export const button = `
   </feSpecularLighting>
   <feComposite in2="result3" operator="atop" />
 </filter>
-`;
+`

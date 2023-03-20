@@ -9,4 +9,4 @@ export const leaves = `
   <feComposite in2="result4" operator="arithmetic" result="result2" k1="0.5" k3="1" />
   <feConvolveMatrix order="3 3" kernelMatrix="1 0 0 0 2 0 0 0 -1 " targetX="0" targetY="0" divisor="1.5" edgeMode="duplicate" in="result2" />
 </filter>
-`;
+`

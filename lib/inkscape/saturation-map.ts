@@ -18,4 +18,4 @@ export const saturationMap = `
   <feFlood flood-color="rgb(255,204,0)" result="result1" />
   <feComposite operator="in" in2="fbSourceGraphic" result="result2" />
 </filter>
-`;
+`

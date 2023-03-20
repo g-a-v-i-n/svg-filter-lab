@@ -8,4 +8,4 @@ export const meltedJelly = `
   <feComposite k3="1.5" k2="1" operator="arithmetic" result="result4" in="result0" in2="result1" />
   <feComposite operator="atop" result="result2" in="result4" in2="result0" />
 </filter>
-`;
+`

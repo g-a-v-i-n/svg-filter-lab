@@ -7,4 +7,4 @@ export const speckle = `
   <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 20 -14" result="result91" />
   <feComposite operator="out" in="SourceGraphic" in2="result91" />
 </filter>
-`;
+`

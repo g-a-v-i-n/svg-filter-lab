@@ -15,4 +15,4 @@ export const thickAcrylic = `
   <feComposite operator="in" result="result2" in="result10" in2="fbSourceGraphic" />
   <feComposite k3="1" k2="1" operator="arithmetic" result="result4" in="fbSourceGraphic" in2="result2" />
 </filter>
-`;
+`

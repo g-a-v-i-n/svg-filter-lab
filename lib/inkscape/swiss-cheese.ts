@@ -17,4 +17,4 @@ export const swissCheese = `
   <feComposite in2="result0" operator="in" />
   <feComposite in2="result2" operator="atop" />
 </filter>
-`;
+`

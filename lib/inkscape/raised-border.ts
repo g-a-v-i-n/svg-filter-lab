@@ -13,4 +13,4 @@ export const raisedBorder = `
   <feComposite operator="over" in="result4" in2="SourceGraphic" />
   <feBlend mode="multiply" in2="result2" />
 </filter>
-`;
+`

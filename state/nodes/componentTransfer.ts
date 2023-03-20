@@ -10,6 +10,9 @@ export const metadata = {
   tagName: "feComponentTransfer",
   icon: "􀊝",
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer",
+  inputs: ['in1'],
+  outputs: ['result'],
+  width: 200,
 }
 
 export type Channel = {
@@ -26,12 +29,18 @@ export type Channel = {
   }
 }
 
-export type ChannelType = UnsetValue | "identity" | "table" | "discrete" | "linear" | "gamma"
+export type ChannelType =
+  | UnsetValue
+  | "identity"
+  | "table"
+  | "discrete"
+  | "linear"
+  | "gamma"
 
 export type ChannelLabel = "red" | "green" | "blue" | "alpha"
 
 export type NodeData = {
-  in1: string | null,
+  in1: string | null
   red: Channel
   green: Channel
   blue: Channel
@@ -79,16 +88,16 @@ export type Slice = {
   alpha: ChannelSlice
 }
 
-export const createSlice = (set:Function) => ({
+export const createSlice = (set: Function) => ({
   componentTransferNode: {
     ...createChannelSlice(set, "red"),
     ...createChannelSlice(set, "green"),
     ...createChannelSlice(set, "blue"),
     ...createChannelSlice(set, "alpha"),
   },
-});
+})
 
-export const createChannelSlice = (set:Function, channel: ChannelLabel) => ({
+export const createChannelSlice = (set: Function, channel: ChannelLabel) => ({
   [channel]: {
     isOn: {
       set: createNodePropSetter(set, channel + ".isOn"),
@@ -130,11 +139,11 @@ export const defaultChannel = {
   offset: 0,
   slope: 1,
   intercept: 0,
-  values:{
+  values: {
     table: [0, 1],
     discrete: [0, 1],
-  }
-};
+  },
+}
 
 export const defaultData = {
   in1: null,
@@ -142,9 +151,9 @@ export const defaultData = {
   green: { ...defaultChannel },
   blue: { ...defaultChannel },
   alpha: { ...defaultChannel },
-};
+}
 
-export function stringify(node:NodeState) {
+export function stringify(node: NodeState) {
   const { id, data } = node
   const { red, green, blue, alpha, in1 } = data
 
@@ -158,7 +167,6 @@ export function stringify(node:NodeState) {
   return str
 }
 
-
 // For identity:
 
 // C' = C
@@ -168,29 +176,45 @@ export function stringify(node:NodeState) {
 // For gamma, the function is defined by the following exponential function:
 // The initial value for type is identity.
 
-function stringifyChannel(id:string, channel:string, data:Channel) {
-  const { isOn, type, amplitude, exponent, offset, slope, intercept, values } = data
+function stringifyChannel(id: string, channel: string, data: Channel) {
+  const { isOn, type, amplitude, exponent, offset, slope, intercept, values } =
+    data
 
   if (!isOn) return ""
 
   let properties = ""
   if (type === "table") {
-    properties = stringifyArrayProp('tableValues', values.table)
-  } 
+    properties = stringifyArrayProp("tableValues", values.table)
+  }
 
   if (type === "discrete") {
-    properties =  stringifyArrayProp('tableValues', values.discrete)
+    properties = stringifyArrayProp("tableValues", values.discrete)
   }
 
   if (type === "linear") {
-    properties = `${stringifyProp('slope', slope)} ${stringifyProp('intercept', intercept)}`
+    properties = `${stringifyProp("slope", slope)} ${stringifyProp(
+      "intercept",
+      intercept
+    )}`
   }
 
   if (type === "gamma") {
-    properties = `${stringifyProp('amplitude', amplitude)} ${stringifyProp('exponent', exponent)} ${stringifyProp('offset', offset)}`
+    properties = `${stringifyProp("amplitude", amplitude)} ${stringifyProp(
+      "exponent",
+      exponent
+    )} ${stringifyProp("offset", offset)}`
   }
 
-  const str = `<feFunc${channel} ${stringifyProp('type', type)} ${properties} />`
+  const str = `<feFunc${channel} ${stringifyProp(
+    "type",
+    type
+  )} ${properties} />`
 
   return str
+}
+
+export function parse(node):NodeState {
+  return {
+    ...node.attributes
+  }
 }

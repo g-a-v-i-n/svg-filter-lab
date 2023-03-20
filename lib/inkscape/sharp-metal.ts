@@ -11,4 +11,4 @@ export const sharpMetal = `
   <feComposite in2="result19" operator="over" result="result15" />
   <feComposite result="result16" in2="SourceGraphic" operator="in" in="result15" />
 </filter>
-`;
+`

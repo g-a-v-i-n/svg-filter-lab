@@ -12,4 +12,4 @@ export const deepColorsPlastic = `
   <feComposite in2="result5" in="SourceGraphic" k3="0.7" k2="0.8" operator="arithmetic" result="result7" />
   <feComposite in="result7" operator="in" in2="SourceGraphic" />
 </filter>
-`;
+`

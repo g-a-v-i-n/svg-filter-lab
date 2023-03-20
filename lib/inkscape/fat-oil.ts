@@ -13,4 +13,4 @@ export const fatOil = `
   <feComposite in="fbSourceGraphic" result="result4" operator="arithmetic" k2="0.4" k3="1.7" in2="result2" />
   <feBlend result="fbSourceGraphic" mode="normal" in2="result2" />
 </filter>
-`;
+`

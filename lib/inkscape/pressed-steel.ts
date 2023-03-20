@@ -13,4 +13,4 @@ export const pressedSteel = `
   <feComposite in2="result4" in="result4" operator="in" result="result91" />
   <feBlend mode="darken" in2="result91" />
 </filter>
-`;
+`

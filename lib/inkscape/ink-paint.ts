@@ -7,4 +7,4 @@ export const inkPaint = `
   <feComposite operator="arithmetic" in2="result4" in="result0" k3="0.5" k1="2" result="result6" />
   <feComposite operator="in" in2="result5" in="result6" result="result7" />
 </filter>
-`;
+`

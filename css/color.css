@@ -42,6 +42,10 @@
   .dividePrimary {
     @apply divide-stroke dark:divide-inverseStroke;
   }
+  
+  .field {
+    @apply bg-surfaceHigh dark:bg-inverseSurfaceHigh shadow-field dark:shadow-inverseField;
+  }
 
   /* focus */
   .elementRing {

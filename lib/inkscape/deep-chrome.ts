@@ -10,4 +10,4 @@ export const deepChrome = `
   <feComposite result="result15" operator="in" in2="SourceGraphic" />
   <feComposite in="result15" operator="in" in2="SourceGraphic" result="result16" />
 </filter>
-`;
+`

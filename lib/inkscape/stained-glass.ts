@@ -13,4 +13,4 @@ export const stainedGlass = `
   <feComposite in="result5" operator="atop" in2="result93" result="result94" />
   <feBlend mode="multiply" in2="result94" />
 </filter>
-`;
+`

@@ -10,4 +10,4 @@ export const silkCarpet = `
   <feComposite in="result4" k1="1" result="result2" operator="arithmetic" in2="result4" k2="1" />
   <feBlend in2="result4" mode="normal" in="result2" />
 </filter>
-`;
+`

@@ -8,19 +8,19 @@
 
 html,
 body {
-  @apply textPrimary bg font-sans;
+  @apply textPrimary bg font-sans !cursor-default;
 }
 
 input {
-  @apply elementRing transition-all rounded-none;
+  @apply outline-none transition-all rounded-none;
 }
 
 button {
-  @apply elementRing transition-all;
+  @apply outline-none transition-all;
 }
 
 a {
-  @apply cs-text elementRing transition-all;
+  @apply cs-text outline-none transition-all;
 }
 
 span {

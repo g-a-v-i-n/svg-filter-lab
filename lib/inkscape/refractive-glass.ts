@@ -11,4 +11,4 @@ export const refractiveGlass = `
   <feComposite in="fbSourceGraphic" in2="fbSourceGraphic" operator="over" result="result14" />
   <feComposite result="result15" in2="SourceGraphic" operator="in" in="result14" />
 </filter>
-`;
+`

@@ -13,4 +13,4 @@ export const gardenOfDelights = `
   <feComposite in2="fbSourceGraphic" operator="atop" in="result2" result="result91" />
   <feBlend mode="darken" in2="result91" />
 </filter>
-`;
+`

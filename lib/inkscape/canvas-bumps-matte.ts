@@ -11,4 +11,4 @@ export const canvasBumpsMatte = `
   <feComposite result="result4" operator="arithmetic" k2="0.9" k3="0.9" in2="SourceGraphic" />
   <feComposite in2="SourceGraphic" in="result4" result="result2" operator="in" />
 </filter>
-`;
+`

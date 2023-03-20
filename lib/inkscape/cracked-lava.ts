@@ -19,4 +19,4 @@ export const crackedLava = `
   <feComposite in="fbSourceGraphic" result="result4" operator="arithmetic" k2="2" k3="2" in2="result2" />
   <feBlend mode="darken" in2="result4" />
 </filter>
-`;
+`

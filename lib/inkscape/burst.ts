@@ -14,4 +14,4 @@ export const burst = `
   <feComposite in2="result7" operator="arithmetic" k2="0.8" k3="0.8" result="result12" />
   <feBlend in2="result12" mode="lighten" />
 </filter>
-`;
+`

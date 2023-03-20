@@ -14,4 +14,4 @@ export const shakenLiquid = `
   </feMerge>
   <feComposite in2="SourceAlpha" operator="in" result="result11" />
 </filter>
-`;
+`

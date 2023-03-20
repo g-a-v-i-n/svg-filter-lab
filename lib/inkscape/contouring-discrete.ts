@@ -13,4 +13,4 @@ export const contouringDiscrete = `
   <feFlood result="result8" flood-color="rgb(128,128,128)" />
   <feComposite in2="result6" operator="in" result="result12" />
 </filter>
-`;
+`

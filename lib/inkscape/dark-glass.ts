@@ -12,4 +12,4 @@ export const darkGlass = `
   <feComposite in="result5" operator="atop" in2="result92" result="result93" />
   <feBlend mode="multiply" in2="result93" />
 </filter>
-`;
+`

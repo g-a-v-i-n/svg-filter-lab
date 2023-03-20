@@ -10,4 +10,4 @@ export const blendOpposites = `
   <feComposite in2="result2" operator="arithmetic" k2="1" result="result5" />
   <feComposite in2="SourceGraphic" operator="in" result="result5" />
 </filter>
-`;
+`

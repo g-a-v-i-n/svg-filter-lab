@@ -7,4 +7,4 @@ export const meltedRainbow = `
   <feComposite in2="result6" operator="in" in="result2" result="fbSourceGraphic" />
   <feComposite in2="fbSourceGraphic" in="fbSourceGraphic" k2="2.5" operator="arithmetic" />
 </filter>
-`;
+`

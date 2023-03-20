@@ -20,4 +20,4 @@ export const plaster = `
   <feComposite in2="result13" result="result9" operator="arithmetic" k2="1" k3="0.8" in="result11" />
   <feComposite in2="SourceGraphic" result="result7" operator="in" in="result9" />
 </filter>
-`;
+`

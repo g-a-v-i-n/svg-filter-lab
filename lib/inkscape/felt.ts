@@ -8,4 +8,4 @@ export const felt = `
   <feComposite in="result6" in2="result0" operator="in" result="result91" />
   <feComposite operator="arithmetic" k1="1.5" in="result2" in2="result91" />
 </filter>
-`;
+`

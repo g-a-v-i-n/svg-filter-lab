@@ -14,4 +14,4 @@ export const fire = `
   <feComposite in="SourceGraphic" in2="result6" />
   <feComposite in2="result7" />
 </filter>
-`;
+`

@@ -9,4 +9,4 @@ export const tartan = `
   </feMerge>
   <feComposite result="result4" in="SourceGraphic" operator="in" in2="result2" id="feComposite2438" />
 </filter>
-`;
+`

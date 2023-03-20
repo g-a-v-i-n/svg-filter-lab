@@ -8,4 +8,4 @@ export const blueCheese = `
   <feComposite operator="in" in2="result2" in="result1" />
   <feComposite in2="SourceGraphic" operator="atop" />
 </filter>
-`;
+`

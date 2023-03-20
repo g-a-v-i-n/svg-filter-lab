@@ -20,4 +20,4 @@ export const reliefPrint = `
   <feComposite in="result1" k3="1" k2="1" operator="arithmetic" in2="result5" result="result9" />
   <feComposite in2="SourceGraphic" operator="in" />
 </filter>
-`;
+`

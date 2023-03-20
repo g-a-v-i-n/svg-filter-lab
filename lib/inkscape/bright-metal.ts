@@ -12,4 +12,4 @@ export const brightMetal = `
   <feComposite in="result3" k3="1.1" k2="0.5" operator="arithmetic" result="result7" in2="result5" k1="0.5" />
   <feComposite in="result7" operator="atop" in2="SourceGraphic" result="result8" />
 </filter>
-`;
+`

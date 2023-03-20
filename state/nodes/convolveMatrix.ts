@@ -11,10 +11,13 @@ export const metadata = {
   tagName: "feConvolveMatrix",
   icon: "􀦸",
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feConvolveMatrix",
+  inputs: ['in1'],
+  outputs: ['result'],
+  width: 200,
 }
 
 export type NodeData = {
-  in1: string | null,
+  in1: string | null
   kernelMatrix: number[][] | UnsetValue
   order: number | UnsetValue
   bias: number | UnsetValue
@@ -29,7 +32,7 @@ export type NodeData = {
 export type NodeState = Node<NodeData> & { selected: boolean }
 
 export type Slice = {
-  kernalMatrix:{
+  kernalMatrix: {
     set: Function
   }
   order: {
@@ -58,7 +61,7 @@ export type Slice = {
   }
 }
 
-export const createSlice = (set:Function) => ({
+export const createSlice = (set: Function) => ({
   convolveMatrixNode: {
     kernalMatrix: {
       set: createNodePropSetter(set, "kernelMatrix"),
@@ -86,7 +89,7 @@ export const createSlice = (set:Function) => ({
     },
     targetY: {
       set: createNodePropSetter(set, "targetY"),
-    }
+    },
   },
 })
 
@@ -111,10 +114,38 @@ export const defaultData: NodeData = {
 // if the value value in state === null
 // in the renderer, do not add the attribute
 // in the node component, use a HTML `placeholder` instead of value
-export function stringify(node:NodeState) {
+export function stringify(node: NodeState) {
   const { id, data } = node
-  const { in1, kernelMatrix, order, bias, divisor, edgeMode, preserveAlpha, targetX, targetY } = data
+  const {
+    in1,
+    kernelMatrix,
+    order,
+    bias,
+    divisor,
+    edgeMode,
+    preserveAlpha,
+    targetX,
+    targetY,
+  } = data
 
-  const str = `<feConvolveMatrix in="${in1}" ${stringifyMatrixProp('kernelMatrix', kernelMatrix)} ${stringifyProp('order', order)} ${stringifyProp('bias', bias)} ${stringifyProp('divisor', divisor)} ${stringifyProp('edgeMode', edgeMode)} ${stringifyBooleanProp('preserveAlpha', preserveAlpha)} ${stringifyProp('targetX', targetX)} ${stringifyProp('targetY', targetY)} result="${id}" />`
+  const str = `<feConvolveMatrix in="${in1}" ${stringifyMatrixProp(
+    "kernelMatrix",
+    kernelMatrix
+  )} ${stringifyProp("order", order)} ${stringifyProp(
+    "bias",
+    bias
+  )} ${stringifyProp("divisor", divisor)} ${stringifyProp(
+    "edgeMode",
+    edgeMode
+  )} ${stringifyBooleanProp("preserveAlpha", preserveAlpha)} ${stringifyProp(
+    "targetX",
+    targetX
+  )} ${stringifyProp("targetY", targetY)} result="${id}" />`
   return str
+}
+
+export function parse(node):NodeState {
+  return {
+    ...node.attributes
+  }
 }

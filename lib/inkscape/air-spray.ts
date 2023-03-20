@@ -7,4 +7,4 @@ export const airSpray = `
   <feMorphology radius="1" operator="dilate" result="result4" />
   <feBlend mode="screen" in2="result2" />
 </filter>
-`;
+`

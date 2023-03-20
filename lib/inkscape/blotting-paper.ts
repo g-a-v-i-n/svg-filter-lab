@@ -8,4 +8,4 @@ export const blottingPaper = `
   <feComposite operator="arithmetic" in2="result5" in="result4" k2="0.25" k3="1" k1="1" />
   <feComposite operator="in" in2="result2" />
 </filter>
-`;
+`

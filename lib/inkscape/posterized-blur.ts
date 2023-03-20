@@ -19,4 +19,4 @@ export const posterizedBlur = `
   </feComponentTransfer>
   <feComposite in2="colormatrix" operator="in" />
 </filter>
-`;
+`

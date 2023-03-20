@@ -1,4 +1,4 @@
-import { Node, Edge} from "../store"
+import { Node, Edge } from "../store"
 import * as source from "../nodes/source"
 import * as blend from "../nodes/blend"
 import * as colorMatrix from "../nodes/colorMatrix"
@@ -8,15 +8,15 @@ import * as convolveMatrix from "../nodes/convolveMatrix"
 import { topologicalSort } from "../../lib/topologicalSort"
 
 export const stringifiers = {
-    source: source.stringify,
-    blend: blend.stringify,
-    colorMatrix: colorMatrix.stringify,
-    componentTransfer: componentTransfer.stringify,
-    composite: composite.stringify,
-    convolveMatrix: convolveMatrix.stringify,
+  source: source.stringify,
+  blend: blend.stringify,
+  colorMatrix: colorMatrix.stringify,
+  componentTransfer: componentTransfer.stringify,
+  composite: composite.stringify,
+  convolveMatrix: convolveMatrix.stringify,
 }
 
-function getAncestors(n:string, ejs:Edge[], acc:Set<string> = new Set()) {
+function getAncestors(n: string, ejs: Edge[], acc: Set<string> = new Set()) {
   // add node to acc
   acc.add(n)
 
@@ -32,23 +32,7 @@ function getAncestors(n:string, ejs:Edge[], acc:Set<string> = new Set()) {
   return acc
 }
 
-// function getNodeTargets(edges:Edge[], nodeId:string) {
-//   return edges
-//       .filter((edge) => edge.target === nodeId)
-//       .reduce((acc, edge) => {
-//         // console.log(edge)
-//         if (edge.data?.source) {
-//           acc[edge.targetHandle] = edge.data.source
-//         } else {
-//           acc[edge.targetHandle] = edge.source
-//         }
-//         return acc
-//       }, {})
-// }
-
-
-export function stringify(nodes:Node[], edges:Edge[]) {
-
+export function stringify(nodes: Node[], edges: Edge[]) {
   const order = topologicalSort(edges)
 
   // console.log(order)
@@ -66,33 +50,29 @@ export function stringify(nodes:Node[], edges:Edge[]) {
   //   } as Node & {edges: {in: string | null, in2: string | null, result: string}}
   // })
 
-
   return nodes.map((n) => {
-
     // get ancestors of given node
     const ancestors = getAncestors(n.id, edges)
 
-    const localSvgFilter = Array
-      .from(ancestors)
+    const localSvgFilter = Array.from(ancestors)
       .sort((a, b) => order.indexOf(a) - order.indexOf(b))
-      .map(ancestor => {
-
+      .map((ancestor) => {
         const ancestorNode = nodes.find((n) => n.id === ancestor)
 
         const renderer = stringifiers[ancestorNode.type]
 
-        return renderer ? renderer(ancestorNode) : `<${ancestorNode.type} no-render />`
+        return renderer
+          ? renderer(ancestorNode)
+          : `<${ancestorNode.type} no-render />`
       })
-      .join('\n')
-
+      .join("\n")
 
     return {
       ...n,
       data: {
         ...n.data,
         filterText: localSvgFilter,
-      }
+      },
     }
   })
-
 }

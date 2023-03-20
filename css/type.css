@@ -105,3 +105,21 @@
   margin-top: -0.5621em;
   display: table;
 }
+
+
+.cs-text-xs {
+  font-size: 11px;
+  line-height: 15.0459px;
+}
+
+.cs-text-xs::before {
+  content: "";
+  margin-bottom: -0.4212em;
+  display: table;
+}
+
+.cs-text-xs::after {
+  content: "";
+  margin-top: -0.3788em;
+  display: table;
+}

@@ -10,4 +10,4 @@ export const convolutedBump = `
   <feComposite in2="result12" in="result1" k3="0.8" k2="1" operator="arithmetic" result="result9" />
   <feComposite in2="SourceGraphic" in="result9" operator="in" result="result7" />
 </filter>
-`;
+`

@@ -16,4 +16,4 @@ export const roughCanvasPainting = `
   <feBlend in2="result3" mode="normal" result="result6" />
   <feComposite in2="SourceGraphic" operator="in" result="result7" />
 </filter>
-`;
+`

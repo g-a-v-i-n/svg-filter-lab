@@ -14,4 +14,4 @@ export const liquid = `
   </feMerge>
   <feComposite in2="SourceGraphic" operator="in" result="result11" />
 </filter>
-`;
+`

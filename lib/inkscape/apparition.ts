@@ -4,4 +4,4 @@ export const apparition = `
   <feGaussianBlur in="result0" stdDeviation="8" result="result91" />
   <feComposite operator="in" in="SourceGraphic" in2="result91" />
 </filter>
-`;
+`

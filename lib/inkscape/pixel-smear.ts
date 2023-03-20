@@ -10,4 +10,4 @@ export const pixelSmear = `
   <feComposite in="result4" k3="0.8" k1="1.3" result="result2" operator="arithmetic" in2="result4" />
   <feBlend in2="result2" mode="screen" in="result2" />
 </filter>
-`;
+`

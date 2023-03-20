@@ -7,4 +7,4 @@ export const oilSlick = `
   <feDisplacementMap result="result4" scale="18.5" yChannelSelector="A" xChannelSelector="R" in="result3" in2="result91" />
   <feComposite in2="SourceGraphic" operator="atop" in="result4" />
 </filter>
-`;
+`

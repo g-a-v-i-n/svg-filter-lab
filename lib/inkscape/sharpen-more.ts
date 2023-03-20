@@ -3,4 +3,4 @@ export const sharpenMore = `
   <feConvolveMatrix targetY="1" targetX="1" in="SourceGraphic" divisor="1" kernelMatrix="0 -0.3 0 -0.3 2.2 -0.3 0 -0.3 0" order="3 3" result="result1" />
   <feBlend in2="SourceGraphic" mode="normal" result="result2" />
 </filter>
-`;
+`

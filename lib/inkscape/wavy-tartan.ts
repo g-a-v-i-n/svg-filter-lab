@@ -9,4 +9,4 @@ export const wavyTartan = `
   <feDisplacementMap result="result4" scale="75" yChannelSelector="A" xChannelSelector="A" in2="result6" in="result1" />
   <feComposite k1="1" in="SourceGraphic" operator="in" result="result2" in2="result4" />
 </filter>
-`;
+`

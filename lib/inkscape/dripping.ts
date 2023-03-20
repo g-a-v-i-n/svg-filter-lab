@@ -12,4 +12,4 @@ export const dripping = `
   <feDisplacementMap in="result4" xChannelSelector="R" yChannelSelector="G" scale="100" result="result9" in2="result91" />
   <feComposite in="SourceGraphic" in2="result9" />
 </filter>
-`;
+`

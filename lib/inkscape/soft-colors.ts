@@ -11,4 +11,4 @@ export const softColors = `
   <feBlend in2="result6" result="result14" mode="screen" />
   <feComposite in2="SourceGraphic" in="result14" operator="in" />
 </filter>
-`;
+`

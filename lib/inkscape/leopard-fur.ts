@@ -21,4 +21,4 @@ export const leopardFur = `
   <feTurbulence numOctaves="3" baseFrequency="0.106" result="result92" />
   <feDisplacementMap in="result3" xChannelSelector="R" yChannelSelector="G" scale="4.5" in2="result92" />
 </filter>
-`;
+`

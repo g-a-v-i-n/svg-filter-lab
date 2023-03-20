@@ -13,4 +13,4 @@ export const moltenMetal = `
   <feComposite operator="in" in="result9" in2="result4" result="result9" />
   <feBlend mode="multiply" in="result9" in2="result9" />
 </filter>
-`;
+`

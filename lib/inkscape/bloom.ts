@@ -15,4 +15,4 @@ export const bloom = `
   <feBlend result="result9" mode="lighten" in="result6" in2="result91" />
   <feComposite in="result11" in2="result9" />
 </filter>
-`;
+`

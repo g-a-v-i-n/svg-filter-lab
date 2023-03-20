@@ -16,4 +16,4 @@ export const tinfoil = `
   <feBlend mode="multiply" in2="result16" />
   <feDisplacementMap in2="result5" xChannelSelector="R" scale="0" />
 </filter>
-`;
+`

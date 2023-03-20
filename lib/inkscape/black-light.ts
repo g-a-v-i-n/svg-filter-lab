@@ -5,4 +5,4 @@ export const blackLight = `
   <feBlend in="result4" mode="multiply" result="result3" in2="result2" />
   <feComposite in2="SourceGraphic" operator="in" in="result3" />
 </filter>
-`;
+`

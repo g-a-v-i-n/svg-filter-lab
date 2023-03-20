@@ -12,4 +12,4 @@ export const plastify = `
   <feComposite operator="atop" in2="SourceGraphic" result="result11" />
   <feDisplacementMap result="result16" in="result11" scale="0" xChannelSelector="R" in2="result5" />
 </filter>
-`;
+`

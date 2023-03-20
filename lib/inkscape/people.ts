@@ -8,4 +8,4 @@ export const people = `
   <feComposite in="result2" operator="in" in2="SourceGraphic" result="result91" />
   <feBlend mode="multiply" in2="result91" />
 </filter>
-`;
+`

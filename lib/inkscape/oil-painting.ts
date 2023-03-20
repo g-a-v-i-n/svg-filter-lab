@@ -4,4 +4,4 @@ export const oilPainting = `
   <feTurbulence numOctaves="1" baseFrequency="0.078" result="result91" />
   <feDisplacementMap in="result0" scale="6.3" xChannelSelector="R" yChannelSelector="G" in2="result91" />
 </filter>
-`;
+`

@@ -10,4 +10,4 @@ export const canvasBumpsAlpha = `
   <feComposite operator="in" result="result2" in="SourceGraphic" in2="result6" />
   <feComposite in2="result2" k3="1" k2="1" operator="arithmetic" result="result4" in="result2" />
 </filter>
-`;
+`

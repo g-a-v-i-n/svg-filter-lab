@@ -11,4 +11,4 @@ export const carnaval = `
   <feBlend mode="normal" in2="result8" result="result11" />
   <feBlend mode="multiply" in2="result11" />
 </filter>
-`;
+`

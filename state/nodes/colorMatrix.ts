@@ -10,12 +10,20 @@ export const metadata = {
   tagName: "feColorMatrix",
   icon: "􀮟",
   mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix",
+  inputs: ['in1'],
+  outputs: ['result'],
+  width: 200,
 }
 
-export type MatrixTypeKey = UnsetValue | "matrix" | "saturate" | "hueRotate" | "luminanceToAlpha"
+export type MatrixTypeKey =
+  | UnsetValue
+  | "matrix"
+  | "saturate"
+  | "hueRotate"
+  | "luminanceToAlpha"
 
 export type NodeData = {
-  in1: string | null,
+  in1: string | null
   type: MatrixTypeKey
   values: {
     matrix: number[][] | UnsetValue
@@ -28,22 +36,22 @@ export type NodeState = Node<NodeData> & { selected: boolean }
 
 export type Slice = {
   type: {
-    set: Function,
+    set: Function
   }
   values: {
     matrix: {
-      set: Function,
+      set: Function
     }
     saturate: {
-      set: Function,
+      set: Function
     }
     hueRotate: {
-      set: Function,
+      set: Function
     }
   }
 }
 
-export const createSlice = (set:Function) => ({
+export const createSlice = (set: Function) => ({
   colorMatrixNode: {
     type: {
       set: createNodePropSetter(set, "type"),
@@ -57,8 +65,8 @@ export const createSlice = (set:Function) => ({
       },
       hueRotate: {
         set: createNodePropSetter(set, "values.hueRotate"),
-      }
-    }
+      },
+    },
   },
 })
 
@@ -74,10 +82,10 @@ export const defaultData: NodeData = {
     ],
     saturate: 0,
     hueRotate: 0,
-  }
+  },
 }
 
-export function stringify(node:NodeState) {
+export function stringify(node: NodeState) {
   const { id, data } = node
   const { type, in1, values } = data
 
@@ -86,35 +94,30 @@ export function stringify(node:NodeState) {
 
   // For type="matrix", values is a list of 20 matrix values (a00 a01 a02 a03 a04 a10 a11 … a34), separated by whitespace and/or a comma.
   if (type === "matrix") {
-    valuesStr = stringifyMatrixProp('values', values.matrix)
+    valuesStr = stringifyMatrixProp("values", values.matrix)
   }
 
   // For type="saturate", values is a single real number value (0 to 1).
   if (type === "saturate") {
-    valuesStr = stringifyProp('values', values.saturate)
+    valuesStr = stringifyProp("values", values.saturate)
   }
 
   // For type="hueRotate", values is a single one real number value (degrees).
   if (type === "hueRotate") {
-    valuesStr = stringifyProp('values', values.hueRotate)
+    valuesStr = stringifyProp("values", values.hueRotate)
   }
 
   // For type="luminanceToAlpha", values is not applicable.
 
-  const str = `<feColorMatrix ${stringifyProp('type', type)} ${valuesStr} in="${in1}" result="${id}" />`
+  const str = `<feColorMatrix ${stringifyProp(
+    "type",
+    type
+  )} ${valuesStr} in="${in1}" result="${id}" />`
   return str
 }
 
-// export function importer(attributes):NodeState {
-//   const valuesKey = attributes.type === "hueRotate"
-//     ? "hueRotateValues"
-//     : attributes.type === "saturate"
-//     ? "saturateValues"  
-//     : "matrixValues"
-
-//   return {
-//     ...defaultData,
-//     ...attributes,
-//     [valuesKey]: attributes.values,
-//   }
-// }
+export function parse(node):NodeState {
+  return {
+    ...node.attributes
+  }
+}

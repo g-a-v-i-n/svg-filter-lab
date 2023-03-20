@@ -8,4 +8,4 @@ export const inset = `
   <feComposite in2="result0" operator="in" result="result91" />
   <feComposite in="SourceGraphic" in2="result91" />
 </filter>
-`;
+`

@@ -16,4 +16,4 @@ export const marble = `
   <feComposite in2="fbSourceGraphic" in="result1" result="result2" operator="in" />
   <feComposite in="fbSourceGraphic" result="result4" operator="arithmetic" k2="1" k3="1" in2="result2" />
 </filter>
-`;
+`

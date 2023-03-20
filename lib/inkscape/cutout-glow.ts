@@ -6,4 +6,4 @@ export const cutoutGlow = `
   <feComposite in="flood" in2="SourceGraphic" operator="in" result="composite" />
   <feBlend in="blur" in2="composite" mode="normal" />
 </filter>
-`;
+`

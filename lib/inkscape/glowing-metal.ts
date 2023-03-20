@@ -11,4 +11,4 @@ export const glowingMetal = `
   <feComposite in="result2" result="result4" operator="arithmetic" k2="2" k3="0.8" in2="fbSourceGraphic" />
   <feBlend in="result4" in2="result4" mode="multiply" />
 </filter>
-`;
+`

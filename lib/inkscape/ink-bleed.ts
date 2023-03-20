@@ -7,4 +7,4 @@ export const inkBleed = `
   <feGaussianBlur result="result4" in="SourceGraphic" stdDeviation="1.1" />
   <feComposite in="result4" in2="result3" />
 </filter>
-`;
+`

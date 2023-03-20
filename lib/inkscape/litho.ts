@@ -13,4 +13,4 @@ export const litho = `
   <feBlend in2="fbSourceGraphic" mode="screen" in="result3" result="result4" />
   <feComposite in2="SourceGraphic" operator="in" in="result4" result="result2" />
 </filter>
-`;
+`

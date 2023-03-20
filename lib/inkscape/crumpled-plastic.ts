@@ -12,4 +12,4 @@ export const crumpledPlastic = `
   <feBlend mode="multiply" result="result6" in2="result5" />
   <feBlend mode="screen" in="result6" in2="result6" />
 </filter>
-`;
+`

@@ -11,4 +11,4 @@ export const deepMetal = `
   <feComposite result="result15" operator="xor" in2="SourceGraphic" in="fbSourceGraphic" />
   <feComposite in="result15" operator="in" in2="result8" result="result16" />
 </filter>
-`;
+`

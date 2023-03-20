@@ -7,4 +7,4 @@ export const tintedRainbow = `
   <feComposite in2="result6" operator="in" in="result2" result="fbSourceGraphic" />
   <feComposite in2="SourceGraphic" in="fbSourceGraphic" k3="0.3" k2="1.5" operator="arithmetic" result="result9" />
 </filter>
-`;
+`

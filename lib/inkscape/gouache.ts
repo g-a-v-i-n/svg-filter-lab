@@ -7,4 +7,4 @@ export const gouache = `
   <feComposite result="result6" operator="arithmetic" k2="1" k1="0.3" k3="0.3" in2="result4" />
   <feComposite in2="result5" in="result6" operator="over" />
 </filter>
-`;
+`

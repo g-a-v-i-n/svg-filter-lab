@@ -8,4 +8,4 @@ export const comicsCream = `
   <feComposite in2="result2" operator="out" in="SourceGraphic" result="fbSourceGraphic" />
   <feComposite in2="SourceGraphic" operator="in" result="result11" in="fbSourceGraphic" />
 </filter>
-`;
+`

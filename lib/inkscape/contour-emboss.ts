@@ -11,4 +11,4 @@ export const contourEmboss = `
   <feComposite result="result14" operator="over" in2="fbSourceGraphic" in="fbSourceGraphic" />
   <feComposite in="result14" operator="in" in2="result17" result="result15" />
 </filter>
-`;
+`

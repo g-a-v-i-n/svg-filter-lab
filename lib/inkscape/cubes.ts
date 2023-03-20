@@ -9,4 +9,4 @@ export const cubes = `
   <feBlend mode="darken" in="result2" in2="result2" />
   <feConvolveMatrix order="3 3" kernelMatrix="2 0 0 0 1 0 0 0 -1 " targetX="1" targetY="1" divisor="2" edgeMode="duplicate" />
 </filter>
-`;
+`

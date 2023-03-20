@@ -15,4 +15,4 @@ export const translucent = `
   <feComposite operator="atop" in="result5" in2="result94" result="result95" />
   <feBlend mode="screen" in2="result95" />
 </filter>
-`;
+`

@@ -14,4 +14,4 @@ export const linenCanvas = `
   <feBlend mode="normal" in2="result3" result="result6" />
   <feComposite in2="SourceGraphic" operator="in" />
 </filter>
-`;
+`

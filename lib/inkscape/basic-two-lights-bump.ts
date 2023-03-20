@@ -11,4 +11,4 @@ export const basicTwoLightsBump = `
   <feComposite in="result11" result="result9" operator="arithmetic" k2="1" k3="1" in2="SourceGraphic" />
   <feComposite in2="SourceGraphic" operator="in" in="result9" />
 </filter>
-`;
+`

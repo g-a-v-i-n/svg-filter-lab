@@ -8,4 +8,4 @@ export const simulateCmy = `
   <feColorMatrix result="result1" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 -1 1 0 " in="SourceGraphic" />
   <feBlend in2="result4" mode="multiply" result="result5" in="result1" />
 </filter>
-`;
+`

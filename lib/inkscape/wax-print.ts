@@ -9,4 +9,4 @@ export const waxPrint = `
   <feComposite k1="0.5" k3="1.5" k2="0.15" in="result4" in2="result5" operator="arithmetic" result="result6" />
   <feComposite operator="in" in="result6" in2="result4" />
 </filter>
-`;
+`

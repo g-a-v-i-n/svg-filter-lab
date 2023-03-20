@@ -10,4 +10,4 @@ export const jamSpread = `
   <feComposite operator="atop" in="result4" in2="result2" result="result91" />
   <feBlend mode="multiply" in2="result91" />
 </filter>
-`;
+`

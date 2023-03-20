@@ -26,10 +26,12 @@ export const Select = forwardRef(
           )}
         >
           <FieldLabel>{name}</FieldLabel>
-          <div className="flex items-center gap-x-1">
+          <div className="flex items-center gap-x-2">
             <SelectPrimitive.Value className="cs-text" />
             <SelectPrimitive.Icon>
-              <span className="textSecondary cs-text-sm font-bold">􀆈</span>
+              <div className="flex items-center justify-center h-5 w-5 field rounded">
+                <span className="textPrimary cs-text-xs font-normal">􀆏</span>
+              </div>
             </SelectPrimitive.Icon>
           </div>
         </SelectPrimitive.Trigger>

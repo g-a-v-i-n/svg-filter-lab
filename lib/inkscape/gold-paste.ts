@@ -17,4 +17,4 @@ export const goldPaste = `
   <feComposite in2="result2" in="result4" operator="atop" result="result92" />
   <feBlend mode="multiply" in2="result92" />
 </filter>
-`;
+`

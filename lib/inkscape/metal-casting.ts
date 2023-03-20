@@ -7,4 +7,4 @@ export const metalCasting = `
   </feSpecularLighting>
   <feComposite in2="result1" operator="atop" />
 </filter>
-`;
+`

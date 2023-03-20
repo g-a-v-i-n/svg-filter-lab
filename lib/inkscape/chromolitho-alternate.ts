@@ -15,4 +15,4 @@ export const chromolithoAlternate = `
   </feComponentTransfer>
   <feComposite in2="SourceGraphic" in="fbSourceGraphic" result="composite" k2="1" operator="in" />
 </filter>
-`;
+`

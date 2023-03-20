@@ -1,6 +1,6 @@
-import {create} from "zustand"
+import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
-// import {uuid} from "../lib/uuid"
+
 import {
   Edge as RFEdge,
   EdgeChange,
@@ -11,7 +11,7 @@ import {
   ReactFlowInstance,
 } from "reactflow"
 
-import { initialNodes, initialEdges } from "./defaultStates/cliques"
+import { initialNodes, initialEdges } from "./defaultStates/nodes"
 
 import * as source from "./nodes/source"
 import * as blend from "./nodes/blend"
@@ -19,21 +19,32 @@ import * as composite from "./nodes/composite"
 import * as colorMatrix from "./nodes/colorMatrix"
 import * as componentTransfer from "./nodes/componentTransfer"
 import * as convolveMatrix from "./nodes/convolveMatrix"
+import * as gaussianBlur from "./nodes/gaussianBlur"
+import * as offset from "./nodes/offset"
+import * as specularLighting from "./nodes/specularLighting"
+import * as turbulence from "./nodes/turbulence"
 
 import { uuid } from "../lib/uuid"
-import { createDragAndDropSlice, OnDragOver,
-  OnDrop } from "./panels/dragAndDrog"
+import {
+  createDragAndDropSlice,
+  OnDragOver,
+  OnDrop,
+} from "./panels/dragAndDrog"
+import { parse } from "./parse/parse"
 
 export type Edge = RFEdge
 
-export type Node = (
-  source.NodeState
+export type Node =
+  | source.NodeState
   | blend.NodeState
   | colorMatrix.NodeState
   | componentTransfer.NodeState
   | composite.NodeState
   | convolveMatrix.NodeState
-)
+  | gaussianBlur.NodeState
+  | offset.NodeState
+  | specularLighting.NodeState
+  | turbulence.NodeState
 
 export type Nodes = Node[]
 export type Edges = Edge[]
@@ -70,6 +81,10 @@ export type State = {
   componentTransferNode: componentTransfer.Slice
   compositeNode: composite.Slice
   convolveMatrixNode: convolveMatrix.Slice
+  gaussianBlurNode: gaussianBlur.Slice
+  offsetNode: offset.Slice
+  specularLightingNode: specularLighting.Slice
+  turbulenceNode: turbulence.Slice
 }
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -81,7 +96,7 @@ const useStore = create<any>()(
       set((state: State) => {
         state.rfInstance = instance
       }),
-      
+
     nodes: initialNodes,
     edges: initialEdges,
 
@@ -93,25 +108,27 @@ const useStore = create<any>()(
     },
 
     // Called when user connects two nodes in a controlled flow
-    onConnect: (params:Connection) => {
+    onConnect: (params: Connection) => {
       const { source, target, sourceHandle, targetHandle } = params
 
       set((state: State) => {
         const edge = {
-          ...params, 
-          id: uuid('edge'),
-          type: 'custom'
+          ...params,
+          id: uuid("edge"),
+          type: "custom",
         }
 
         // when two nodes get connected, the target node's in1 or in2 property is set to the source node's id
         // get the source node
-        const sourceNode = state.nodes.find((node) => node.id === source) as Node
+        const sourceNode = state.nodes.find(
+          (node) => node.id === source
+        ) as Node
 
         // get the index of the target node
         const index = state.nodes.findIndex((node) => node.id === target)
 
         // if the source node's type is `source`.
-        if (sourceNode.type === 'source') {
+        if (sourceNode.type === "source") {
           // set the target node's in1 or in2 property to the source node's source property
           state.nodes[index].data[targetHandle] = sourceNode.data.source
         } else {
@@ -127,12 +144,13 @@ const useStore = create<any>()(
     // Called on select and remove - handler for adding interactivity for a controlled flow
     onEdgesChange: (changes: EdgeChange[]) => {
       set((state: State) => {
-
         // when a connection is deleted, the target node's in1 or in2 property is set to null
         changes
           .filter((change) => change.type === "remove")
           .forEach((removalChange) => {
-            const edge = state.edges.find((edge) => edge.id === removalChange.id) as Edge
+            const edge = state.edges.find(
+              (edge) => edge.id === removalChange.id
+            ) as Edge
 
             // find all nodes with which this edge is connected as a target
             state.nodes
@@ -141,7 +159,7 @@ const useStore = create<any>()(
                 console.log(node)
                 node.data[edge.targetHandle] = null
               })
-        })
+          })
 
         state.edges = applyEdgeChanges(changes, state.edges)
       })
@@ -165,7 +183,15 @@ const useStore = create<any>()(
     //     }
     //   })
     // },
-    
+
+    parse: (filter: string) => {
+      set((state: State) => {
+        const { nodes, edges } = parse(filter)
+        state.nodes = nodes
+        state.edges = edges
+      })
+    },
+
     // Panel slices
     ...createDragAndDropSlice(set),
 
@@ -176,6 +202,10 @@ const useStore = create<any>()(
     ...componentTransfer.createSlice(set),
     ...composite.createSlice(set),
     ...convolveMatrix.createSlice(set),
+    ...gaussianBlur.createSlice(set),
+    ...offset.createSlice(set),
+    ...specularLighting.createSlice(set),
+    ...turbulence.createSlice(set),
   }))
 )
 

@@ -15,4 +15,4 @@ export const jellyBump = `
   </feMerge>
   <feComposite in2="SourceGraphic" operator="in" in="result14" />
 </filter>
-`;
+`

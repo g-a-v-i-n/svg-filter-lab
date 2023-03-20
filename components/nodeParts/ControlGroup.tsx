@@ -9,8 +9,8 @@ export function ControlGroup({
   ...props
 }: ControlGroupProps) {
   return (
-    <div {...props} className={`flex flex-col px-2 ${className}`}>
-      <div className="surfaceMiddle border borderPrimary shadow-field dark:shadow-black/20 flex flex-col w-full rounded-lg nodrag">
+    <div {...props} className={`flex flex-col ${className}`}>
+      <div className="surfaceMiddle border-y borderPrimary flex flex-col w-full nodrag">
         {children}
       </div>
     </div>
