@@ -2,6 +2,15 @@ import React from "react"
 import { getBezierPath, EdgeLabelRenderer } from "reactflow"
 import { theme } from "../../tailwind.config"
 
+function angle(cx, cy, ex, ey) {
+  var dy = ey - cy;
+  var dx = ex - cx;
+  var theta = Math.atan2(dy, dx); // range (-PI, PI]
+  // theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  //if (theta < 0) theta = 360 + theta; // range [0, 360)
+  return theta;
+}
+
 export default function CustomEdge({
   id,
   sourceX,
@@ -15,27 +24,34 @@ export default function CustomEdge({
   markerEnd,
   removeEdge,
 }) {
-  // const [edgePath, labelX, labelY] = getBezierPath({
-  //   sourceX,
-  //   sourceY,
-  //   sourcePosition,
-  //   targetX,
-  //   targetY,
-  //   targetPosition,
-  // })
+ 
+  // approximate 'radius' of the arc
+  const r = (targetX - sourceX) / 5 > 24 ? 24 : (targetX - sourceX) / 5
+  // offset from the edge of the node
+  const o = 2
 
-  // console.log(edgePath, sourceX, sourceY, targetX, targetY)
 
-  // const edgePath = `M0 0H27.2727L122.727 95H150`
-//   Q x1 y1, x y
-// (or)
-// q dx1 dy1, dx dy
+  const theta = angle(
+    sourceX + r + o, sourceY, 
+    targetX - r - o, targetY
+  );
+
+  // const r = 32
+
+  
+  console.log(targetX - sourceX)
+
+  const a1 = r * Math.sin(theta)
+  const b1 = r * Math.cos(theta)
 
   const edgePath = `
     M${sourceX} ${sourceY}
-    H${sourceX + 32}
-    L${targetX - 32} ${targetY}
-    H${targetX}`
+    H${sourceX + o}
+    Q${sourceX + r + o} ${sourceY} ${sourceX + b1 + r + o} ${sourceY + a1}
+    L${targetX - b1 - r - o} ${targetY - a1}
+    Q${targetX - r - o} ${targetY} ${targetX - o} ${targetY}
+    H${targetX}
+  `
 
   //   ctx.quadraticCurveTo(
   //     x + w, 
