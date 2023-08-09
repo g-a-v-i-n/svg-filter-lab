@@ -15,7 +15,7 @@ module.exports = {
 
         background: "hsla(0, 0%, 100%, 100%)",
         surfaceBase: "hsla(0, 0%, 97%, 100%)",
-        surfaceMiddle: "hsla(0, 0%, 100%, 100%)",
+        surfaceMiddle: "hsla(0, 0%, 99%, 100%)",
         surfaceHigh: "hsla(0, 0%, 100%, 100%)",
 
         surfaceBaseTheme: "hsla(210, 100%, 90%, 100%)",

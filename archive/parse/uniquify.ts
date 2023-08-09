@@ -20,7 +20,6 @@ export function uniquify(tags) {
             } else {
                 // If its a new id, add it to aliases but don't change it.
                 // aliases[result] = result
-
                 const newId = uuid('n')
                 tag.attributes.result = newId
                 aliases[result] = newId

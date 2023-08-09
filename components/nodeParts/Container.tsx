@@ -8,7 +8,9 @@ import { Header } from "./Header"
 export type ContainerProps = {
   selected?: boolean
   className?: string
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  metadata: any,
+  dragging: boolean | undefined,
   id?: string
 }
 
@@ -17,6 +19,7 @@ export function Container({
   children,
   selected,
   metadata,
+  dragging,
   id,
   ...props
 }: ContainerProps) {
@@ -25,7 +28,8 @@ export function Container({
       {...props}
       style={{ width: metadata.width + 'px'}}
       className={clsx(
-        "relative flex flex-col rounded-xl border outline-none surfaceBase borderPrimary",
+        { "shadow-xl surfaceMiddle": dragging, },
+        "relative flex flex-col rounded-xl border outline-none surfaceBase borderPrimary transition-all",
         className
       )}
     >
@@ -61,7 +65,7 @@ export function Container({
       {children}
       </ControlGroup>
       <Footer />
-      <div className="absolute bottom-[-16px] text-xs text-secondary pl-3">
+      <div className="absolute bottom-[-16px] text-xs text-secondary font-mono pl-3">
         {id}
       </div>
     </div>

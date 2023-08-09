@@ -36,7 +36,7 @@ export const Select = forwardRef(
           </div>
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Portal>
-          <SelectPrimitive.Content className="bg-primary text-inversePrimary rounded-lg shadow-high">
+          <SelectPrimitive.Content className="bg-primary text-inversePrimary rounded-lg shadow-high backdrop-blur-lg">
             <SelectPrimitive.ScrollUpButton className="w-full flex surfaceHigh items-center justify-center">
               <span className="textSecondary cs-text-sm font-bold">􀆈</span>
             </SelectPrimitive.ScrollUpButton>
@@ -68,7 +68,7 @@ export const SelectItem = forwardRef(
           {...props}
           ref={forwardedRef}
           className={clsx(
-            "rounded w-full user-select-none cursor-pointer outline-none flex items-center relative px-8 py-3 hover:bg-inverseTheme",
+            "rounded w-full user-select-none cursor-pointer outline-none flex items-center relative px-8 py-2 hover:bg-inverseTheme",
             className
           )}
         >

@@ -1,6 +1,5 @@
 import React, { useRef } from "react"
 import type { NextPage } from "next"
-import Div100vh from "react-div-100vh"
 import ReactFlow, { ReactFlowProvider } from "reactflow"
 
 import useStore from "../state/store"
@@ -8,34 +7,35 @@ import useStore from "../state/store"
 import Edge from "../components/edges/Edge"
 import ConnectionLine from "../components/edges/ConnectionLine"
 
-import SourceNode from "../components/nodes/SourceNode"
+// import SourceNode from "../components/nodes/SourceNode"
+import {nodeFactory} from "../components/nodes/Node"
 import BlendNode from "../components/nodes/BlendNode"
 import ColorMatrixNode from "../components/nodes/ColorMatrixNode"
-import ComponentTransferNode from "../components/nodes/ComponentTransferNode"
-import CompositeNode from "../components/nodes/CompositeNode"
-import ConvolveMatrixNode from "../components/nodes/ConvolveMatrixNode"
-import GaussianBlurNode from "../components/nodes/GaussianBlurNode"
-import OffsetNode from "../components/nodes/OffsetNode"
-import SpecularLightingNode from "../components/nodes/SpecularLightingNode"
-import TurbulenceNode from "../components/nodes/TurbulenceNode"
+// import ComponentTransferNode from "../components/nodes/ComponentTransferNode"
+// import CompositeNode from "../components/nodes/CompositeNode"
+// import ConvolveMatrixNode from "../components/nodes/ConvolveMatrixNode"
+// import GaussianBlurNode from "../components/nodes/GaussianBlurNode"
+// import OffsetNode from "../components/nodes/OffsetNode"
+// import SpecularLightingNode from "../components/nodes/SpecularLightingNode"
+// import TurbulenceNode from "../components/nodes/TurbulenceNode"
 
-import { Tray } from "../components/tray/Tray"
+import { Sidebar } from "../components/sidebar/Sidebar"
 import pkg from "../package.json"
-import { stringify } from "../state/stringify/stringify"
+// import { stringify } from "../state/stringify/stringify"
 import { lizardSkin } from "../lib/inkscape/lizard-skin"
-import { parse } from "../state/parse/parse"
+// import { parse } from "../state/parse/parse"
 
 const nodeTypes = {
-  source: SourceNode,
-  blend: BlendNode,
-  colorMatrix: ColorMatrixNode,
-  componentTransfer: ComponentTransferNode,
-  composite: CompositeNode,
-  convolveMatrix: ConvolveMatrixNode,
-  gaussianBlur: GaussianBlurNode,
-  turbulence: TurbulenceNode,
-  offset: OffsetNode,
-  specularLighting: SpecularLightingNode,
+  // source: SourceNode,
+  blend: nodeFactory('blend'),
+  colorMatrix: nodeFactory('colorMatrix'),
+  // componentTransfer: ComponentTransferNode,
+  // composite: CompositeNode,
+  // convolveMatrix: ConvolveMatrixNode,
+  // gaussianBlur: GaussianBlurNode,
+  // turbulence: TurbulenceNode,
+  // offset: OffsetNode,
+  // specularLighting: SpecularLightingNode,
 }
 
 const edgeTypes = {
@@ -53,13 +53,13 @@ function logState(nodes, edges) {
   console.log("initialEdges", initialEdges)
 }
 
-function logRender(nodes, edges) {
-  console.log("RENDER", render(nodes, edges))
-}
+// function logRender(nodes, edges) {
+//   console.log("RENDER", render(nodes, edges))
+// }
 
-function importFilter() {
-  parse(lizardSkin)
-}
+// function importFilter() {
+//   parse(lizardSkin)
+// }
 
 const Home: NextPage = () => {
   const RFWrapper = useRef(null)
@@ -73,15 +73,18 @@ const Home: NextPage = () => {
     onSelectionChange,
     onDrop,
     onDragOver,
-    setReactFlowInstance,
-    parse,
+    setXyfInstance,
+    // parse,
     // filterText,
   } = useStore()
+
+  console.log("STATE", useStore())
 
   // const filterText = stringify(nodes, edges).at(-1).data.filterText
 
   return (
-    <Div100vh>
+    <main className="w-full h-[100dvh] flex">
+      <Sidebar />
       <ReactFlowProvider>
         <div ref={RFWrapper} className={"w-full h-full"}>
           <Flow
@@ -95,7 +98,7 @@ const Home: NextPage = () => {
             edgeTypes={edgeTypes}
             connectionLineComponent={ConnectionLine}
             onDrop={(event) => onDrop(event, RFWrapper)}
-            onInit={setReactFlowInstance}
+            onInit={setXyfInstance}
             onDragOver={onDragOver}
             elevateEdgesOnSelect
             fitView
@@ -107,8 +110,8 @@ const Home: NextPage = () => {
           />
         </div>
       </ReactFlowProvider>
-      <Tray />
-
+      {/* <Tray /> */}
+{/* 
       <div className="fixed right-4 top-4 flex flex-col gap-y-2">
         <div className="bg-green cs-text text-inversePrimary dark:text-primary p-2 rounded-full">
           {pkg.version}
@@ -153,8 +156,8 @@ const Home: NextPage = () => {
             <circle cx="50" cy="50" r="50" fill="orangered" />
           </g>
         </svg>
-      </div>
-    </Div100vh>
+      </div> */}
+    </main>
   )
 }
 

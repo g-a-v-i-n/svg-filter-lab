@@ -1,5 +1,4 @@
-import { uuid } from "../../lib/uuid"
-import { defaultNodeData } from "../store"
+import { createNode } from "../common"
 
 export type OnDragOver = (event: React.DragEvent) => void
 export type OnDrop = (
@@ -7,7 +6,7 @@ export type OnDrop = (
   RFWrapper: React.Ref<HTMLDivElement>
 ) => void
 
-export const createDragAndDropSlice = (set: Function) => ({
+export const createSidebarSlice = (set: Function) => ({
   onDragOver: (event: React.DragEvent) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = "move"
@@ -25,17 +24,18 @@ export const createDragAndDropSlice = (set: Function) => ({
     }
 
     set((state: State) => {
-      const position = state.rfInstance.project({
+      if (state.xyfInstance.project === undefined) {
+        console.log(state)
+      }
+      const position = state.xyfInstance?.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       })
 
-      const newNode = {
-        id: uuid(type),
-        type,
+      const newNode = createNode({
+        nodeType: type,
         position,
-        data: structuredClone(defaultNodeData[type]),
-      }
+      })
 
       state.nodes.push(newNode)
     })

@@ -1,16 +1,18 @@
 import clsx from "clsx"
 import { NumericFormat } from "react-number-format"
-import { UNSET, UnsetValue } from "../../lib/unset"
+// import { UNSET, UnsetValue } from "../../lib/unset"
 import FieldLabel from "./FieldLabel"
 
 type MatrixInputProps = {
   rows: number
   cols: number
+  hasValue: boolean
+  hasError: boolean
   className?: string
   label: string
   disabled?: boolean
   onValueChange: (v: number, i: number, j: number) => void
-  values: number[][] | UnsetValue
+  values: number[][]
 }
 
 export function MatrixInput({
@@ -18,6 +20,8 @@ export function MatrixInput({
   cols,
   className,
   values,
+  hasValue,
+  hasError,
   onValueChange,
   disabled,
   ...props
@@ -35,12 +39,12 @@ export function MatrixInput({
           disabled ? "opacity-50" : ""
         }`}
       >
-        {values === UNSET && (
+        {hasValue === false && (
           <div className="flex divide-x dividePrimary">
             <span>Unset</span>
           </div>
         )}
-        {values !== UNSET &&
+        {hasValue === true &&
           [...Array(rows)].map((_, i) => {
             return (
               <div

@@ -2,21 +2,29 @@ import React, { memo } from "react"
 import useStore, { State } from "../../state/store"
 import { Container } from "../nodeParts/Container"
 import { Select, SelectItem, Separator } from "../nodeParts/Select"
-import { NodeState, metadata, BlendModeKey } from "../../state/nodes/blend"
+import { definition, BlendModeKey, NodeState } from "../../state/nodes/blend"
 
-const selector = (state: State) => state.blendNode
+const selector = (state: State) => state.blend
 
 type NodeProps = NodeState & {}
 
 function BlendNode(props: NodeProps) {
-  const { id, data, selected } = props
+  const { id, data, selected, dragging } = props
   const { mode } = useStore(selector)
 
+  console.log(
+    props
+  )
+
   return (
-    <Container id={id} metadata={metadata} selected={selected} className="w-[210px]">
+    <Container 
+      id={id}
+      metadata={definition.meta} 
+      selected={selected} 
+      dragging={dragging}>
         <Select
           name="Mode"
-          value={data.mode}
+          value={data.attributes.mode.value}
           onValueChange={(val: string) => mode.set(id, val as BlendModeKey)}
         >
           <SelectItem value="unset">Unset</SelectItem>

@@ -13,7 +13,7 @@ import {
   metadata,
   ChannelSlice,
   Channel,
-} from "../../state/nodes/componentTransfer"
+} from "../../.next/archive/componentTransfer"
 import clsx from "clsx"
 
 const selector = (state: State) => state.componentTransferNode

@@ -1,21 +1,50 @@
-import { Node } from "reactflow"
-import { UnsetValue } from "../../lib/unset"
-import { stringifyProp } from "../stringify/stringifyProp"
-import { createNodePropSetter } from "../setters"
+import { Node } from "reactflow";
+import { INPUTS } from '../common';
+import { serialize, serializeTag } from '../exporter';
+import { Attribute, NodeDefinition } from '../../types';
+import { createNodeFnFactory } from '../common';
 
-export const metadata = {
-  type: "blend",
-  title: "Blend",
-  tagName: "feBlend",
-  icon: "􀟗",
-  mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
-  inputs: ['in1', 'in2'],
-  outputs: ['result'],
-  width: 200,
-}
+// Define the node for serialization, parsing and rendering
+export const definition = {
+  meta: {
+    nodeType: "blend",
+    title: "Blend",
+    tagName: "feBlend",
+    icon: "􀟗",
+    mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
+    inputs: ['in1', 'in2'],
+    outputs: ['result'],
+    width: 200,
+    // attributeOrder: ['mode'],
+  },
+  attributes: {
+    mode: {
+      key: 'mode',
+      name: 'mode',
+      title: 'Mode',
+      input: {
+        type: INPUTS.ENUM,
+        options: [
+          { key: "normal", title: "Normal", cat: "normal" },
+          { key: "multiply", title: "Multiply", cat: "normal" },
+          { key: "screen", title: "Screen", cat: "normal" },
+          { key: "darken", title: "Darken", cat: "normal" },
+          { key: "lighten", title: "Lighten", cat: "normal" },
+          { key: "color-dodge", title: "Color Dodge", cat: "normal" },
+          { key: "color-burn", title: "Color Burn", cat: "normal" },
+        ]
+      },
+      default: 'normal',
+      serializer: (v: string) => serialize.string(v),
+    }
+  },
+} as NodeDefinition;
+
+export const createData = createNodeFnFactory(definition);
+
+// export const serializeNode = (node) => serializeTag(node)
 
 export type BlendModeKey =
-  | UnsetValue
   | "normal"
   | "multiply"
   | "screen"
@@ -32,10 +61,13 @@ export type BlendModeKey =
   | "color"
   | "luminosity"
 
+
 export type NodeData = {
   in1: string | null
   in2: string | null
-  mode: BlendModeKey
+  attributes: {
+    mode: Attribute<BlendModeKey>
+  }
 }
 
 export type NodeState = Node<NodeData> & { selected: boolean }
@@ -46,33 +78,45 @@ export type Slice = {
   }
 }
 
-export const createSlice = (set: Function) => ({
-  blendNode: {
-    mode: {
-      set: createNodePropSetter(set, "mode"),
-    },
-  },
-})
 
-export const defaultData: NodeData = {
-  in1: null,
-  in2: null,
-  mode: "normal",
-}
 
-export function stringify(node: NodeState) {
-  const { id, data } = node
-  const { mode, in1, in2 } = data
 
-  const str = `<feBlend ${stringifyProp(
-    "mode",
-    mode
-  )} in="${in1}" in2="${in2}" result="${id}" />`
-  return str
-}
+// export function createSlice() {
+//   return createNodeSlice(tag.attributes)
+// }
 
-export function parse(node):NodeState {
-  return {
-    ...node.attributes
-  }
-}
+// export const createSlice = (set: (nextStateOrUpdater: any, shouldReplace?: boolean | undefined) => void) => ({
+//   blendNode: {
+//     mode: {
+//       set: genericSetter(set, "mode"),
+//     },
+//   },
+// })
+
+// export const defaultData: NodeData = {
+//   in1: null,
+//   in2: null,
+//   mode: {
+//     value: "normal",
+//     type: 'SELECT',
+//   },
+// }
+
+// export function stringify(node: NodeState) {
+//   const { id, data } = node
+//   const { mode, in1, in2 } = data
+
+//   const str = `<feBlend ${stringifyProp(
+//     "mode",
+//     mode
+//   )} in="${in1}" in2="${in2}" result="${id}" />`
+//   return str
+// }
+
+// export function parse(node): NodeState['data'] {
+//   return {
+//     in1: node.attributes.in1,
+//     in2: node.attributes.in2,
+//     mode: parseProp(node.attributes.mode)
+//   }
+// }

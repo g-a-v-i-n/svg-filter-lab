@@ -22,11 +22,11 @@ export function Handle({ className, title, ...props }: HandleProps) {
       title={title}
     >
       <div className={clsx({
-        "bg-Tertiary dark:bg-inverseTertiary w-[4px] h-5 ": true,
+        "bg-tertiary dark:bg-inverseTertiary w-[4px] h-5  pointer-events-none": true,
         "rounded-r translate-x-[-1px]": props.position === Position.Left,
         "rounded-l translate-x-[1px]": props.position === Position.Right
       })} />
-      <span className="text-sm textTertiary">{title}</span>
+      <span className="text-sm textTertiary pointer-events-none">{title}</span>
     </RFHandle>
   )
 }

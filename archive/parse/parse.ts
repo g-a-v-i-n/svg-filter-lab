@@ -6,7 +6,7 @@ import { infill } from "./infill"
 import { reservedIds } from "./reservedIds"
 import { parsers } from "./parsers"
 
-function nodeProps(i) { 
+function nodeProps(i) {
   return {
     position: {
       x: i * 300,

@@ -1,8 +1,6 @@
 import { Node } from "reactflow"
 import { State } from "./store"
 
-export const
-
 export type BlendModes = typeof blendModes
 
 export type BlendMode = BlendModes[number]
