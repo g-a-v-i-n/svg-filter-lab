@@ -23,8 +23,9 @@ export const createSidebarSlice = (set: Function) => ({
       return
     }
 
+
     set((state: State) => {
-      if (state.xyfInstance.project === undefined) {
+      if (state.xyfInstance?.project === undefined) {
         console.log(state)
       }
       const position = state.xyfInstance?.project({

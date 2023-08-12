@@ -1,54 +1,69 @@
 /* Text */
 @layer components {
   .textPrimary {
-    @apply text-primary dark:text-inversePrimary;
+    @apply text-black-950 dark:text-white-950;
   }
 
   .textSecondary {
-    @apply text-secondary dark:text-inverseSecondary;
+    @apply text-black-700 dark:text-white-700;
   }
 
   .textTertiary {
-    @apply text-tertiary dark:text-inverseTertiary;
+    @apply text-black-500 dark:text-white-500;
+  }
+
+  .textQuaternary {
+    @apply text-black-300 dark:text-white-300;
   }
 
   /* Backgrounds */
   .bg {
-    @apply bg-background dark:bg-inverseBackground;
+    @apply bg-white dark:bg-black;
   }
 
-  /* Surfaces */
-  .surfaceBase {
-    @apply bg-surfaceBase dark:bg-inverseSurfaceBase;
+  /* Surfaces aka bg-1 */
+  .surface {
+    @apply bg-white-950 dark:bg-black-950;
   }
 
-  .surfaceMiddle {
-    @apply bg-surfaceMiddle dark:bg-inverseSurfaceMiddle;
+  .surfaceSecondary {
+    @apply bg-white dark:bg-black-900;
   }
 
-  .surfaceHigh {
-    @apply bg-surfaceHigh dark:bg-inverseSurfaceHigh;
-  }
-
-  .surfaceBaseTheme {
-    @apply bg-surfaceBaseTheme dark:bg-inverseSurfaceBaseTheme;
+  .surfaceTertiary {
+    @apply bg-white dark:bg-black;
   }
 
   /* Borders */
   .borderPrimary {
-    @apply border-stroke dark:border-inverseStroke;
+    @apply border-black/10 dark:border-white/10;
   }
 
-  .dividePrimary {
-    @apply divide-stroke dark:divide-inverseStroke;
+  .borderSecondary {
+    @apply border-black/5 dark:border-white/5;
+  }
+
+  .strokePrimary {
+    @apply stroke-black-400 dark:stroke-white-400;
+  }
+
+  .borderTheme { 
+    @apply border-blue-500 dark:border-blue-300;
+  }
+
+  .borderSecondaryTheme {
+    @apply border-blue-300 dark:border-blue-200;
   }
   
   .field {
-    @apply bg-surfaceHigh dark:bg-inverseSurfaceHigh shadow-field dark:shadow-inverseField;
+    @apply shadow-field dark:shadow-inverseField ;
   }
 
-  /* focus */
-  .elementRing {
-    @apply outline-none focus:ring-2 focus:ring-theme dark:focus:ring-inverseTheme;
+  .fieldDivY > *:not(:last-child) {
+    @apply shadow-fieldBottom dark:shadow-inverseFieldBottom;
+  }
+
+  .fieldDivX > *:not(:last-child) {
+    @apply shadow-fieldRight dark:shadow-inverseFieldRight;
   }
 }

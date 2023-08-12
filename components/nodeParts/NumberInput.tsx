@@ -3,7 +3,7 @@ import { NumericFormat } from "react-number-format"
 import FieldLabel from "./FieldLabel"
 
 export type NumberInputProps = {
-  label: string
+  title: string
   onChange: (value:number) => void
   value: number
   step: number
@@ -16,7 +16,7 @@ export type NumberInputProps = {
 }
 
 export function NumberInput({
-  label,
+  title,
   onChange,
   step,
   precision,
@@ -25,46 +25,25 @@ export function NumberInput({
 }: NumberInputProps) {
   return (
     <div className={"flex w-full px-2 h-8 items-center justify-between z-10"}>
-      <FieldLabel className="">{label}</FieldLabel>
-      <div className="field flex rounded h-6">
+      <FieldLabel className="">{title}</FieldLabel>
+      <div className="field fieldDivX flex rounded h-5">
+      <DetentButton 
+        onClick={() => onChange((Number(props.value) - step).toFixed(precision))} 
+        className="">􀅽</DetentButton>
+
       <NumericFormat
         className={clsx(
-          "w-20 flex items-center text-right bg-transparent",
+          "w-20 flex cs-text items-center text-right bg-transparent px-1",
           className
         )}
         value={props.value}
         onChange={(e) => onChange(Number(e.target.value))}
         allowNegative
       />
-      <div className="w-6 flex flex-col h-full">
-        <DetentButton onClick={() => onChange((Number(props.value) + step).toFixed(precision))} className="">􀅼</DetentButton>
-        <DetentButton onClick={() => onChange((Number(props.value) - step).toFixed(precision))} className="">􀅽</DetentButton>
-        {/* <button
-          onClick={() => {
-            onChange({
-              target: {
-                value: (Number(props.value) + step).toFixed(precision),
-              },
-            });
-          }}
-          className="h-full hover:text-primary"
-        >
-          <span className="text-sm textSecondary">􀅼</span>
-        </button> */}
 
-        {/* <button
-          onClick={() => {
-            onChange({
-              target: {
-                value: (Number(props.value) - step).toFixed(precision),
-              },
-            });
-          }}
-          className="h-full hover:text-primary"
-        >
-          <span className="text-sm textSecondary"></span>
-        </button> */}
-        </div>
+        <DetentButton 
+          onClick={() => onChange((Number(props.value) + step).toFixed(precision))} 
+          className="">􀅼</DetentButton>
       </div>
     </div>
   )
@@ -74,9 +53,9 @@ function DetentButton(props) {
   return (
     <button
       onClick={props.onClick}
-      className="h-full w-full flex items-center justify-center"
+      className={clsx("h-full w-full flex items-center justify-center px-1", props.className)}
   >
-    <span className="cs-text-xs textSecondary text-center">
+    <span className="cs-text-xs textTertiary text-center hover:textPrimary font-bold">
       {props.children}
     </span>
   </button>

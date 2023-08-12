@@ -18,7 +18,7 @@ export default function CustomEdge({
         d={rubberbandPath(sourceX, sourceY, targetX, targetY)}
         markerEnd={markerEnd}
         strokeWidth="5px"
-        className="stroke-connection dark:stroke-inverseConnection"
+        className="strokePrimary"
         fill="none"
         strokeLinecap="round"
       />

@@ -6,12 +6,19 @@ import {
 import clsx from "clsx"
 
 export type HandleProps = {
-  // selected: boolean
+  selected: boolean
   title: string
   className?: string
 } & RFHandleProps
 
 export function Handle({ className, title, ...props }: HandleProps) {
+  
+  title = title === 'in1'
+    ? 'In'
+    : title === 'in2'
+    ? 'In2'
+    : 'Result'
+
   return (
     <RFHandle
       className={clsx({
@@ -22,9 +29,11 @@ export function Handle({ className, title, ...props }: HandleProps) {
       title={title}
     >
       <div className={clsx({
-        "bg-tertiary dark:bg-inverseTertiary w-[4px] h-5  pointer-events-none": true,
-        "rounded-r translate-x-[-1px]": props.position === Position.Left,
-        "rounded-l translate-x-[1px]": props.position === Position.Right
+        "w-[4px] h-5  pointer-events-none": true,
+        'bg-blue-500 dark:bg-blue-300': props.selected,
+        "bg-black-500 dark:bg-white-500": !props.selected,
+        "rounded-r-sm translate-x-[-1px]": props.position === Position.Left,
+        "rounded-l-sm translate-x-[1px]": props.position === Position.Right
       })} />
       <span className="text-sm textTertiary pointer-events-none">{title}</span>
     </RFHandle>

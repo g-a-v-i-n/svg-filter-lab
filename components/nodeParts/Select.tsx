@@ -4,7 +4,7 @@ import { forwardRef, Ref } from "react"
 import FieldLabel from "./FieldLabel"
 
 export type SelectProps = {
-  name: string
+  title: string
   className?: string
   children?: React.ReactNode
   value: string
@@ -13,7 +13,7 @@ export type SelectProps = {
 
 export const Select = forwardRef(
   (
-    { children, name, className, ...props }: SelectProps,
+    { children, title, className, ...props }: SelectProps,
     forwardedRef: Ref<HTMLButtonElement>
   ) => {
     return (
@@ -25,7 +25,7 @@ export const Select = forwardRef(
             className
           )}
         >
-          <FieldLabel>{name}</FieldLabel>
+          <FieldLabel>{title}</FieldLabel>
           <div className="flex items-center gap-x-2">
             <SelectPrimitive.Value className="cs-text" />
             <SelectPrimitive.Icon>
@@ -37,11 +37,11 @@ export const Select = forwardRef(
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content className="bg-primary text-inversePrimary rounded-lg shadow-high backdrop-blur-lg">
-            <SelectPrimitive.ScrollUpButton className="w-full flex surfaceHigh items-center justify-center">
+            <SelectPrimitive.ScrollUpButton className="w-full flex surfaceTertiary items-center justify-center">
               <span className="textSecondary cs-text-sm font-bold">􀆈</span>
             </SelectPrimitive.ScrollUpButton>
             <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-            <SelectPrimitive.ScrollDownButton className="w-full flex surfaceHigh items-center justify-center">
+            <SelectPrimitive.ScrollDownButton className="w-full flex surfaceTertiary items-center justify-center">
               <span className="textSecondary cs-text-sm font-bold">􀆈</span>
             </SelectPrimitive.ScrollDownButton>
           </SelectPrimitive.Content>

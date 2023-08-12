@@ -12,12 +12,12 @@ export function Header({ className, metadata, id, ...props }: HeaderProps) {
   return (
     <div
       {...props}
-      className={`flex items-center justify-between pl-2 pr-2 pt-2 pb-2 border-b borderPrimary ${className}`}
+      className={`flex items-center justify-between pl-2 pr-2 pt-2 pb-2 border-b borderSecondary ${className}`}
     >
       <div className="flex gap-x-1 items-center">
-        {/* <span className="cs-text font-medium ">
+        <span className="cs-text font-medium ">
           {metadata.icon}
-        </span> */}
+        </span>
         <span className="cs-text font-medium">
           {metadata.title}
         </span>
@@ -25,9 +25,9 @@ export function Header({ className, metadata, id, ...props }: HeaderProps) {
           href={metadata.mdn}
           rel="noreferrer"
           target="_blank"
-          className="inline textTertiary hover:textPrimary cs-text rounded"
+          className="inline textQuaternary hover:textPrimary text-xs font-bold rounded"
         >
-          􀅴
+          􁊈
         </a>
         {/* <a
           href={metadata.mdn}

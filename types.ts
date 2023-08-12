@@ -16,14 +16,14 @@ export type AttributeDefinition = {
   key: string,
   name: string,
   title: string,
-  input: EnumInput | NumberInput | MatrixInput | StringInput
-  default: any,
+  input: EnumInput | NumberInput | MatrixInput | StringInput | ColorInput
+  defaultValue: any,
   serializer: Function,
 }
 
 export type EnumInput = {
   type: 'enum'
-  options: { key: string, title: string, cat: string }[]
+  options: { key: string, title: string, cat?: string }[]
 }
 
 export type NumberInput = {
@@ -44,6 +44,11 @@ export type StringInput = {
   type: 'string'
 }
 
+export type ColorInput = {
+  type: 'color'
+  format: 'hex' | 'rgb' | 'hsl'
+}
+
 export type NodeMetadata = {
   nodeType: string
   title: string
@@ -53,7 +58,7 @@ export type NodeMetadata = {
   inputs: string[] | []
   outputs: string[] | []
   width: number
-  // attributeOrder: string[]
+  attributeOrder: string[]
 }
 
 export type NodeDefinition = {

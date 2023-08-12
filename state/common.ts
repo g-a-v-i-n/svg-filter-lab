@@ -11,6 +11,7 @@ export const INPUTS = {
     MATRIX: 'matrix',
     ARRAY: 'array',
     ENUM: 'enum',
+    COLOR: 'color',
 }
 
 function getNodeIndexById(nodes, id) {
@@ -24,9 +25,10 @@ function getNodeIndexById(nodes, id) {
     return index
 }
 
-// Function to create a property setter for a node based on its ID
+// Function to create a property setter function for a node.
+// key is a specific property of the node's data.attributes object
 export function genericSetter(set: ZustandSet, key: string) {
-    // Return a new function that takes an ID and a new value
+    // Return a new function that takes a node Id and a new value
     return (id: string, newValue: any) => {
 
         // Call the provided `set` function with an updater function
@@ -57,7 +59,7 @@ export function createNodeMatrixSetter(set: ZustandSet, key: string) {
             // Find the index of the node with the given ID
             const index = getNodeIndexById(state.nodes, id)
             const root = state.nodes[index].data;
-            _set(root, `${key}.value[${i}]`, newValue)
+            _set(root, `${key}.value[${i}][${j}]`, newValue)
 
         })
     }
@@ -74,7 +76,7 @@ export function createNodeArraySetter(set: ZustandSet, key: string) {
             // Find the index of the node with the given ID
             const index = getNodeIndexById(state.nodes, id)
             const root = state.nodes[index].data;
-            _set(root, `${key}.value[${i}][${j}]`, newValue)
+            _set(root, `${key}.value[${i}]`, newValue)
         })
     }
     return setter
@@ -95,6 +97,7 @@ export function createNodeSlice(set: ZustandSet, definition: NodeDefinition) {
             case INPUTS.STRING:
             case INPUTS.NUMBER:
             case INPUTS.BOOLEAN:
+            case INPUTS.COLOR:
             case INPUTS.ENUM:
                 setter = genericSetter(set, key);
                 break;
@@ -111,8 +114,6 @@ export function createNodeSlice(set: ZustandSet, definition: NodeDefinition) {
         slice[key] = {
             set: setter,
         }
-
-        console.log(slice)
     });
 
     return {
@@ -143,9 +144,10 @@ export function createNodeFnFactory(definition: NodeDefinition) {
 
         // read the attributes entry and create a property for each
         Object.values(definition.attributes).forEach((attr: AttributeDefinition) => {
+            console.log(attr)
             const key = attr.key;
             out.attributes[key] = {
-                value: props?.attributes[key].value || definition.attributes[key].default,
+                value: props?.attributes[key].value || definition.attributes[key].defaultValue,
                 input: definition.attributes[key].input,
                 hasValue: props?.attributes[key].hasValue || true,
                 hasError: props?.attributes[key].hasError || false,

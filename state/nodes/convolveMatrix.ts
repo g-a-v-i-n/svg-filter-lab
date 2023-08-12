@@ -5,96 +5,33 @@ import { Attribute, Matrix, NodeDefinition } from '../../types';
 
 export const definition = {
   meta: {
-    nodeType: "colorMatrix",
-    title: "Color Matrix",
-    tagName: "feColorMatrix",
-    icon: "􀝦",
-    mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix",
+    nodeType: "convolveMatrix",
+    title: "Convolve Matrix",
+    tagName: "feConvolveMatrix",
+    icon: "􀦸",
+    mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feConvolveMatrix",
     inputs: ['in1'],
     outputs: ['result'],
-    width: 220,
-    attributeOrder: ['type', 'matrixValues', 'hueRotateValues', 'luminanceToAlphaValues', 'saturateValues'],
+    width: 200,
+    attributeOrder: ['kernelMatrix'],
   },
   attributes: {
-    matrixValues: {
-      key: 'matrixValues',
-      name: 'values',
-      title: 'Values',
+    kernelMatrix: {
+      key: 'kernelMatrix',
+      name: 'kernelMatrix',
+      title: 'Kernal matrix',
       input: {
         type: 'matrix',
-        rows: 4,
-        cols: 5,
+        rows: 3,
+        cols: 3,
       },
       defaultValue: [
-        [1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0],
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1],
       ],
       serializer: serialize.matrix,
-      isHidden: (data: NodeData) => data.type.value !== 'matrix',
     },
-    hueRotateValues: {
-      key: 'hueRotateValues',
-      name: 'values',
-      title: 'Values',
-      input: {
-        type: 'number',
-        min: 0,
-        max: 360,
-        step: 1,
-        precision: 2,
-      },
-      defaultValue: 1,
-      serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'hueRotate',
-    },
-    luminanceToAlphaValues: {
-      key: 'luminanceToAlphaValues',
-      name: 'values',
-      title: 'Values',
-      input: {
-        type: 'number',
-        min: 0,
-        max: 360,
-        step: 1,
-        precision: 2,
-      },
-      defaultValue: 1,
-      serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'luminanceToAlpha',
-    },
-    saturateValues: {
-      key: 'saturateValues',
-      name: 'values',
-      title: 'Values',
-      input: {
-        type: 'number',
-        min: 0,
-        max: 360,
-        step: 1,
-        precision: 2,
-      },
-      defaultValue: 1,
-      serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'saturateValues',
-    },
-    type: {
-      key: 'type',
-      name: 'type',
-      title: 'Type',
-      input: {
-        type: INPUTS.ENUM,
-        options: [
-          { key: "matrix", title: "Matrix", cat: "matrix" },
-          { key: "hueRotate", title: "Hue Rotate", cat: "numeric" },
-          { key: "luminanceToAlpha", title: "Luminance to Alpha", cat: "numeric" },
-          { key: "saturate", title: "Saturate", cat: "numeric" },
-        ]
-      },
-      defaultValue: 'matrix',
-      serializer: serialize.string,
-    }
   },
 } as NodeDefinition
 

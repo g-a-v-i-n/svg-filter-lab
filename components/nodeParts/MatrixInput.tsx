@@ -1,6 +1,5 @@
 import clsx from "clsx"
 import { NumericFormat } from "react-number-format"
-// import { UNSET, UnsetValue } from "../../lib/unset"
 import FieldLabel from "./FieldLabel"
 
 type MatrixInputProps = {
@@ -9,17 +8,17 @@ type MatrixInputProps = {
   hasValue: boolean
   hasError: boolean
   className?: string
-  label: string
+  title: string
   disabled?: boolean
   onValueChange: (v: number, i: number, j: number) => void
-  values: number[][]
+  value: number[][]
 }
 
 export function MatrixInput({
   rows,
   cols,
   className,
-  values,
+  value,
   hasValue,
   hasError,
   onValueChange,
@@ -33,23 +32,23 @@ export function MatrixInput({
         className
       )}
     >
-      <FieldLabel>{props.label}</FieldLabel>
+      <FieldLabel>{props.title}</FieldLabel>
       <div
-        className={`flex flex-col border borderPrimary divide-y dividePrimary rounded ${
+        className={`flex flex-col field fieldDivY rounded ${
           disabled ? "opacity-50" : ""
         }`}
       >
-        {hasValue === false && (
+        {/* {hasValue === false && (
           <div className="flex divide-x dividePrimary">
             <span>Unset</span>
           </div>
-        )}
+        )} */}
         {hasValue === true &&
           [...Array(rows)].map((_, i) => {
             return (
               <div
-                className="flex divide-x dividePrimary"
-                key={props.label + "-" + "rows" + "-" + i}
+                className="flex fieldDivX"
+                key={props.title + "-" + "rows" + "-" + i}
               >
                 {[...Array(cols)].map((_, j) => {
                   const inputCns = clsx(
@@ -59,13 +58,13 @@ export function MatrixInput({
                       "rounded-bl-sm": i === rows - 1 && j === 0,
                       "rounded-br-sm": i === rows - 1 && j === cols - 1,
                     },
-                    "w-full h-6 text-center font-mono bg-transparent relative focus:z-10"
+                    "w-full h-5 text-center font-mono cs-text bg-transparent relative focus:z-10"
                   )
                   return (
                     <NumericFormat
-                      key={props.label + "-" + "rows" + i + "-" + "cols" + j}
+                      key={props.title + "-" + "rows" + i + "-" + "cols" + j}
                       className={inputCns}
-                      value={values[i][j]}
+                      value={value[i][j]}
                       onChange={(e) => {
                         onValueChange(Number(e.target.value), i, j)
                       }}

@@ -28,15 +28,19 @@ export function Container({
       {...props}
       style={{ width: metadata.width + 'px'}}
       className={clsx(
-        { "shadow-xl surfaceMiddle": dragging, },
-        "relative flex flex-col rounded-xl border outline-none surfaceBase borderPrimary transition-all",
+        "relative flex flex-col rounded-xl border outline-none surface  transition-all",
+        { "shadow-2xl surfaceSecondary": dragging,
+          "shadow-sm": !dragging,
+          "borderPrimary": !selected,
+          "borderTheme ring-4 ring-blue-500/20 dark:ring-blue-400/40" : selected
+        },
         className
       )}
     >
       <Header metadata={metadata} id={id} />
 
-      <div className="flex w-full justify-between py-2">
-        <div className="flex flex-col gap-y-2">
+      <div className="flex w-full justify-between py-1">
+        <div className="flex flex-col gap-y-1">
           {metadata.inputs.map((input, index) => (
               <Handle
                 key={index + '-' + input} 
@@ -48,7 +52,7 @@ export function Container({
               />
           ))}
         </div>
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-1">
           {metadata.outputs.map((output, index) => (
               <Handle
                 key={index + '-' + output}
@@ -62,10 +66,10 @@ export function Container({
         </div>
       </div>
       <ControlGroup>
-      {children}
+        {children}
       </ControlGroup>
       <Footer />
-      <div className="absolute bottom-[-16px] text-xs text-secondary font-mono pl-3">
+      <div className="absolute bottom-[-16px] text-xs text-primary opacity-20 font-mono pl-3">
         {id}
       </div>
     </div>
