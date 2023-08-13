@@ -7,6 +7,7 @@ import ConnectionLine from "../components/edges/ConnectionLine"
 import {nodeFactory} from "../components/nodes/Node"
 import { Sidebar } from "../components/sidebar/Sidebar"
 import nodes from '../state/nodes/index'
+import { exportFilter } from "../state/exporter";
 
 const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]) => {
   acc[key] = nodeFactory(value.definition)
@@ -55,10 +56,13 @@ const Home: NextPage = () => {
 
   console.log("STATE:", useStore())
 
-  // const filterText = stringify(nodes, edges).at(-1).data.filterText
+  console.log(
+    "exportFilter:",
+    exportFilter(nodes)
+  );
 
   useEffect(() => {
-    console.log('this forces client-size render')
+    console.log('this forces clientside render')
   })
 
   return (

@@ -49,7 +49,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.operator.value !== 'arithmatic',
+      isHidden: (data: NodeData) => data.attributes.operator.value !== 'arithmatic',
     },
     k2: {
       key: 'k2',
@@ -64,7 +64,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.operator.value !== 'arithmatic',
+      isHidden: (data: NodeData) => data.attributes.operator.value !== 'arithmatic',
     },
     k3: {
       key: 'k3',
@@ -79,7 +79,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.operator.value !== 'arithmatic',
+      isHidden: (data: NodeData) => data.attributes.operator.value !== 'arithmatic',
     },
     k4: {
       key: 'k4',
@@ -94,14 +94,14 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.operator.value !== 'arithmatic',
+      isHidden: (data: NodeData) => data.attributes.operator.value !== 'arithmatic',
     },
   },
 } as NodeDefinition;
 
-export const createData = createNodeFnFactory(definition);
+// export const createData = createNodeFnFactory(definition);
 
-// export const serializeNode = (node) => serializeTag(node)
+// export const exportData = createExporter(definition);
 
 export type BlendModeKey =
   | "normal"

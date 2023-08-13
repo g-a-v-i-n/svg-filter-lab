@@ -12,7 +12,6 @@ import nodes from './nodes/index'
 import { createSidebarSlice } from "./panels/sidebar"
 import { createNodeSlice } from "./common"
 import { createXyFlowSlice } from "./xyFlow"
-// import { parse } from "./parse/parse"
 
 export type Edge = RFEdge
 

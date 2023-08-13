@@ -1,6 +1,6 @@
 import { Node } from "reactflow";
 import { INPUTS } from '../common';
-import { serialize, serializeTag } from '../exporter';
+import { serialize, createExporter } from '../exporter';
 import { Attribute, NodeDefinition } from '../../types';
 import { createNodeFnFactory } from '../common';
 
@@ -47,10 +47,6 @@ export const definition = {
     }
   },
 } as NodeDefinition;
-
-export const createData = createNodeFnFactory(definition);
-
-// export const serializeNode = (node) => serializeTag(node)
 
 export type BlendModeKey =
   | "normal"

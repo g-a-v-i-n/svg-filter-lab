@@ -36,7 +36,25 @@ export function createXyFlowSlice(set) {
         onConnect: (params: Connection) => {
             const { source, target, sourceHandle, targetHandle } = params
 
+
             set((state: State) => {
+                // if the source node is the same as the target node, return
+                if (source === target) return
+
+                // constrain to a single connection per input
+                // if the target node already has a connection on the targetHandle, return
+                if (
+                    state.nodes.find(
+                        (node) =>
+                            node.id === target &&
+                            node.data[targetHandle] !== null &&
+                            node.data[targetHandle] !== undefined
+                    )
+                ) {
+                    return
+                }
+
+
                 const edge = {
                     ...params,
                     id: uuid("edge"),

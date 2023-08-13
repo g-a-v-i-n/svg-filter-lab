@@ -32,7 +32,7 @@ export function Container({
         { "shadow-2xl surfaceSecondary": dragging,
           "shadow-sm": !dragging,
           "borderPrimary": !selected,
-          "borderTheme ring-4 ring-blue-500/20 dark:ring-blue-400/40" : selected
+          "border-white dark:border-black ring-[8px] ring-blue-500/30 dark:ring-blue-400/40" : selected
         },
         className
       )}

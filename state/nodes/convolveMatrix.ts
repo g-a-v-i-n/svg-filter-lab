@@ -36,7 +36,9 @@ export const definition = {
 } as NodeDefinition
 
 // Used for creating the data property of a new node
-export const createData = createNodeFnFactory(definition)
+// export const createData = createNodeFnFactory(definition)
+
+// export const exportData = createExporter(definition);
 
 export type NodeState = Node<NodeData> & { selected: boolean }
 

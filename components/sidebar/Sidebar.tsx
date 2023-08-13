@@ -18,7 +18,7 @@ const byAlpha = (a, b) => {
 
 export function Sidebar() {
   return (
-    <aside className="w-[220px] surface border-r borderPrimary backdrop-blur-3xl flex flex-col gap-1 p-1 flex-none">
+    <aside className="w-[220px] bg-white-900 dark:bg-black-900 border-r borderPrimary backdrop-blur-3xl flex flex-col gap-1 p-1 flex-none">
       <span className="p-2 font-semibold">Filter Elements</span>
       {nodesArray.map((n) => {
         return <Card key={n.definition.meta.nodeType} metadata={n.definition.meta} />

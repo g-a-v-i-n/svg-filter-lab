@@ -1,6 +1,6 @@
 import { Node } from "reactflow";
 import { INPUTS, createNodeFnFactory } from '../common';
-import { serialize } from '../exporter';
+import { serialize, createExporter } from '../exporter';
 import { Attribute, Matrix, NodeDefinition } from '../../types';
 
 export const definition = {
@@ -32,7 +32,7 @@ export const definition = {
         [0, 0, 0, 1, 0],
       ],
       serializer: serialize.matrix,
-      isHidden: (data: NodeData) => data.type.value !== 'matrix',
+      isHidden: (data: NodeData) => data.attributes.type.value !== 'matrix',
     },
     hueRotateValues: {
       key: 'hueRotateValues',
@@ -47,7 +47,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'hueRotate',
+      isHidden: (data: NodeData) => data.attributes.type.value !== 'hueRotate',
     },
     luminanceToAlphaValues: {
       key: 'luminanceToAlphaValues',
@@ -62,7 +62,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'luminanceToAlpha',
+      isHidden: (data: NodeData) => data.attributes.type.value !== 'luminanceToAlpha',
     },
     saturateValues: {
       key: 'saturateValues',
@@ -77,7 +77,7 @@ export const definition = {
       },
       defaultValue: 1,
       serializer: serialize.number,
-      isHidden: (data: NodeData) => data.type.value !== 'saturateValues',
+      isHidden: (data: NodeData) => data.attributes.type.value !== 'saturateValues',
     },
     type: {
       key: 'type',
@@ -97,9 +97,6 @@ export const definition = {
     }
   },
 } as NodeDefinition
-
-// Used for creating the data property of a new node
-export const createData = createNodeFnFactory(definition)
 
 export type NodeState = Node<NodeData> & { selected: boolean }
 

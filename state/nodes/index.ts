@@ -16,8 +16,10 @@ import * as morphology from "./morphology";
 import * as tile from "./tile";
 import * as flood from './flood'
 import * as dropShadow from './dropShadow'
+import { createNodeCreator } from "../common";
+import { createNodeExporter } from "../exporter";
 
-export default {
+let nodes = {
     blend,
     colorMatrix,
     gaussianBlur,
@@ -33,4 +35,20 @@ export default {
     morphology,
     tile,
     dropShadow,
+    // flood
 };
+
+// add createData and exportData to each node
+nodes = Object.entries(nodes).reduce((acc, [key, node]) => {
+    return {
+        ...acc,
+        [key]: {
+            ...node,
+            createData: createNodeCreator(node.definition),
+            exportData: createNodeExporter(node.definition),
+        },
+    };
+}, {});
+
+
+export default nodes;

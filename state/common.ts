@@ -131,7 +131,7 @@ export function createNode(props): Node {
     }
 }
 
-export function createNodeFnFactory(definition: NodeDefinition) {
+export function createNodeCreator(definition: NodeDefinition) {
     return function (props) {
         let out = {
             attributes: {}

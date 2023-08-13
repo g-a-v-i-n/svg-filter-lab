@@ -45,5 +45,3 @@ export const definition = {
         }
     },
 } as NodeDefinition;
-
-export const createData = createNodeFnFactory(definition);
