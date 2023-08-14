@@ -11,6 +11,7 @@
     "@radix-ui/react-select": "^1.1.2",
     "@radix-ui/react-switch": "^1.0.1",
     "@radix-ui/react-tooltip": "^1.0.2",
+    "allotment": "^1.19.2",
     "clsx": "^1.2.1",
     "hast-util-from-html": "^1.0.1",
     "immer": "^9.0.16",

@@ -1,4 +1,5 @@
 import React from "react"
+import clsx from "clsx"
 import { rubberbandPath } from "./rubberbandPath"
 
 export default function CustomEdge({
@@ -9,6 +10,7 @@ export default function CustomEdge({
   targetY,
   style = {},
   markerEnd,
+  selected,
 }) {
   return (
     <>
@@ -18,7 +20,13 @@ export default function CustomEdge({
         d={rubberbandPath(sourceX, sourceY, targetX, targetY)}
         markerEnd={markerEnd}
         strokeWidth="5px"
-        className="strokePrimary"
+        className={
+          clsx({
+            "transition-colors": true,
+            "strokePrimary hover:stroke-black hover:dark:stroke-white": !selected,
+            "stroke-blue-500 dark:stroke-blue-400": selected,
+          })
+        }
         fill="none"
         strokeLinecap="round"
       />

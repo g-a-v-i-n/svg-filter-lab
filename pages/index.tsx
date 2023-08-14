@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from "react"
 import type { NextPage } from "next"
 import ReactFlow, { ReactFlowProvider } from "reactflow"
+import "allotment/dist/style.css";
+import { Allotment } from "allotment";
+import pkg from "../package.json"
+
 import useStore from "../state/store"
 import Edge from "../components/edges/Edge"
 import ConnectionLine from "../components/edges/ConnectionLine"
 import {nodeFactory} from "../components/nodes/Node"
 import { Sidebar } from "../components/sidebar/Sidebar"
+import { Preview } from "../components/preview/Preview"
 import nodes from '../state/nodes/index'
 import { exportFilter } from "../state/exporter";
+
 
 const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]) => {
   acc[key] = nodeFactory(value.definition)
@@ -67,31 +73,40 @@ const Home: NextPage = () => {
 
   return (
     <main className="w-full h-[100dvh] flex">
-      <Sidebar />
-      <ReactFlowProvider>
-        <div ref={RFWrapper} className={"w-full h-full"}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onSelectionChange={onSelectionChange}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            connectionLineComponent={ConnectionLine}
-            onDrop={(event) => onDrop(event, RFWrapper)}
-            onInit={setXyfInstance}
-            onDragOver={onDragOver}
-            fitView
-            selectionOnDrag
-            panOnScroll
-            panOnDrag={false}
-            // maxZoom={1}
-            attributionPosition="bottom-center"
-          />
-        </div>
-      </ReactFlowProvider>
+      <Allotment>
+      <Allotment.Pane minSize={100} maxSize={220} preferredSize={220}>
+        <Sidebar />
+      </Allotment.Pane>
+      <Allotment.Pane minSize={200}>
+        <ReactFlowProvider>
+          <div ref={RFWrapper} className={"w-full h-full"}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onSelectionChange={onSelectionChange}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              connectionLineComponent={ConnectionLine}
+              onDrop={(event) => onDrop(event, RFWrapper)}
+              onInit={setXyfInstance}
+              onDragOver={onDragOver}
+              fitView
+              selectionOnDrag
+              panOnScroll
+              panOnDrag={false}
+              // maxZoom={1}
+              attributionPosition="bottom-center"
+            />
+          </div>
+        </ReactFlowProvider>
+      </Allotment.Pane>
+      <Allotment.Pane minSize={200} preferredSize={500}>
+        <Preview />
+      </Allotment.Pane>
+
       {/* <Tray /> */}
 {/* 
       <div className="fixed right-4 top-4 flex flex-col gap-y-2">
@@ -104,41 +119,8 @@ const Home: NextPage = () => {
         <button onClick={() => parse(lizardSkin)}>parse</button>
       </div>
 
-      <div className="fixed right-4 bottom-20 flex hidden borderPrimary surface rounded-xl p-2">
-        <svg
-          width="200"
-          height="200"
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs
-            dangerouslySetInnerHTML={{
-              __html: `
-              <filter id="filter" x="0" y="0" width="100%" height="100%">
-
-              </filter>
-              `,
-            }}
-          />
-
-          <g filter="url(#filter)">
-            <circle cx="50" cy="50" r="50" fill="orangered" />
-          </g>
-        </svg>
-
-        <svg
-          width="200"
-          height="200"
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <circle cx="50" cy="50" r="50" fill="orangered" />
-          </g>
-        </svg>
-      </div> */}
+       */}
+      </Allotment>
     </main>
   )
 }

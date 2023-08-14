@@ -13,6 +13,7 @@ export default function CustomEdge(props) {
     fromHandle,
     fromPosition,
   } = props
+  console.log('CustomEdge props', props)
   const dir = fromPosition === "right" ? -1 : 1
   const nubWidth = 0
   const offsetX = (fromHandle.width+nubWidth)/2 * dir

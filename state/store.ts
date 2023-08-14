@@ -11,6 +11,7 @@ import nodes from './nodes/index'
 
 import { createSidebarSlice } from "./panels/sidebar"
 import { createNodeSlice } from "./common"
+import filter from "./filter"
 import { createXyFlowSlice } from "./xyFlow"
 
 export type Edge = RFEdge
@@ -47,6 +48,9 @@ const useStore = create<any>()(
           ...createNodeSlice(set, node.definition),
         }
       }, {}),
+      // Filter tag slice
+      filter: createNodeSlice(set, filter.definition),
+
     }))
   )
 )

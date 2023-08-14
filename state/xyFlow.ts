@@ -41,6 +41,16 @@ export function createXyFlowSlice(set) {
                 // if the source node is the same as the target node, return
                 if (source === target) return
 
+                // if the source and target are already connected, return
+                if (
+                    state.edges.find(
+                        (edge) =>
+                            edge.source === source && edge.target === target
+                    )
+                ) {
+                    return
+                }
+
                 // constrain to a single connection per input
                 // if the target node already has a connection on the targetHandle, return
                 if (
