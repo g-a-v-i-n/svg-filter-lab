@@ -1,6 +1,7 @@
 
 import { useRef } from "react"
 import ReactFlow, { ReactFlowProvider } from "reactflow"
+// @ts-ignore: allotment has incorrectly bundled or missing types
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 
@@ -12,10 +13,10 @@ import { nodeFactory } from "@components/nodes/Node"
 import { Sidebar } from "@components/sidebar/Sidebar"
 import { Preview } from "@components/preview/Preview"
 
-const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]) => {
+const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]:[string, any]) => {
   acc[key] = nodeFactory(value.definition)
   return acc
-}, {})
+}, {} as any)
 
 const edgeTypes = {
   custom: Edge,

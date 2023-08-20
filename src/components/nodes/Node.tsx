@@ -1,11 +1,17 @@
-import React, { memo } from "react"
+import { memo } from "react"
+import { NodeProps } from "reactflow";
 import useStore, { State } from "@state/store"
-import { exporter } from "@state/exporter";
+// import { exporter } from "@state/exporter";
 import { Container } from "../nodeParts/Container"
-import { Select, SelectItem, Separator } from "../nodeParts/Select"
+import { Select, SelectItem } from "../nodeParts/Select"
 import { NodeDefinition } from "../../../types";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { MatrixInput } from "../nodeParts/MatrixInput";
+import { byOrdering } from "@lib/byOrdering";
+
+type NodeState = NodeProps & {
+    
+}
 
 export function nodeFactory(definition:NodeDefinition) {
     const {
@@ -15,13 +21,11 @@ export function nodeFactory(definition:NodeDefinition) {
 
     const selector = (state: State) => state[meta.nodeType];
 
-    return memo((props) => {
+    return memo((props:NodeState) => {
         const slice = useStore(selector);
 
         const { id, data, selected, dragging } = props
         const nodeId = id
-
-        const byAttrOrder = (a, b) => meta.attributeOrder.indexOf(a.key) - meta.attributeOrder.indexOf(b.key);
 
         return (
             <Container
@@ -30,16 +34,17 @@ export function nodeFactory(definition:NodeDefinition) {
                 selected={selected} 
                 dragging={dragging}>
                 {
-                    Object.values(attributes).sort(byAttrOrder).map(
-                        (attr, index) => {
-                            return createAttrUI(
-                                attr, // attr definition
-                                index, 
-                                data.attributes[attr.key], // state
-                                (value) => slice[attr.key].set(nodeId, value) // setter
-                            )
-                        }
-                    )
+                    Object
+                    .values(attributes)
+                    .sort((a, b) => byOrdering(a.key, b.key, meta.attributeOrder))
+                    .map((attr, index) => {
+                        return createAttrUI(
+                            attr, // attr definition
+                            index, 
+                            data.attributes[attr.key], // state
+                            (value:any) => slice[attr.key].set(nodeId, value) // setter
+                        )
+                    })
                 }
                 <div className="fixed pt-32 text-xs text-primary opacity-50 font-mono pl-3 flex flex-col pointer-events-none">
                     {id}
@@ -83,7 +88,26 @@ function createAttrUI(attr, index, data, set) {
     }
 }
 
-function Enum({title, input, data, set, defaultValue}) {
+type EnumProps = {
+    title: string
+    input: {
+        type: string
+        options: {
+            key: string
+            title: string
+            cat: string
+        }[]
+    }
+    data: {
+        value: string
+        hasValue: boolean
+        hasError: boolean
+    }
+    set: (value: string) => void
+    defaultValue: string
+}
+
+function Enum({title, input, data, set, defaultValue}:EnumProps) {
     const { options } = input
     return (
         <Select
@@ -105,7 +129,24 @@ function Enum({title, input, data, set, defaultValue}) {
     )
 }
 
-function Number({title, input, data, set, defaultValue}) {
+type NumberProps = {
+    title: string
+    input: {
+        type: string
+        min: number
+        max: number
+        step: number
+    }
+    data: {
+        value: number
+        hasValue: boolean
+        hasError: boolean
+    }
+    set: (value: number) => void
+    defaultValue: number
+}
+
+function Number({title, input, data, set, defaultValue}:NumberProps) {
     return (
         <NumberInput
         title={title}
@@ -121,7 +162,23 @@ function Number({title, input, data, set, defaultValue}) {
     )
 }
 
-function Matrix({title, input, data, set, defaultValue}) {
+type MatrixProps = {
+    title: string
+    input: {
+        type: string
+        rows: number
+        cols: number
+    }
+    data: {
+        value: number[][]
+        hasValue: boolean
+        hasError: boolean
+    }
+    set: (value: number[][], i:number, j:number) => void
+    defaultValue: number[][]
+}
+
+function Matrix({title, input, data, set, defaultValue}:MatrixProps) {
     return (
         <MatrixInput
             title={title}

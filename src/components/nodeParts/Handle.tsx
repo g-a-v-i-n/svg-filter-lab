@@ -29,7 +29,7 @@ export function Handle({ className, title, ...props }: HandleProps) {
       title={title}
     >
       <div className={clsx({
-        "w-[4px] h-4 pointer-events-none transition-colors": true,
+        "w-[3px] h-4 pointer-events-none transition-colors": true,
         'bg-blue-500 dark:bg-blue-300': props.selected,
         "bg-black-500 dark:bg-white-500 group-hover:bg-black group-hover:dark:bg-white": !props.selected,
         "rounded-r-sm translate-x-[-1px]": props.position === Position.Left,

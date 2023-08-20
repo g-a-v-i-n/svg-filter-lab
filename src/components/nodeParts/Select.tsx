@@ -8,7 +8,10 @@ export type SelectProps = {
   title: string
   className?: string
   children?: React.ReactNode
-  value: string
+  value: string,
+  hasValue: boolean,
+  hasError: boolean,
+  defaultValue: string,
   onValueChange: (val: string) => void
 }
 

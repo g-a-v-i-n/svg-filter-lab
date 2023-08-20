@@ -13,6 +13,9 @@ export type NumberInputProps = {
   first?: boolean
   last?: boolean
   className?: string
+  hasValue?: boolean
+  hasError?: boolean
+  defaultValue?: number
 }
 
 export function NumberInput({
