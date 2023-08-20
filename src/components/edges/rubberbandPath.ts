@@ -1,5 +1,5 @@
 // Converts a pair of vectors to an angle in rads
-function angle(cx, cy, ex, ey) {
+function angle(cx: number, cy: number, ex: number, ey: number) {
   var dy = ey - cy;
   var dx = ex - cx;
   var theta = Math.atan2(dy, dx); // range (-PI, PI]

@@ -1,5 +1,4 @@
-import React from "react";
-import useStore, { State } from "../../state/store"
+import useStore from "../../state/store"
 
 export type HeaderProps = {
   id: string
@@ -8,7 +7,7 @@ export type HeaderProps = {
 }
 
 export function Header({ className, metadata, id, ...props }: HeaderProps) {
-  const deleteNode = useStore((state: State) => state.deleteNode)
+  const deleteNode = useStore((state) => state.deleteNode)
 
   return (
     <div
@@ -30,18 +29,9 @@ export function Header({ className, metadata, id, ...props }: HeaderProps) {
         >
           􁊈
         </a>
-        {/* <a
-          href={metadata.mdn}
-          rel="noreferrer"
-          target="_blank"
-          className="textTertiary hover:textPrimary font-extrabold cs-text rounded"
-        >
-          􀍢
-        </a> */}
       </div>
 
       <div className="flex gap-x-2">
-        {/* <button className="text-secondary cs-text hover:">􀁭</button> */}
         <button
           onClick={() => deleteNode(id)}
           className="textTertiary hover:textPrimary h-4 w-4 rounded-full flex items-center justify-center"

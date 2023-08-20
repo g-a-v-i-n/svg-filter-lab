@@ -1,4 +1,3 @@
-import React from "react";
 import * as RS from "@radix-ui/react-switch"
 import clsx from "clsx"
 import { forwardRef, Ref } from "react"

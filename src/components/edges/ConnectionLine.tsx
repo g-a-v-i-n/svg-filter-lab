@@ -1,29 +1,24 @@
-import React from "react"
 import { rubberbandPath } from "./rubberbandPath"
+import { ConnectionLineComponentProps } from "reactflow"
 
-export default function CustomEdge(props) {
+export default function CustomEdge(props:ConnectionLineComponentProps) {
   const {
-    id,
     fromX,
     fromY,
     toX,
     toY,
-    style = {},
-    markerEnd,
     fromHandle,
     fromPosition,
-  } = props
-  console.log('CustomEdge props', props)
+  } = props;
+
+
   const dir = fromPosition === "right" ? -1 : 1
   const nubWidth = 0
-  const offsetX = (fromHandle.width+nubWidth)/2 * dir
+  const offsetX = ((fromHandle?.width || 0) + nubWidth) / 2 * dir
   return (
     <>
       <path
-        id={id}
-        style={style}
         d={rubberbandPath(fromX - offsetX, fromY, toX, toY)}
-        // markerEnd={markerEnd}
         className="stroke-black dark:stroke-white"
         strokeWidth="4px"
         fill="none"

@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx"
 import { NumericFormat } from "react-number-format"
 import FieldLabel from "./FieldLabel"
@@ -29,7 +28,7 @@ export function NumberInput({
       <FieldLabel className="">{title}</FieldLabel>
       <div className="field fieldDivX flex rounded h-5">
       <DetentButton 
-        onClick={() => onChange((Number(props.value) - step).toFixed(precision))} 
+        onClick={() => onChange(calculateAndFormat(props.value, step, precision, 'subtract'))} 
         className="">􀅽</DetentButton>
 
       <NumericFormat
@@ -43,14 +42,20 @@ export function NumberInput({
       />
 
         <DetentButton 
-          onClick={() => onChange((Number(props.value) + step).toFixed(precision))} 
+          onClick={() => onChange(calculateAndFormat(props.value, step, precision, 'add'))} 
           className="">􀅼</DetentButton>
       </div>
     </div>
   )
 }
 
-function DetentButton(props) {
+type DetentButtonProps = {
+  onClick: () => void
+  className?: string
+  children: React.ReactNode
+}
+
+function DetentButton(props:DetentButtonProps) {
   return (
     <button
       onClick={props.onClick}
@@ -61,6 +66,23 @@ function DetentButton(props) {
     </span>
   </button>
   )
+}
+
+function calculateAndFormat(value:number, step:number, precision:number, operation: 'add' | 'subtract') {
+  let result;
+
+  switch(operation) {
+      case 'add':
+          result = Number(value) + step;
+          break;
+      case 'subtract':
+          result = Number(value) - step;
+          break;
+      default:
+          throw new Error("Invalid operation. Use 'add' or 'subtract'.");
+  }
+
+  return parseFloat(result.toFixed(precision));
 }
 
 NumberInput.defaultProps = {

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Handle as RFHandle,
   Position,

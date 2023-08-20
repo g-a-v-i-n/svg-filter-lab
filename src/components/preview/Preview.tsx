@@ -1,5 +1,3 @@
-import React from "react";
-
 export function Preview(props) {
     return (
         <div className="w-full h-full flex">

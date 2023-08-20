@@ -5,25 +5,27 @@ import { ControlGroup } from "./ControlGroup"
 import { Footer } from "./Footer"
 import { Handle } from "./Handle"
 import { Header } from "./Header"
+import { NodeInputKey, NodeMetadata } from "@/types"
 
 export type ContainerProps = {
-  selected?: boolean
+  selected: boolean
   className?: string
   children?: React.ReactNode,
-  metadata: any,
+  metadata: NodeMetadata,
   dragging: boolean | undefined,
-  id?: string
+  id: string
 }
 
-export function Container({
-  className,
-  children,
-  selected,
-  metadata,
-  dragging,
-  id,
-  ...props
-}: ContainerProps) {
+export function Container(props: ContainerProps) {
+  const {
+    className="",
+    children,
+    selected,
+    metadata,
+    dragging,
+    id,
+  } = props;
+
   return (
     <div
       {...props}
@@ -42,7 +44,7 @@ export function Container({
 
       <div className="flex w-full justify-between py-1">
         <div className="flex flex-col gap-y-1.5">
-          {metadata.inputs.map((input, index) => (
+          {metadata.inputs.map((input:NodeInputKey, index:number) => (
               <Handle
                 key={index + '-' + input} 
                 selected={selected}   
@@ -72,8 +74,4 @@ export function Container({
       <Footer />
     </div>
   )
-}
-
-Container.defaultProps = {
-  className: "",
 }

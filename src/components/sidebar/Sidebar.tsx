@@ -1,4 +1,3 @@
-import React from "react";
 import nodes from '@state/nodes/index'
 import { version } from "../../../package.json";
 

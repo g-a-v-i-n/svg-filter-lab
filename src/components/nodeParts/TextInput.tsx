@@ -1,4 +1,3 @@
-import React from "react";
 import FieldLabel from "./FieldLabel"
 
 export type TextInputProps = {

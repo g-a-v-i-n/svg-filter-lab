@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx"
 import { NumericFormat } from "react-number-format"
 import FieldLabel from "./FieldLabel"

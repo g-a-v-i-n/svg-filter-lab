@@ -1,20 +1,12 @@
 import React, { memo } from "react"
 import useStore, { State } from "../../state/store"
 import { Container } from "../nodeParts/Container"
-import { ControlGroup } from "../nodeParts/ControlGroup"
 import { Divider } from "../nodeParts/Divider"
 import { NumberInput } from "../nodeParts/NumberInput"
 import { Select, SelectItem, Separator } from "../nodeParts/Select"
 import { Switch } from "../nodeParts/Switch"
 import { SwitchRow } from "../nodeParts/SwitchRow"
 import { TextInput } from "../nodeParts/TextInput"
-import {
-  NodeState,
-  metadata,
-  ChannelSlice,
-  Channel,
-} from "../../.next/archive/componentTransfer"
-import clsx from "clsx"
 
 const selector = (state: State) => state.componentTransferNode
 

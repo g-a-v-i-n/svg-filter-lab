@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react"
+import { useRef } from "react"
 import ReactFlow, { ReactFlowProvider } from "reactflow"
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";

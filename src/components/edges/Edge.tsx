@@ -1,17 +1,19 @@
-import React from "react"
 import clsx from "clsx"
 import { rubberbandPath } from "./rubberbandPath"
+import { EdgeProps } from "reactflow"
 
-export default function CustomEdge({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  style = {},
-  markerEnd,
-  selected,
-}) {
+export default function CustomEdge(props: EdgeProps) {
+  const {
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    style = {},
+    markerEnd,
+    selected,
+  } = props;
+  
   return (
     <>
       <path

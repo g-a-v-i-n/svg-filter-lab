@@ -19,13 +19,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    
+
     /* Aliases */
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"],
-      "@state/*": ["state/*"],
+      "@/*": ["*"],
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["src/lib/*"],
+      "@state/*": ["src/state/*"],
     },
   },
   "include": ["src"],
