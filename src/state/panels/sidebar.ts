@@ -1,20 +1,26 @@
 import { uuid } from '@lib/uuid'
-import nodes from '@state/nodes/index'
+import nodeDefinitions from '@state/nodes/index'
+import { State, ZustandSet } from '@/types'
 
-export type OnDragOver = (event: React.DragEvent) => void
-export type OnDrop = (
-  event: React.DragEvent,
-  RFWrapper: React.Ref<HTMLDivElement>
-) => void
+// export type OnDragOver = (event: React.DragEvent) => void
+// export type OnDrop = (
+//   event: React.DragEvent,
+//   RFWrapper: React.RefObject<HTMLDivElement>
+// ) => void
 
-export const createSidebarSlice = (set: Function) => ({
+export const createSidebarSlice = (set: ZustandSet) => ({
   onDragOver: (event: React.DragEvent) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = "move"
   },
 
-  onDrop: (event: React.DragEvent, RFWrapper: React.Ref<HTMLDivElement>) => {
-    event.preventDefault()
+  onDrop: (event: React.DragEvent, RFWrapper: React.RefObject<HTMLDivElement>) => {
+    event.preventDefault();
+
+    if (RFWrapper === null || RFWrapper.current === null) {
+      console.warn("RFWrapper is null or undefined")
+      return
+    }
 
     const reactFlowBounds = RFWrapper.current.getBoundingClientRect()
     const nodeType = event.dataTransfer.getData("application/reactflow")
@@ -39,7 +45,7 @@ export const createSidebarSlice = (set: Function) => ({
         // xyFlow specific, key must be called type
         type: nodeType,
         position: position,
-        data: nodes[nodeType].createData(),
+        data: nodeDefinitions[nodeType].createData(),
       }
 
       state.nodes.push(newNode)

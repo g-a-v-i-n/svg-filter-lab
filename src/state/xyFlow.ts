@@ -8,9 +8,9 @@ import {
     OnSelectionChangeParams,
 } from "reactflow"
 import { uuid } from "@lib/uuid"
-import { EdgeInstance, NodeInstance, State } from "@/types"
+import { EdgeInstance, NodeInstance, State, ZustandSet } from "@/types"
 
-export function createXyFlowSlice(set: Function) {
+export function createXyFlowSlice(set: ZustandSet) {
     return {
         nodes: [] as NodeInstance[],
         edges: [] as EdgeInstance[],
