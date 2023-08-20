@@ -1,4 +1,8 @@
-import { NodeProps, EdgeProps } from "reactflow"
+import { NodeProps, EdgeProps, Node, Edge } from "reactflow"
+
+export type EdgeInstance = Edge
+
+export type NodeInstance = Node
 
 export type EdgeState = EdgeProps
 
@@ -100,6 +104,7 @@ export type NodeTypeEnum = 'blend'
   | 'source'
   | 'tile'
   | 'turbulence'
+  | 'filter'
 
 export type NodeMetadata = {
   nodeType: NodeTypeEnum

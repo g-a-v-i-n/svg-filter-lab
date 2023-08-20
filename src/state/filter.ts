@@ -17,22 +17,26 @@ const specification = {
     attributeOrder: ['id', 'x', 'y', 'width', 'height', 'filterUnits', 'primitiveUnits'],
   },
   attributes: {
-    id: {
-      key: 'id',
-      name: 'id',
-      title: 'ID',
-      input: {
-        type: 'string',
-      },
-      defaultValue: 'filter',
-      serializer: serialize.string,
-    },
+    // id: {
+    //   key: 'id',
+    //   name: 'id',
+    //   title: 'ID',
+    //   input: {
+    //     type: 'string',
+    //   },
+    //   defaultValue: 'filter',
+    //   serializer: serialize.string,
+    // },
     x: {
       key: 'x',
       name: 'x',
       title: 'X Coordinate',
       input: {
         type: 'number',
+        min: 0,
+        max: 1000,
+        step: 1,
+        precision: 1,
       },
       defaultValue: 0,
       serializer: serialize.number,
@@ -43,6 +47,10 @@ const specification = {
       title: 'Y Coordinate',
       input: {
         type: 'number',
+        min: 0,
+        max: 1000,
+        step: 1,
+        precision: 1,
       },
       defaultValue: 0,
       serializer: serialize.number,
@@ -54,7 +62,9 @@ const specification = {
       input: {
         type: 'number',
         min: 0,
-        max: Infinity,
+        max: 1000,
+        step: 1,
+        precision: 1,
       },
       defaultValue: 100,  // Default width
       serializer: serialize.number,
@@ -66,7 +76,9 @@ const specification = {
       input: {
         type: 'number',
         min: 0,
-        max: Infinity,
+        max: 1000,
+        step: 1,
+        precision: 1,
       },
       defaultValue: 100,  // Default height
       serializer: serialize.number,
@@ -102,8 +114,10 @@ const specification = {
   },
 } as NodeSpecification;
 
-export default {
+const nodeDefinition = {
   specification,
   createData: createNodeCreator(specification),
   exportData: createNodeExporter(specification),
 }
+
+export default nodeDefinition;

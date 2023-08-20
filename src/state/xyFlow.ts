@@ -5,13 +5,15 @@ import {
     applyNodeChanges,
     applyEdgeChanges,
     ReactFlowInstance,
+    OnSelectionChangeParams,
 } from "reactflow"
-import { uuid } from "../lib/uuid"
+import { uuid } from "@lib/uuid"
+import { EdgeInstance, NodeInstance, State } from "@/types"
 
-export function createXyFlowSlice(set) {
+export function createXyFlowSlice(set: Function) {
     return {
-        nodes: [],
-        edges: [],
+        nodes: [] as NodeInstance[],
+        edges: [] as EdgeInstance[],
 
         // These are used to store any nodes connected to selected edges, or any edges connected to selected nodes
         connectedNodes: [],
@@ -36,35 +38,21 @@ export function createXyFlowSlice(set) {
 
         // Called when user connects two nodes in a controlled flow
         onConnect: (params: Connection) => {
-            const { source, target, sourceHandle, targetHandle } = params
+            const { source, target, targetHandle } = params
 
 
             set((state: State) => {
                 // if the source node is the same as the target node, return
                 if (source === target) return
 
-                // if the source and target are already connected, return
-                if (
-                    state.edges.find(
-                        (edge) =>
-                            edge.source === source && edge.target === target
-                    )
-                ) {
-                    return
-                }
+                console.log(source, target, targetHandle)
 
-                // constrain to a single connection per input
-                // if the target node already has a connection on the targetHandle, return
-                if (
-                    state.nodes.find(
-                        (node) =>
-                            node.id === target &&
-                            node.data[targetHandle] !== null &&
-                            node.data[targetHandle] !== undefined
-                    )
-                ) {
-                    return
-                }
+                // constrain to a single connection per input handle
+                const existingEdge = state.edges.find(
+                    (edge: EdgeInstance) => edge.targetHandle === targetHandle && edge.target === target
+                )
+
+                if (existingEdge) return
 
                 const edge = {
                     ...params,
@@ -85,9 +73,9 @@ export function createXyFlowSlice(set) {
 
         deleteNode: (nodeId: string) => {
             set((state: State) => {
-                state.nodes = state.nodes.filter((node) => node.id !== nodeId)
+                state.nodes = state.nodes.filter((node: NodeInstance) => node.id !== nodeId)
                 state.edges = state.edges.filter(
-                    (edge) => edge.source !== nodeId && edge.target !== nodeId
+                    (edge: EdgeInstance) => edge.source !== nodeId && edge.target !== nodeId
                 )
             })
         },
@@ -97,14 +85,14 @@ export function createXyFlowSlice(set) {
                 // Get any nodes that are connected to the selected edges
                 state.connectedNodes = edges.map((edge) => {
                     const node = state.nodes.filter(
-                        (node) => node.id === edge.source || node.id === edge.target
+                        (node: NodeInstance) => node.id === edge.source || node.id === edge.target
                     )
                     return node
                 })
 
                 state.connectedEdges = nodes.map((node) => {
                     const edge = state.edges.filter(
-                        (edge) => edge.source === node.id || edge.target === node.id
+                        (edge: EdgeInstance) => edge.source === node.id || edge.target === node.id
                     )
                     return edge
                 })
