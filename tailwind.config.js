@@ -1,9 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     colors: {
@@ -36,10 +35,18 @@ module.exports = {
         DEFAULT: "hsla(0, 0%, 100%, 100%)",
       },
       blue: {
+        50: "hsla(206, 100%, 98%, 100%)",
+        100: "hsla(206, 100%, 95%, 100%)",
         200: "hsla(206, 100%, 90%, 100%)",
         300: "hsla(206, 100%, 75%, 100%)",
         400: "hsla(206, 100%, 55%, 100%)",
         500: "hsla(210, 100%, 50%, 100%)",
+        600: "hsla(210, 100%, 45%, 100%)",
+        700: "hsla(210, 100%, 40%, 100%)",
+        800: "hsla(210, 100%, 30%, 100%)",
+        900: "hsla(210, 100%, 20%, 100%)",
+        950: "hsla(210, 100%, 10%, 100%)",
+        DEFAULT: "hsla(210, 100%, 50%, 100%)",
       },
       transparent: "transparent",
     },

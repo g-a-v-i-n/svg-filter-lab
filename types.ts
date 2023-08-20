@@ -19,6 +19,7 @@ export type AttributeDefinition = {
   input: EnumInput | NumberInput | MatrixInput | StringInput | ColorInput
   defaultValue: any,
   serializer: Function,
+  isHidden?: Function,
 }
 
 export type EnumInput = {
@@ -49,17 +50,37 @@ export type ColorInput = {
   format: 'hex' | 'rgb' | 'hsl'
 }
 
+export type NodeTypeEnum = 'blend'
+  | 'colorMatrix'
+  | 'composite'
+  | 'convolveMatrix'
+  | 'displacementMap'
+  | 'dropShadow'
+  | 'flood'
+  | 'gaussianBlur'
+  | 'image'
+  | 'merge'
+  | 'morphology'
+  | 'offset'
+  | 'source'
+  | 'tile'
+  | 'turbulence'
+
 export type NodeMetadata = {
-  nodeType: string
+  nodeType: NodeTypeEnum
   title: string
-  tagName: string
+  tagName: string | null
   icon: string
   mdn: string
-  inputs: string[] | []
-  outputs: string[] | []
+  inputs: NodeInputKey[] | []
+  outputs: NodeOutputKey[] | []
   width: number
   attributeOrder: string[]
 }
+
+export type NodeInputKey = 'in1' | 'in2'
+
+export type NodeOutputKey = 'result'
 
 export type NodeDefinition = {
   meta: NodeMetadata
