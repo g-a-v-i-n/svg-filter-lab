@@ -1,17 +1,16 @@
-import React, { useEffect, useRef } from "react"
+
+import React, { useRef } from "react"
 import ReactFlow, { ReactFlowProvider } from "reactflow"
-import "allotment/dist/style.css";
 import { Allotment } from "allotment";
-import pkg from "../package.json"
+import "allotment/dist/style.css";
 
-import useStore from "./state/store"
-import Edge from "./components/edges/Edge"
-import ConnectionLine from "./components/edges/ConnectionLine"
-import {nodeFactory} from "./components/nodes/Node"
-import { Sidebar } from "./components/sidebar/Sidebar"
-import { Preview } from "./components/preview/Preview"
-import nodes from './state/nodes/index'
-
+import useStore from "@state/store"
+import nodes from '@state/nodes/index'
+import Edge from "@components/edges/Edge"
+import ConnectionLine from "@components/edges/ConnectionLine"
+import { nodeFactory } from "@components/nodes/Node"
+import { Sidebar } from "@components/sidebar/Sidebar"
+import { Preview } from "@components/preview/Preview"
 
 const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]) => {
   acc[key] = nodeFactory(value.definition)
@@ -22,26 +21,7 @@ const edgeTypes = {
   custom: Edge,
 }
 
-// function Flow(props) {
-//   return <ReactFlow {...props} />
-// }
-
-function logState(nodes, edges) {
-  const initialNodes = JSON.stringify(nodes, null, 2)
-  const initialEdges = JSON.stringify(edges, null, 2)
-  console.log("initialNodes", initialNodes)
-  console.log("initialEdges", initialEdges)
-}
-
-// function logRender(nodes, edges) {
-//   console.log("RENDER", render(nodes, edges))
-// }
-
-// function importFilter() {
-//   parse(lizardSkin)
-// }
-
-const Home: NextPage = () => {
+const Home = () => {
   const RFWrapper = useRef(null)
 
   const {
@@ -54,31 +34,7 @@ const Home: NextPage = () => {
     onDrop,
     onDragOver,
     setXyfInstance,
-    // parse,
-    // filterText,
   } = useStore()
-
-  // console.log("STATE:", useStore())
-
-  // console.log(
-  //   "exportFilter:",
-  //   exportFilter(nodes, edges, {})
-  // );
-
-  // useEffect(() => {
-  //   console.log('this forces clientside render')
-  // // })
-
-  // const progressiveFilters = nodes.map(({id}) => {
-  //   return progressiveExportFilters(id, nodes, edges)
-  // })
-
-  // const progressiveFilters = nodes.reduce((acc, {id}) => {
-  //   acc[id] = progressiveExportFilters(id, nodes, edges)
-  //   return acc
-  // }, {})
-
-  // console.log('progressiveFilters', progressiveFilters)
 
   return (
     <main className="w-full h-[100dvh] flex">
