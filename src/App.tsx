@@ -36,6 +36,14 @@ const Home = () => {
     setXyfInstance,
   } = useStore()
 
+  if (process.env.NODE_ENV !== "development") {
+    return (
+      <main className="w-full h-[100dvh] flex">
+        <div>Coming Soon.</div>
+      </main>
+    )
+  }
+
   return (
     <main className="w-full h-[100dvh] flex">
       <Allotment>
