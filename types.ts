@@ -1,3 +1,38 @@
+import { NodeProps, EdgeProps } from "reactflow"
+
+export type EdgeState = EdgeProps
+
+export type NodeState = NodeProps & {
+  selected: boolean,
+  data: {
+    in1?: string | null
+    in2?: string | null
+    attributes: {
+      [key: string]: any
+    }
+  }
+}
+
+export type BlendModeKey =
+  | "normal"
+  | "multiply"
+  | "screen"
+  | "darken"
+  | "lighten"
+  | "color-dodge"
+  | "color-burn"
+  | "hard-light"
+  | "soft-light"
+  | "difference"
+  | "exclusion"
+  | "hue"
+  | "saturation"
+  | "color"
+  | "luminosity"
+
+export type NodeStates = NodeState[]
+export type EdgeStates = EdgeState[]
+
 export type Attribute<Type> = {
   // This is the current value of the property as seen and edited via the UI.
   // It is usually a specific parsed value, but it falls back to string in the
@@ -83,6 +118,13 @@ export type NodeInputKey = 'in1' | 'in2'
 export type NodeOutputKey = 'result'
 
 export type NodeDefinition = {
+  specification: NodeSpecification
+  createData: Function
+  exportData: Function
+  importData: Function
+}
+
+export type NodeSpecification = {
   meta: NodeMetadata
   attributes: {
     [key: string]: AttributeDefinition
@@ -93,15 +135,19 @@ export type NodeDefinition = {
 
 export type InputEnum = 'string' | 'number' | 'boolean' | 'matrix' | 'array' | 'enum'
 
-export type Tag = {
-  // The name of the tag as it appears in the spec
-  tagName: string
-  // The order in which the attributes appear in the tag
-  attrOrder: string[]
-  // The attributes of the tag
-  attr: { [key: string]: Attribute }
-}
+// export type Tag = {
+//   // The name of the tag as it appears in the spec
+//   tagName: string
+//   // The order in which the attributes appear in the tag
+//   attrOrder: string[]
+//   // The attributes of the tag
+//   attr: { [key: string]: Attribute }
+// }
 
 export type ZustandSet = (nextStateOrUpdater: any, shouldReplace?: boolean | undefined) => void
 
 export type Matrix = number[][]
+
+export type State = {
+  [key: string]: any
+}

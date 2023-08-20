@@ -1,8 +1,5 @@
 import { set as _set } from "lodash"
-import { State } from "./store"
-import { Node, AttributeDefinition, ZustandSet, NodeDefinition } from "../types"
-import { uuid } from "@lib/uuid"
-import nodes from './nodes/index'
+import { AttributeDefinition, ZustandSet, NodeSpecification, NodeState, NodeStates, NodeInputKey, State } from "../../types"
 
 export const INPUTS = {
     STRING: 'string',
@@ -14,18 +11,18 @@ export const INPUTS = {
     COLOR: 'color',
 }
 
-export function getNodeIndexById(nodes, id) {
-    const index = nodes.findIndex((node: Node) => node.id === id);
+export function getNodeIndexById(nodes: NodeStates, id: string) {
+    const index = nodes.findIndex((node: NodeState) => node.id === id);
     // If index is -1, the node was not found
     if (index === -1) {
         // Log a warning and exit the function
         console.warn(`Node with ID ${id} not found`);
-        return;
+        return index;
     }
     return index
 }
 
-export function getNodeById(nodes, id): Node {
+export function getNodeById(nodes: NodeStates, id: string) {
     const index = getNodeIndexById(nodes, id)
     return nodes[index]
 }
@@ -89,10 +86,12 @@ export function createNodeArraySetter(set: ZustandSet, key: string) {
 
 
 // Function to create a node slice for Zustand
-export function createNodeSlice(set: ZustandSet, definition: NodeDefinition) {
-    const slice = {}
-    const nodeType = definition.meta.nodeType;
-    const attributes = definition.attributes;
+export function createNodeSlice(set: ZustandSet, specification: NodeSpecification) {
+    const slice = {} as {
+        [key: string]: any
+    }
+    const nodeType = specification.meta.nodeType;
+    const attributes = specification.attributes;
 
     // Create a setter for each attribute
     Object.keys(attributes).forEach((key) => {
@@ -126,36 +125,26 @@ export function createNodeSlice(set: ZustandSet, definition: NodeDefinition) {
     };
 }
 
-export function createNode(props): Node {
-    return {
-        id: uuid(props.nodeType),
-        // xyFlow specific, key must be called type
-        type: props.nodeType,
-        position: props.position,
-        data: nodes[props.nodeType].createData(),
-    }
-}
 
-export function createNodeCreator(definition: NodeDefinition) {
-    return function (props) {
+export function createNodeCreator(specification: NodeSpecification) {
+    return function (): NodeState['data'] {
         let out = {
             attributes: {}
-        }
+        } as NodeState['data']
 
         // read the inputs entry from node metadata and create a property for each
-        definition.meta.inputs.forEach((input: string) => {
-            out[input] = props?.[input] || null
+        specification.meta.inputs.forEach((inputKey: NodeInputKey) => {
+            out[inputKey] = null
         })
 
         // read the attributes entry and create a property for each
-        Object.values(definition.attributes).forEach((attr: AttributeDefinition) => {
-            console.log(attr)
+        Object.values(specification.attributes).forEach((attr: AttributeDefinition) => {
             const key = attr.key;
             out.attributes[key] = {
-                value: props?.attributes[key].value || definition.attributes[key].defaultValue,
-                input: definition.attributes[key].input,
-                hasValue: props?.attributes[key].hasValue || true,
-                hasError: props?.attributes[key].hasError || false,
+                value: specification.attributes[key].defaultValue,
+                input: specification.attributes[key].input,
+                hasValue: true,
+                hasError: false,
             }
         })
 

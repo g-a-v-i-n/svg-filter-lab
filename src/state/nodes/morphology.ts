@@ -1,7 +1,7 @@
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 import { serialize } from "../exporter";
 
-export const definition = {
+export const specification = {
     meta: {
         nodeType: "morphology",
         title: "Morphology",
@@ -43,4 +43,4 @@ export const definition = {
             serializer: serialize.number,
         }
     },
-} as NodeDefinition;
+} as NodeSpecification;

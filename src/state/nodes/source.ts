@@ -1,8 +1,8 @@
 import { serialize } from '../exporter';
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 
 // Define the node for serialization, parsing and rendering
-export const definition = {
+export const specification = {
   meta: {
     nodeType: "source",
     title: "Source",
@@ -35,4 +35,4 @@ export const definition = {
       serializer: (v: string) => serialize.string(v),
     }
   },
-} as NodeDefinition;
+} as NodeSpecification;

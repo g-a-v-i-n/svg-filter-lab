@@ -1,9 +1,8 @@
-import { Node } from "reactflow";
 import { serialize } from '../exporter';
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 
 // Define the node for serialization, parsing and rendering
-export const definition = {
+export const specification = {
   meta: {
     nodeType: "gaussianBlur",
     title: "Gaussian Blur",
@@ -31,67 +30,4 @@ export const definition = {
       serializer: (v: number) => serialize.number(v),
     }
   },
-} as NodeDefinition;
-
-// export const createData = createNodeFnFactory(definition);
-// export const exportData = createExporter(definition);
-
-
-export type NodeData = {
-  in1: string | null
-  in2: string | null
-  attributes: {
-    mode: number
-  }
-}
-
-export type NodeState = Node<NodeData> & { selected: boolean }
-
-export type Slice = {
-  mode: {
-    set: Function
-  }
-}
-
-
-
-
-// export function createSlice() {
-//   return createNodeSlice(tag.attributes)
-// }
-
-// export const createSlice = (set: (nextStateOrUpdater: any, shouldReplace?: boolean | undefined) => void) => ({
-//   blendNode: {
-//     mode: {
-//       set: genericSetter(set, "mode"),
-//     },
-//   },
-// })
-
-// export const defaultData: NodeData = {
-//   in1: null,
-//   in2: null,
-//   mode: {
-//     value: "normal",
-//     type: 'SELECT',
-//   },
-// }
-
-// export function stringify(node: NodeState) {
-//   const { id, data } = node
-//   const { mode, in1, in2 } = data
-
-//   const str = `<feBlend ${stringifyProp(
-//     "mode",
-//     mode
-//   )} in="${in1}" in2="${in2}" result="${id}" />`
-//   return str
-// }
-
-// export function parse(node): NodeState['data'] {
-//   return {
-//     in1: node.attributes.in1,
-//     in2: node.attributes.in2,
-//     mode: parseProp(node.attributes.mode)
-//   }
-// }
+} as NodeSpecification;

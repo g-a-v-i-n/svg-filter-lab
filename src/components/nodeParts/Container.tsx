@@ -5,7 +5,7 @@ import { ControlGroup } from "./ControlGroup"
 import { Footer } from "./Footer"
 import { Handle } from "./Handle"
 import { Header } from "./Header"
-import { NodeInputKey, NodeMetadata } from "@/types"
+import { NodeInputKey, NodeMetadata } from "@/src/types"
 
 export type ContainerProps = {
   selected: boolean

@@ -1,12 +1,12 @@
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 import { serialize } from "../exporter";
 
-export const definition = {
+export const specification = {
     meta: {
         nodeType: "turbulence",
         title: "Turbulence",
         tagName: "feTurbulence",
-        icon: "􁎄", // Consider providing a new icon specific to Turbulence
+        icon: "􁎄",
         mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feTurbulence",
         inputs: [],
         outputs: ['result'],
@@ -85,6 +85,4 @@ export const definition = {
             serializer: serialize.string,
         }
     },
-} as NodeDefinition;
-
-// export const createData = createNodeFnFactory(definition);
+} as NodeSpecification;

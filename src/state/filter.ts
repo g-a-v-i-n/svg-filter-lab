@@ -1,10 +1,10 @@
-import { NodeDefinition } from "../types";
+import { NodeSpecification } from "../../types";
 import { serialize } from "./exporter";
 import { createNodeCreator } from "./common";
 import { createNodeExporter } from "./exporter";
 
 // This is using the same pattern as the other nodes, but it is not implemented as a node in the UI.
-const definition = {
+const specification = {
   meta: {
     nodeType: "filter",
     title: "Filter",
@@ -100,10 +100,10 @@ const definition = {
       serializer: serialize.string,
     }
   },
-} as NodeDefinition;
+} as NodeSpecification;
 
 export default {
-  definition,
-  createData: createNodeCreator(definition),
-  exportData: createNodeExporter(definition),
+  specification,
+  createData: createNodeCreator(specification),
+  exportData: createNodeExporter(specification),
 }

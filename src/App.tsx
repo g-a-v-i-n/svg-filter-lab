@@ -14,7 +14,7 @@ import { Sidebar } from "@components/sidebar/Sidebar"
 import { Preview } from "@components/preview/Preview"
 
 const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]:[string, any]) => {
-  acc[key] = nodeFactory(value.definition)
+  acc[key] = nodeFactory(value.specification)
   return acc
 }, {} as any)
 
@@ -37,10 +37,10 @@ const Home = () => {
     setXyfInstance,
   } = useStore()
 
-  if (process.env.NODE_ENV !== "development") {
+  if (process.env.NODE_ENV === "development") {
     return (
-      <main className="w-full h-[100dvh] flex">
-        <div>Coming Soon.</div>
+      <main className="w-full h-[100dvh] flex items-center justify-center">
+        <div className="textSecondary">Coming Soon</div>
       </main>
     )
   }

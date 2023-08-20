@@ -1,6 +1,6 @@
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 
-export const definition = {
+export const specification = {
     meta: {
         nodeType: "tile",
         title: "Tile",
@@ -16,7 +16,4 @@ export const definition = {
         // For feTile, there aren't any unique SVG attributes aside from the 'in' input.
         // If there are any custom attributes you want to add or handle, define them here.
     },
-} as NodeDefinition;
-
-
-// export const createData = createNodeFnFactory(definition);
+} as NodeSpecification;

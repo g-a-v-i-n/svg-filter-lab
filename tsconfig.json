@@ -29,6 +29,6 @@
       "@state/*": ["src/state/*"],
     },
   },
-  "include": ["src"],
+  "include": ["src", "types.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

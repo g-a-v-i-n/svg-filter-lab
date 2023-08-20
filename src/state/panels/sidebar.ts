@@ -1,4 +1,5 @@
-import { createNode } from "../common"
+import { uuid } from '@lib/uuid'
+import nodes from '@state/nodes/index'
 
 export type OnDragOver = (event: React.DragEvent) => void
 export type OnDrop = (
@@ -16,10 +17,10 @@ export const createSidebarSlice = (set: Function) => ({
     event.preventDefault()
 
     const reactFlowBounds = RFWrapper.current.getBoundingClientRect()
-    const type = event.dataTransfer.getData("application/reactflow")
+    const nodeType = event.dataTransfer.getData("application/reactflow")
 
     // check if the dropped element is valid
-    if (typeof type === "undefined" || !type) {
+    if (typeof nodeType === "undefined" || !nodeType) {
       return
     }
 
@@ -33,10 +34,13 @@ export const createSidebarSlice = (set: Function) => ({
         y: event.clientY - reactFlowBounds.top,
       })
 
-      const newNode = createNode({
-        nodeType: type,
-        position,
-      })
+      const newNode = {
+        id: uuid(nodeType),
+        // xyFlow specific, key must be called type
+        type: nodeType,
+        position: position,
+        data: nodes[nodeType].createData(),
+      }
 
       state.nodes.push(newNode)
     })

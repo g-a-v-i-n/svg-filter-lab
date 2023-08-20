@@ -5,10 +5,10 @@ import { byAlpha } from '@lib/byAlpha'
   // conver the nodes import to a dictionary
   const nodesArray = Object.entries(nodes).map(([key, value]:[string, any]) => {
     return {
-      definition: value.definition,
+      specification: value.specification,
       create: value.createData,
     }
-  }).sort((a, b) => byAlpha(a.definition.meta.title, b.definition.meta.title))
+  }).sort((a, b) => byAlpha(a.specification.meta.title, b.specification.meta.title))
 
 
 export function Sidebar() {
@@ -16,7 +16,7 @@ export function Sidebar() {
     <aside className="relative w-full h-full bg-white-900 dark:bg-black-900 backdrop-blur-3xl flex flex-col gap-1 p-1 flex-none">
       <span className="p-2 font-semibold">Filter Elements</span>
       {nodesArray.map((n) => {
-        return <Card key={n.definition.meta.nodeType} metadata={n.definition.meta} />
+        return <Card key={n.specification.meta.nodeType} metadata={n.specification.meta} />
       })}
       <div className="absolute left-0 bottom-0 p-3">
         <span className="textTertiary">{version}</span>

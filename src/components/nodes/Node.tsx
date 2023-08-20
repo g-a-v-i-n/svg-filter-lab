@@ -1,10 +1,11 @@
+// @ts-nocheck
 import { memo } from "react"
 import { NodeProps } from "reactflow";
-import useStore, { State } from "@state/store"
+import useStore from "@state/store"
 // import { exporter } from "@state/exporter";
 import { Container } from "../nodeParts/Container"
 import { Select, SelectItem } from "../nodeParts/Select"
-import { NodeDefinition } from "../../../types";
+import { AttributeDefinition, NodeSpecification, State } from '@/types';
 import { NumberInput } from "../nodeParts/NumberInput";
 import { MatrixInput } from "../nodeParts/MatrixInput";
 import { byOrdering } from "@lib/byOrdering";
@@ -13,11 +14,11 @@ type NodeState = NodeProps & {
     
 }
 
-export function nodeFactory(definition:NodeDefinition) {
+export function nodeFactory(specification:NodeSpecification) {
     const {
         attributes,
         meta,
-    } = definition;
+    } = specification;
 
     const selector = (state: State) => state[meta.nodeType];
 
@@ -39,8 +40,7 @@ export function nodeFactory(definition:NodeDefinition) {
                     .sort((a, b) => byOrdering(a.key, b.key, meta.attributeOrder))
                     .map((attr, index) => {
                         return createAttrUI(
-                            attr, // attr definition
-                            index, 
+                            attr, // attr specification
                             data.attributes[attr.key], // state
                             (value:any) => slice[attr.key].set(nodeId, value) // setter
                         )
@@ -59,7 +59,7 @@ export function nodeFactory(definition:NodeDefinition) {
     })
 }
 
-function createAttrUI(attr, index, data, set) {
+function createAttrUI(attr:AttributeDefinition, data:NodeState['data'], set: (value:any) => void) {
 
     if (attr.input.type === 'enum') {
         return (

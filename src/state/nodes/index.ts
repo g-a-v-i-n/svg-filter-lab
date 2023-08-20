@@ -14,13 +14,14 @@ import * as turbulence from "./turbulence";
 import * as displacementMap from "./displacementMap";
 import * as morphology from "./morphology";
 import * as tile from "./tile";
-import * as flood from './flood'
+// import * as flood from './flood'
 import * as dropShadow from './dropShadow'
 
 import { createNodeCreator } from "../common";
 import { createNodeExporter } from "../exporter";
+import { NodeDefinition } from "@/types";
 
-let nodes = {
+let nodeSpecifications = {
     blend,
     colorMatrix,
     gaussianBlur,
@@ -41,16 +42,17 @@ let nodes = {
 };
 
 // add createData and exportData to each node
-nodes = Object.entries(nodes).reduce((acc, [key, node]) => {
+const nodeDefinitions = Object.entries(nodeSpecifications).reduce((acc, [key, { specification }]) => {
     return {
         ...acc,
         [key]: {
-            ...node,
-            createData: createNodeCreator(node.definition),
-            exportData: createNodeExporter(node.definition),
+            specification,
+            createData: createNodeCreator(specification),
+            exportData: createNodeExporter(specification),
+            importData: () => { },
         },
     };
-}, {});
+}, {}) as { [key: string]: NodeDefinition };
 
 
-export default nodes;
+export default nodeDefinitions;

@@ -1,32 +1,31 @@
-import {
-    Node,
-    Edge,
-    getConnectedEdges,
-} from 'reactflow'
+import { getConnectedEdges } from 'reactflow'
+
+// @ts-ignore - package does not contain types
 import toposort from "toposort"
 
 import nodeDefinitions from './nodes/index'
 import { getNodeById } from './common'
-import { NodeInputKey } from '../types'
+import { NodeInputKey, EdgeState, NodeState, NodeSpecification } from '@/types'
 
-export function topologicalSort(edges) {
+export function topologicalSort(edges: EdgeState[]) {
     const dimunitiveEdges = edges.map((edge) => {
         return [edge.source, edge.target]
     })
 
-    const order = toposort(dimunitiveEdges)
+    const order = toposort(dimunitiveEdges) as string[]
     return order
 }
 
-function fillInputs(node: Node, nodes: Node[], edges: Edge[]) {
+function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
     const newNode = structuredClone(node);
 
-    const definition = nodeDefinitions[newNode.type].definition;
+    const specification = nodeDefinitions[newNode.type].specification;
 
     // get edges connected to the node
+    // @ts-ignore
     const connectedEdges = getConnectedEdges([newNode], edges);
 
-    definition.meta.inputs.forEach((input: NodeInputKey) => {
+    specification.meta.inputs.forEach((input: NodeInputKey) => {
         const edgeConnectedToThisInput = connectedEdges
             .find(({ targetHandle }) => targetHandle === input);
 
@@ -52,7 +51,7 @@ function fillInputs(node: Node, nodes: Node[], edges: Edge[]) {
     return newNode
 }
 
-export function exporter(nodeId: string, nodes: Node[], edges: Edge[]) {
+export function exporter(nodeId: string, nodes: NodeState[], edges: EdgeState[]) {
     // Fill in the missing inputs and outputs in node.data
     nodes = nodes.map((node) => fillInputs(node, nodes, edges))
 
@@ -62,47 +61,44 @@ export function exporter(nodeId: string, nodes: Node[], edges: Edge[]) {
 
     // // With the ordered filter IDs, get the node data for each node and run the exporter for each.
     const stack = orderedNodeIds
-        .map((id) => {
-            return nodes.find((node) => node.id === id)
+        .map((id: string) => {
+            return nodes.find((node) => node.id === id) as NodeState
         })
-        .filter((node) => {
+        .filter((node: NodeState) => {
             return node.type !== 'source'
         })
-        .map((node) => {
+        .map((node: NodeState) => {
             return nodeDefinitions[node.type].exportData(node)
         })
-
 
     // // we discard all nodes following the nodeId arg
     const index = orderedNodeIds.indexOf(nodeId);
     const filteredStack = stack.slice(0, index + 1);
 
     const filterText = `<filter id="${'filter'}">${filteredStack.join('\n')}</filter>`
-    console.log('filterText', filterText)
-    // We'll add the filter tag here later
     return filterText;
 }
 
 
 
 
-// Creates a partially applied function which takes a node definition and returns a function which takes a node and returns function which takes an attribute and returns a string
-export function createNodeExporter(definition: NodeDefinition) {
+// Creates a partially applied function which takes a node specification and returns a function which takes a node and returns function which takes an attribute and returns a string
+export function createNodeExporter(specification: NodeSpecification) {
 
     return function exporter(nodeState: NodeState) {
-        // For inputs, we map over the inputs array in the definition using state for input.
+        // For inputs, we map over the inputs array in the specification using state for input.
         // Input keys will have already been backfilled and made unique by the importer, or by state transitions.
-        const inputs = definition.meta.inputs.map((input) => {
+        const inputs = specification.meta.inputs.map((input) => {
             const inputKey = input === 'in1' ? 'in' : input;
             const inputValue = nodeState.data[input] || 'sourceGraphic';
             return `${inputKey}="${inputValue}"`;
         })
 
-        // For attributes, we map over the attributeOrder array in the definition using state for attribute values.
-        // We also need to look at the attribute definition to determine the serializer to use.
+        // For attributes, we map over the attributeOrder array in the specification using state for attribute values.
+        // We also need to look at the attribute specification to determine the serializer to use.
         // And, we also need to look at the `isHidden` function to determine if the attribute should be serialized at all.
-        const attrs = definition.meta.attributeOrder.map((attrKey) => {
-            const attr = definition.attributes[attrKey];
+        const attrs = specification.meta.attributeOrder.map((attrKey) => {
+            const attr = specification.attributes[attrKey];
             const attrName = attr.name;
             const value = nodeState.data.attributes[attrKey].value;
             const serializer = attr.serializer;
@@ -117,29 +113,29 @@ export function createNodeExporter(definition: NodeDefinition) {
             return `${attrName}="${serializer(value)}"`;
         });
 
-        return `<${definition.meta.tagName} ${inputs.join(' ')} ${attrs.join(' ')} />`;
+        return `<${specification.meta.tagName} ${inputs.join(' ')} ${attrs.join(' ')} />`;
     }
 }
 
 
 // Function to serialize attributes into a string representation
 export const serialize = {
-    string: (v) => {
+    string: (v: string) => {
         return v
     },
-    number: (v) => {
+    number: (v: number) => {
         return String(v)
     },
-    boolean: (v) => {
+    boolean: (v: boolean) => {
         return String(v)
     },
-    array: (v) => {
+    array: (v: any[]) => {
         return v.join(' ')
     },
-    matrix: (v) => {
+    matrix: (v: any[][]) => {
         return v.map((row) => row.join(' ')).join(' ')
     },
-    color: (v) => {
+    color: (v: string) => {
         return v
     },
 };

@@ -1,7 +1,7 @@
-import { NodeDefinition } from "../../../types";
+import { NodeSpecification } from '@/types';
 import { serialize } from "../exporter";
 
-export const definition = {
+export const specification = {
     meta: {
         nodeType: "image",
         title: "Image",
@@ -91,6 +91,4 @@ export const definition = {
             serializer: serialize.string,
         }
     },
-} as NodeDefinition;
-
-// export const createData = createNodeFnFactory(definition);
+} as NodeSpecification;
