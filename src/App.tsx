@@ -11,7 +11,7 @@ import Edge from "@components/edges/Edge"
 import ConnectionLine from "@components/edges/ConnectionLine"
 import { nodeFactory } from "@components/nodes/Node"
 import { Sidebar } from "@components/sidebar/Sidebar"
-import { Preview } from "@components/preview/Preview"
+// import { Preview } from "@components/preview/Preview"
 
 const nodeTypes = Object.entries(nodes).reduce((acc, [key, value]:[string, any]) => {
   acc[key] = nodeFactory(value.specification)
@@ -77,9 +77,9 @@ const Home = () => {
           </div>
         </ReactFlowProvider>
       </Allotment.Pane>
-      <Allotment.Pane minSize={200} preferredSize={200}>
+      {/* <Allotment.Pane minSize={200} preferredSize={200}>
         <Preview />
-      </Allotment.Pane>
+      </Allotment.Pane> */}
 
       {/* <Tray /> */}
 {/* 

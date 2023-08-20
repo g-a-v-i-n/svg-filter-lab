@@ -46,14 +46,14 @@ export function nodeFactory(specification:NodeSpecification) {
                         )
                     })
                 }
-                <div className="fixed pt-32 text-xs text-primary opacity-50 font-mono pl-3 flex flex-col pointer-events-none">
+                {/* <div className="fixed pt-32 text-xs text-primary opacity-50 font-mono pl-3 flex flex-col pointer-events-none">
                     {id}
                     <pre>
                     {
                     JSON.stringify(data, null, 2)
                     }
                     </pre>
-                </div>
+                </div> */}
             </Container>
         )
     })
