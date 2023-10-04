@@ -123,3 +123,20 @@
   margin-top: -0.3788em;
   display: table;
 }
+
+.cs-text-xxs {
+  font-size: 10px;
+  line-height: 14.0459px;
+}
+
+.cs-text-xxs::before {
+  content: "";
+  margin-bottom: -0.4212em;
+  display: table;
+}
+
+.cs-text-xxs::after {
+  content: "";
+  margin-top: -0.3788em;
+  display: table;
+}

@@ -1,5 +1,80 @@
-// import { uuid } from "@lib/uuid"
+import { nodeMetadata } from "@components/nodes";
+import { uuid } from "@lib/uuid";
+import { fromXml } from "xast-util-from-xml";
+import { remove } from "unist-util-remove";
+import string from "../lib/string";
+import { XastElement } from "../../types";
 
+import { age } from "../lib/inkscape/age";
+
+export function importer(filterText: string) {
+	// filterText = age;
+
+	let xast;
+
+	// Parse the filter text into an xast tree
+	try {
+		xast = fromXml(filterText);
+	} catch (error) {
+		console.error(error);
+		return { nodes: [], edges: [] };
+	}
+
+	// Remove all but elements from the xast tree
+	remove(xast, (node) => node.type !== "element");
+
+	// Get the first element in the xast tree, which should be the filter element
+	const filterElement = xast.children[0] as XastElement;
+
+	// Get the children of the filter element, which should be the filter stack
+	const filterStack = filterElement.children as XastElement[];
+
+	// We need to do three things in order.
+	// 1. First, change `in` attributes to `in1` attributes, because `in` is a reserved word and cannot be destructured. This is what the editor uses.
+	// 2. Second, make all existing in1 and in2 values unique. SVG filters can have multiple elements with the same id, because they are overwritten by duplicates moving down the element list.
+	// We can't do that in the editor, because we need to use these IDs as unique IDs for each node and edges.
+	// 3. Third, fill in any missing in1 and in2 values. SVG filters let you have implied connections between elements as you move down the element list. We can't do that in the editor, because edges need to be explicit.
+	const normalizedFilterStack = fillInInputs(
+		uniquifyInputIds(
+			filterStack
+				// @ts-ignore. NB: We have already filtered out any non-elements, but TS doesn't know that and I don't want to write a type guard.
+				.map(setInToIn1),
+		),
+	);
+
+	const nodes = importNodes(normalizedFilterStack);
+	const edges = importEdges(normalizedFilterStack);
+
+	return { nodes, edges };
+}
+
+function importNodes(filterStack: XastElement[]) {
+	const nodes = filterStack.map((tag, i) => {
+		// const name = nodeTypesByTagName[tag.name];
+
+		const attributes = Object.entries(tag.attributes).reduce(
+			(acc, [key, value]) => {
+				if (key === "result") {
+					acc[key] = value;
+				}
+				return acc;
+			},
+			{},
+		);
+
+		return {
+			id: tag.attributes.result,
+			type: name,
+			data: {
+				ast: {},
+			},
+		};
+	});
+
+	return nodes;
+}
+
+function importEdges(filterStack: XastElement[]) {}
 // export const reservedIds = [
 //     "SourceGraphic",
 //     "SourceAlpha",
@@ -9,105 +84,101 @@
 //     "StrokePaint",
 // ]
 
-// export function setInToIn1(node) {
-//     const in1 = node.attributes.in
-//     delete node.attributes.in
-//     node.attributes.in1 = in1
-//     return node
-// }
+function setInToIn1(elem: XastElement) {
+	const in1 = elem.attributes.in;
+	delete elem.attributes.in;
+	elem.attributes.in1 = in1;
+	return elem;
+}
 
-// export function uniquify(tags) {
-//     const aliases = {
-//         // oldId: 'newId'
-//     }
+export function uniquifyInputIds(tags) {
+	const aliases = {
+		// oldId: 'newId'
+	};
 
-//     const newTags = tags.map(tag => {
-//         const in1 = tag.attributes.in1
-//         const in2 = tag.attributes.in2
-//         const result = tag.attributes.result
+	const newTags = tags.map((tag) => {
+		const in1 = tag.attributes.in1;
+		const in2 = tag.attributes.in2;
+		const result = tag.attributes.result;
 
-//         if (result) {
-//             if (result in aliases) {
-//                 // If this attribute has been seen before, assign the the id an alias in
-//                 // both aliases and replace it with the new value in the tag
-//                 const newId = uuid('n')
-//                 tag.attributes.result = newId
-//                 aliases[result] = newId
-//             } else {
-//                 // If its a new id, add it to aliases but don't change it.
-//                 // aliases[result] = result
-//                 const newId = uuid('n')
-//                 tag.attributes.result = newId
-//                 aliases[result] = newId
-//             }
-//         }
+		if (result) {
+			if (result in aliases) {
+				// If this attribute has been seen before, assign the the id an alias in
+				// both aliases and replace it with the new value in the tag
+				const newId = uuid("n");
+				tag.attributes.result = newId;
+				aliases[result] = newId;
+			} else {
+				// If its a new id, add it to aliases but don't change it.
+				// aliases[result] = result
+				const newId = uuid("n");
+				tag.attributes.result = newId;
+				aliases[result] = newId;
+			}
+		}
 
-//         if (in1) {
-//             if (in1 in aliases) {
-//                 // if this id has an alias, use the alias instead of the existing ID
-//                 tag.attributes.in1 = aliases[in1]
-//             } else {
-//                 // if this id has no result id at all, it may be an error, or it could be a reserved id.
-//                 console.log(in1)
-//             }
-//         }
+		if (in1) {
+			if (in1 in aliases) {
+				// if this id has an alias, use the alias instead of the existing ID
+				tag.attributes.in1 = aliases[in1];
+			} else {
+				// if this id has no result id at all, it may be an error, or it could be a reserved id.
+				console.log(in1);
+			}
+		}
 
-//         if (in2) {
-//             if (in2 in aliases) {
-//                 // if this id has an alias, use the alias instead of the existing ID
-//                 tag.attributes.in2 = aliases[in2]
-//             } else {
-//                 // if this id has no result id at all, it may be an error, or it could be a reserved id.
-//                 console.log(in2)
-//             }
-//         }
+		if (in2) {
+			if (in2 in aliases) {
+				// if this id has an alias, use the alias instead of the existing ID
+				tag.attributes.in2 = aliases[in2];
+			} else {
+				// if this id has no result id at all, it may be an error, or it could be a reserved id.
+				console.log(in2);
+			}
+		}
 
-//         return tag
-//     })
-//     return newTags
-// }
+		return tag;
+	});
+	return newTags;
+}
 
-// export function infill(tags) {
+export function fillInInputs(tags) {
+	let lastUnsetResult = "SourceGraphic";
 
-//     let lastUnsetResult = "SourceGraphic"
+	const newTags = tags.map((tag) => {
+		const in1 = tag.attributes.in1;
+		const in2 = tag.attributes.in2;
+		const result = tag.attributes.result;
 
-//     const newTags = tags.map(tag => {
+		if (in1) {
+			// noop
+		} else {
+			if (allowedInputs[tag.name].includes("in1")) {
+				tag.attributes.in1 = lastUnsetResult;
+			}
+		}
 
-//         const in1 = tag.attributes.in1
-//         const in2 = tag.attributes.in2
-//         const result = tag.attributes.result
+		if (in2) {
+			// noop
+		} else {
+			if (allowedInputs[tag.name].includes("in2")) {
+				tag.attributes.in2 = lastUnsetResult;
+			}
+		}
 
-//         if (in1) {
-//             // noop
-//         } else {
-//             if (allowedInputs[tag.name].includes('in1')) {
-//                 tag.attributes.in1 = lastUnsetResult
-//             }
-//         }
+		if (result) {
+			// noop
+		} else {
+			const newId = uuid("n");
+			tag.attributes.result = newId;
+			lastUnsetResult = newId;
+		}
 
-//         if (in2) {
-//             // noop
-//         } else {
-//             if (allowedInputs[tag.name].includes('in2')) {
+		return tag;
+	});
 
-//                 tag.attributes.in2 = lastUnsetResult
-//             }
-//         }
-
-//         if (result) {
-//             // noop
-//         } else {
-//             const newId = uuid('n')
-//             tag.attributes.result = newId
-//             lastUnsetResult = newId
-//         }
-
-//         return tag
-//     })
-
-//     return newTags
-// }
-
+	return newTags;
+}
 
 // function nodeProps(i) {
 //     return {
@@ -202,7 +273,6 @@
 
 //     }, [])
 
-
 //     const edges = nodes.reduce((acc, node, i) => {
 //         const edgeProps = {
 //             selected: false,
@@ -241,7 +311,6 @@
 //         edges,
 //     }
 // }
-
 
 // const nodeTypesByTagName = {
 //     // Util filter tags

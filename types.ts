@@ -1,158 +1,148 @@
-import { NodeProps, EdgeProps, Node, Edge } from "reactflow"
+import { NodeProps, EdgeProps, Node, Edge } from "reactflow";
 
-export type EdgeInstance = Edge
+// @ts-expect-error NB Gavin: Library `xast` exposes no types
+import { Element as _XastElement } from "@types/xast";
 
-export type NodeInstance = Node
+// Basic Types
+export type ZustandSet = (
+	nextStateOrUpdater: any,
+	shouldReplace?: boolean | undefined,
+) => void;
+export type Matrix = number[][];
+export type Color = string;
+export type State = {
+	[key: string]: any;
+};
 
-export type EdgeState = EdgeProps
+export type XastElement = _XastElement;
 
+// Node and Edge Types
+export type NodeInstance = Node<NodeState["data"]>;
+export type EdgeInstance = Edge;
 export type NodeState = NodeProps & {
-  selected: boolean,
-  data: {
-    in1?: string | null
-    in2?: string | null
-    attributes: {
-      [key: string]: any
-    }
-  }
-}
+	data: {
+		ast: Element; // NB this should be a xast syntax tree which is parsable by unified
+	};
+};
+
+export type EdgeState = EdgeProps;
+
+// Attribute
+export type Attribute<Value, Type> = {
+	value: Value;
+	type: Type;
+	omit?: boolean;
+	aliasOf?: string;
+	primary?: (data: Element) => boolean;
+	// noError?: boolean;
+	noValue?: boolean;
+};
+
+// Element
+export type Element = {
+	type: "element";
+	tagName: TagNameEnum;
+	omit: boolean;
+	attributes: {
+		[key: string]: Attribute<AttributeValue, AttributeType>;
+	};
+	children?: Element[];
+};
+
+export type AttributeValue =
+	| string
+	| number
+	| boolean
+	| Matrix
+	| Array<number>
+	| Color
+	| null;
+
+export type AttributeType =
+	| "string"
+	| "number"
+	| "boolean"
+	| "matrix"
+	| "array"
+	| "color"
+	| "null";
+
+// Node Definitions and Metadata
+export type NodeMetadata = {
+	nodeType: NodeTypeEnum;
+	title: string;
+	cat: string;
+	icon: string;
+	width: number;
+	tagName: TagNameEnum;
+	mdn: string;
+	inputs: NodeInputKey[] | [];
+	outputs: NodeOutputKey[] | [];
+};
+
+// Node Input/Output Types
+export type NodeInputKey = "in1" | "in2";
+export type NodeOutputKey = "result";
+
+// Attribute-level Enums
+export type NodeTypeEnum =
+	| "blend"
+	| "colorMatrix"
+	| "composite"
+	| "convolveMatrix"
+	| "displacementMap"
+	| "dropShadow"
+	| "flood"
+	| "gaussianBlur"
+	| "image"
+	| "merge"
+	| "morphology"
+	| "offset"
+	| "source"
+	| "tile"
+	| "turbulence"
+	| "filter"
+	| "componentTransfer";
+
+export type TagNameEnum =
+	| "feBlend"
+	| "feColorMatrix"
+	| "feComposite"
+	| "feConvolveMatrix"
+	| "feDisplacementMap"
+	| "feDropShadow"
+	| "feFlood"
+	| "feGaussianBlur"
+	| "feImage"
+	| "feMerge"
+	| "feMorphology"
+	| "feOffset"
+	| "feTile"
+	| "feTurbulence"
+	| "feComponentTransfer"
+	| "feDiffuseLighting"
+	| "feDistantLight"
+	| "fePointLight"
+	| "feSpotLight"
+	| "feSpecularLighting"
+	| "feFuncA"
+	| "feFuncB"
+	| "feFuncG"
+	| "feFuncR";
 
 export type BlendModeKey =
-  | "normal"
-  | "multiply"
-  | "screen"
-  | "darken"
-  | "lighten"
-  | "color-dodge"
-  | "color-burn"
-  | "hard-light"
-  | "soft-light"
-  | "difference"
-  | "exclusion"
-  | "hue"
-  | "saturation"
-  | "color"
-  | "luminosity"
-
-export type NodeStates = NodeState[]
-export type EdgeStates = EdgeState[]
-
-export type Attribute<Type> = {
-  // This is the current value of the property as seen and edited via the UI.
-  // It is usually a specific parsed value, but it falls back to string in the
-  // case it cannot be parsed
-  value: string | Type
-  // This enum is set during parsing or on coercion of `current`. It's purpose
-  // is to inform the UI of which input to use to display + edit the value.
-  input: string
-  // if parsing fails, we need a flag for the UI.
-  hasError?: boolean
-  // if the value is unset, we need a flag for the UI.
-  hasValue?: boolean
-}
-
-export type AttributeDefinition = {
-  key: string,
-  name: string,
-  title: string,
-  input: EnumInput | NumberInput | MatrixInput | StringInput | ColorInput
-  defaultValue: any,
-  serializer: Function,
-  isHidden?: Function,
-}
-
-export type EnumInput = {
-  type: 'enum'
-  options: { key: string, title: string, cat?: string }[]
-}
-
-export type NumberInput = {
-  type: 'number'
-  min: number
-  max: number
-  step: number
-  precision: number
-}
-
-export type MatrixInput = {
-  type: 'matrix'
-  rows: number
-  cols: number
-}
-
-export type StringInput = {
-  type: 'string'
-}
-
-export type ColorInput = {
-  type: 'color'
-  format: 'hex' | 'rgb' | 'hsl'
-}
-
-export type NodeTypeEnum = 'blend'
-  | 'colorMatrix'
-  | 'composite'
-  | 'convolveMatrix'
-  | 'displacementMap'
-  | 'dropShadow'
-  | 'flood'
-  | 'gaussianBlur'
-  | 'image'
-  | 'merge'
-  | 'morphology'
-  | 'offset'
-  | 'source'
-  | 'tile'
-  | 'turbulence'
-  | 'filter'
-
-export type NodeMetadata = {
-  nodeType: NodeTypeEnum
-  title: string
-  tagName: string | null
-  icon: string
-  mdn: string
-  inputs: NodeInputKey[] | []
-  outputs: NodeOutputKey[] | []
-  width: number
-  attributeOrder: string[]
-}
-
-export type NodeInputKey = 'in1' | 'in2'
-
-export type NodeOutputKey = 'result'
-
-export type NodeDefinition = {
-  specification: NodeSpecification
-  createData: Function
-  exportData: Function
-  importData: Function
-}
-
-export type NodeSpecification = {
-  meta: NodeMetadata
-  attributes: {
-    [key: string]: AttributeDefinition
-  }
-}
-
-// export type NodeData<> {}
-
-export type InputEnum = 'string' | 'number' | 'boolean' | 'matrix' | 'array' | 'enum'
-
-// export type Tag = {
-//   // The name of the tag as it appears in the spec
-//   tagName: string
-//   // The order in which the attributes appear in the tag
-//   attrOrder: string[]
-//   // The attributes of the tag
-//   attr: { [key: string]: Attribute }
-// }
-
-export type ZustandSet = (nextStateOrUpdater: any, shouldReplace?: boolean | undefined) => void
-
-export type Matrix = number[][]
-
-export type State = {
-  [key: string]: any
-}
+	| "normal"
+	| "multiply"
+	| "screen"
+	| "darken"
+	| "lighten"
+	| "color-dodge"
+	| "color-burn"
+	| "hard-light"
+	| "soft-light"
+	| "difference"
+	| "exclusion"
+	| "hue"
+	| "saturation"
+	| "color"
+	| "luminosity";

@@ -1,23 +1,37 @@
-import * as RS from "@radix-ui/react-switch"
-import clsx from "clsx"
-import { forwardRef, Ref } from "react"
+import * as RS from "@radix-ui/react-switch";
+import clsx from "clsx";
+import { forwardRef, Ref } from "react";
 
 export type SwitchProps = {
-  className?: string
-  checked: boolean
-  onCheckedChange: (checked: boolean) => void
-}
+	className?: string;
+	checked: boolean;
+	onCheckedChange: (checked: boolean) => void;
+};
 
 export const Switch = forwardRef(
-  ({ className = "", ...props }: SwitchProps, ref: Ref<HTMLButtonElement>) => {
-    return (
-      <RS.Root
-        ref={ref}
-        className={clsx("w-6 h-[14px] rounded-full flex p-[1px] ", className)}
-        {...props}
-      >
-        <RS.Thumb className="bg-inversePrimary dark:bg-inversePrimary w-[12px] h-[12px] rounded-full content-none" />
-      </RS.Root>
-    )
-  }
-)
+	(
+		{ className = "", checked, ...props }: SwitchProps,
+		ref: Ref<HTMLButtonElement>,
+	) => {
+		return (
+			<RS.Root
+				ref={ref}
+				className={clsx(className, {
+					"w-7 h-[16px] rounded-full flex p-[0px] borderPrimary border transition-all": true,
+					"bg-black-200 dark:bg-white-200": !checked,
+				})}
+				{...props}
+			>
+				<RS.Thumb
+					className={clsx(
+						"shadow-pressableNoBorder dark:shadow-pressableNoBorderInverse dark:bg-white w-[14px] h-[14px] rounded-full content-none transition-all",
+						{
+							"translate-x-0": !checked,
+							"translate-x-[12px]": checked,
+						},
+					)}
+				/>
+			</RS.Root>
+		);
+	},
+);

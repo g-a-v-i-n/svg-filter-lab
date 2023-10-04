@@ -18,3 +18,7 @@
     /* @apply bg-theme dark:bg-inverseTheme; */
   }
 }
+
+.react-flow__background > pattern > circle {
+  @apply fill-black-200 dark:fill-white-200;
+}

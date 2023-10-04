@@ -8,7 +8,7 @@
 
 html,
 body {
-  @apply textPrimary bg font-sans !cursor-default;
+  @apply textPrimary bg font-sans !cursor-default antialiased;
 }
 
 input {
@@ -25,4 +25,40 @@ a {
 
 span {
   @apply cs-text;
+}
+
+
+.selectContent {
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.selectContent[data-side='top'] {
+  animation-name: slideUp;
+}
+
+.selectContent[data-side='bottom'] {
+  animation-name: slideDown;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

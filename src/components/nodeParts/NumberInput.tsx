@@ -1,95 +1,147 @@
-import clsx from "clsx"
-import { NumericFormat } from "react-number-format"
-import FieldLabel from "./FieldLabel"
+import clsx from "clsx";
+import { useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
+import { NumericFormat } from "react-number-format";
+import FieldLabel from "./FieldLabel";
 
 export type NumberInputProps = {
-  title: string
-  onChange: (value:number) => void
-  value: number
-  step: number
-  precision: number
-  min?: number
-  max?: number
-  first?: boolean
-  last?: boolean
-  className?: string
-  hasValue?: boolean
-  hasError?: boolean
-  defaultValue?: number
-}
+	title: string;
+	onChange: (value: number) => void;
+	value: number;
+	step: number;
+	precision: number;
+	min: number;
+	max: number;
+	allowNegative: boolean;
+	className: string;
+	hasValue: boolean;
+	hasError: boolean;
+	defaultValue?: number;
+};
 
 export function NumberInput({
-  title,
-  onChange,
-  step,
-  precision,
-  className,
-  ...props
+	title,
+	onChange,
+	step = 1,
+	precision = 0.1,
+	className = "",
+	allowNegative = false,
+	value,
+	max = Infinity,
+	min = -Infinity,
 }: NumberInputProps) {
-  return (
-    <div className={"flex w-full px-2 h-8 items-center justify-between z-10"}>
-      <FieldLabel className="">{title}</FieldLabel>
-      <div className="field fieldDivX flex rounded h-5">
-      <DetentButton 
-        onClick={() => onChange(calculateAndFormat(props.value, step, precision, 'subtract'))} 
-        className="">􀅽</DetentButton>
+	const [shiftHeld, setShiftHeld] = useState(false);
 
-      <NumericFormat
-        className={clsx(
-          "w-20 flex cs-text items-center text-right bg-transparent px-1",
-          className
-        )}
-        value={props.value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        allowNegative
-      />
+	useHotkeys(
+		"shift",
+		(event) => {
+			setShiftHeld(event.type === "keydown");
+		},
+		{
+			keydown: true,
+			keyup: true,
+		},
+		[shiftHeld],
+	);
 
-        <DetentButton 
-          onClick={() => onChange(calculateAndFormat(props.value, step, precision, 'add'))} 
-          className="">􀅼</DetentButton>
-      </div>
-    </div>
-  )
+	return (
+		<div className={"flex w-full px-2 h-8 items-center justify-between z-10"}>
+			<FieldLabel className="">{title}</FieldLabel>
+			<div className="pressable flex rounded h-5">
+				<NumericFormat
+					className={clsx(
+						"w-20 flex cs-text items-center text-right bg-transparent px-1",
+						className,
+					)}
+					type={"text"}
+					value={value}
+					isAllowed={(values) => {
+						const { floatValue } = values;
+						if (floatValue === undefined) return false;
+						return floatValue <= max && floatValue >= min;
+					}}
+					onChange={(e) => onChange(Number(e.target.value))}
+					allowNegative={allowNegative}
+				/>
+				<div className="flex flex-col h-full border-l borderSecondary fieldDivY">
+					<DetentButton
+						onClick={() =>
+							onChange(
+								calculateAndFormat(value, step, precision, "add", shiftHeld),
+							)
+						}
+						className=""
+					>
+						􀆇
+					</DetentButton>
+
+					<DetentButton
+						onClick={() =>
+							onChange(
+								calculateAndFormat(
+									value,
+									step,
+									precision,
+									"subtract",
+									shiftHeld,
+								),
+							)
+						}
+						className=""
+					>
+						􀆈
+					</DetentButton>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 type DetentButtonProps = {
-  onClick: () => void
-  className?: string
-  children: React.ReactNode
+	onClick: () => void;
+	className?: string;
+	children: React.ReactNode;
+};
+
+function DetentButton(props: DetentButtonProps) {
+	return (
+		<button
+			type="button"
+			onClick={props.onClick}
+			className={clsx(
+				"h-full w-full flex items-center justify-center px-0.5",
+				props.className,
+			)}
+		>
+			<span className="cs-text-xxs textTertiary text-center font-semibold hover:textPrimary">
+				{props.children}
+			</span>
+		</button>
+	);
 }
 
-function DetentButton(props:DetentButtonProps) {
-  return (
-    <button
-      onClick={props.onClick}
-      className={clsx("h-full w-full flex items-center justify-center px-1", props.className)}
-  >
-    <span className="cs-text-xs textTertiary text-center hover:textPrimary font-bold">
-      {props.children}
-    </span>
-  </button>
-  )
-}
+function calculateAndFormat(
+	value: number,
+	step: number,
+	precision: number,
+	operation: "add" | "subtract",
+	shiftHeld: boolean,
+) {
+	let result;
+	const multiplier = shiftHeld ? 10 : 1;
 
-function calculateAndFormat(value:number, step:number, precision:number, operation: 'add' | 'subtract') {
-  let result;
+	switch (operation) {
+		case "add":
+			result = Number(value) + step * multiplier;
+			break;
+		case "subtract":
+			result = Number(value) - step * multiplier;
+			break;
+		default:
+			throw new Error("Invalid operation. Use 'add' or 'subtract'.");
+	}
 
-  switch(operation) {
-      case 'add':
-          result = Number(value) + step;
-          break;
-      case 'subtract':
-          result = Number(value) - step;
-          break;
-      default:
-          throw new Error("Invalid operation. Use 'add' or 'subtract'.");
-  }
+	console.log(value, step, result, precision, result.toFixed(precision));
 
-  return parseFloat(result.toFixed(precision));
-}
-
-NumberInput.defaultProps = {
-  className: "",
-  step: 1,
-  precision: 0,
+	return parseFloat(result.toFixed(precision));
 }

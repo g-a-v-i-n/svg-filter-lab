@@ -1,24 +1,24 @@
-import React from "react"
+import React from "react";
 
 export type ControlGroupProps = {
-  className?: string
-  children: React.ReactNode
-}
+	className?: string;
+	children: React.ReactNode;
+};
 
 export function ControlGroup({
-  className,
-  children,
-  ...props
+	className,
+	children,
+	...props
 }: ControlGroupProps) {
-  return (
-    <div {...props} className={`flex flex-col ${className}`}>
-      <div className="surfaceSecondary border-y borderSecondary flex flex-col w-full nodrag py-1">
-        {children}
-      </div>
-    </div>
-  )
+	return (
+		<div {...props} className={`flex flex-col ${className}`}>
+			<div className="surfaceSecondary border-t borderPrimary flex flex-col w-full nodrag pt-1 rounded-b-xl">
+				{children}
+			</div>
+		</div>
+	);
 }
 
 ControlGroup.defaultProps = {
-  className: "",
-}
+	className: "",
+};

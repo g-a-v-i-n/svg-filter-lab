@@ -1,28 +1,18 @@
 import { set as _set } from "lodash"
-import { AttributeDefinition, ZustandSet, NodeSpecification, NodeState, NodeStates, NodeInputKey, State } from "../../types"
+import { AttributeDefinition, ZustandSet, NodeSpecification, NodeState, NodeInputKey, State } from "@/types"
 
-export const INPUTS = {
-    STRING: 'string',
-    NUMBER: 'number',
-    BOOLEAN: 'boolean',
-    MATRIX: 'matrix',
-    ARRAY: 'array',
-    ENUM: 'enum',
-    COLOR: 'color',
-}
-
-export function getNodeIndexById(nodes: NodeStates, id: string) {
+export function getNodeIndexById(nodes: NodeState[], id: string) {
     const index = nodes.findIndex((node: NodeState) => node.id === id);
     // If index is -1, the node was not found
     if (index === -1) {
         // Log a warning and exit the function
         console.warn(`Node with ID ${id} not found`);
-        return index;
+        return index
     }
     return index
 }
 
-export function getNodeById(nodes: NodeStates, id: string) {
+export function getNodeById(nodes: NodeState[], id: string) {
     const index = getNodeIndexById(nodes, id)
     return nodes[index]
 }
@@ -49,6 +39,12 @@ export function genericSetter(set: ZustandSet, key: string) {
     };
 }
 
+export const setNodeWithPath = (set: ZustandSet) => (id: string) => (path: string, value: any) => set((state: State) => {
+    const index = getNodeIndexById(state.nodes, id)
+    const root = state.nodes[index].data.attributes;
+    _set(root, `${path}.value`, value)
+})
+
 
 export function createNodeMatrixSetter(set: ZustandSet, key: string) {
     const setter = (
@@ -60,7 +56,7 @@ export function createNodeMatrixSetter(set: ZustandSet, key: string) {
         set((state: State) => {
             // Find the index of the node with the given ID
             const index = getNodeIndexById(state.nodes, id)
-            const root = state.nodes[index].data;
+            const root = state.nodes[index].data.attributes;
             _set(root, `${key}.value[${i}][${j}]`, newValue)
 
         })
@@ -68,21 +64,31 @@ export function createNodeMatrixSetter(set: ZustandSet, key: string) {
     return setter
 }
 
-export function createNodeArraySetter(set: ZustandSet, key: string) {
-    const setter = (
-        id: string,
-        newValue: number,
-        i: number,
-    ) => {
-        set((state: State) => {
-            // Find the index of the node with the given ID
-            const index = getNodeIndexById(state.nodes, id)
-            const root = state.nodes[index].data;
-            _set(root, `${key}.value[${i}]`, newValue)
-        })
-    }
-    return setter
-}
+// export function createNodeArraySetter(set: ZustandSet, key: string) {
+//     const setter = (
+//         id: string,
+//         newValue: number,
+//         i: number,
+//     ) => {
+//         set((state: State) => {
+//             // Find the index of the node with the given ID
+//             const index = getNodeIndexById(state.nodes, id)
+//             const root = state.nodes[index].data.attributes;
+//             _set(root, `${key}.value[${i}]`, newValue)
+//         })
+//     }
+//     return setter
+// }
+
+
+// export const attributeSetter(set, path) => set((state: State) => {
+//     // Find the index of the node with the given ID
+//     const index = getNodeIndexById(state.nodes, id)
+//     const root = state.nodes[index].data.attributes;
+//     _set(root, `${path}.value`, newValue)
+
+// }) 
+// }
 
 
 // Function to create a node slice for Zustand
@@ -98,21 +104,24 @@ export function createNodeSlice(set: ZustandSet, specification: NodeSpecificatio
         let setter;
 
         switch (attributes[key].input.type) {
-            case INPUTS.STRING:
-            case INPUTS.NUMBER:
-            case INPUTS.BOOLEAN:
-            case INPUTS.COLOR:
-            case INPUTS.ENUM:
+            case 'string':
+            case 'number':
+            // case 'boolean':
+            case 'sectionSwitch':
+            case 'enum':
+            case 'color':
                 setter = genericSetter(set, key);
+                // setter = attributeSetter(set, (i, j) => `${key}.value[${i}][${j}]`)
                 break;
-            case INPUTS.MATRIX:
+            case 'matrix':
                 setter = createNodeMatrixSetter(set, key);
                 break;
-            case INPUTS.ARRAY:
+            case 'array':
                 setter = genericSetter(set, key);
                 break;
             default:
-                throw new Error(`Unknown input type: ${attributes[key].input}`);
+                console.error(`Unknown input type: ${key}`)
+            // throw new Error(`Unknown input type: ${attributes[key].input}`);
         }
 
         slice[key] = {

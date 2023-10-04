@@ -18,25 +18,33 @@
 
   /* Backgrounds */
   .bg {
-    @apply bg-white dark:bg-black;
+    @apply bg-white dark:bg-black-800;
   }
 
   /* Surfaces aka bg-1 */
   .surface {
-    @apply bg-white-950 dark:bg-black-950;
+    @apply bg-white dark:bg-white-100;
   }
 
   .surfaceSecondary {
-    @apply bg-white dark:bg-black-900;
+    @apply bg-black-50 dark:bg-white-50;
   }
 
   .surfaceTertiary {
-    @apply bg-white dark:bg-black;
+    @apply bg-black-100 dark:bg-white-100;
+  }
+
+  .surfacePressable {
+    @apply bg-white dark:bg-white-200;
+  }
+
+  .surfaceInputable {
+    @apply bg-white dark:bg-black-200;
   }
 
   /* Borders */
   .borderPrimary {
-    @apply border-black/10 dark:border-white/10;
+    @apply border-black-100 dark:border-white-100;
   }
 
   .borderSecondary {
@@ -65,5 +73,17 @@
 
   .fieldDivX > *:not(:last-child) {
     @apply shadow-fieldRight dark:shadow-inverseFieldRight;
+  }
+
+  .pressable {
+    @apply shadow-pressable dark:shadow-pressableInverse rounded surfacePressable;
+  }
+
+  .inputable {
+    @apply shadow-inputable dark:shadow-inputableInverse rounded surfaceInputable;
+  }
+
+  .pressable:hover {
+    /* @apply shadow-pressableHover; */
   }
 }
