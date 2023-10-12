@@ -1,8 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+	darkMode: "class",
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		colors: {
+			// base: "var(--color-base)",
+			// surface1: "var(--color-surface1)",
+			// surface2: "var(--color-surface2)",
+			// surface3: "var(--color-surface3)",
+			// label1: "var(--color-text1)",
+			// label2: "var(--color-text2)",
+			// label3: "var(--color-text3)",
+			// label4: "var(--color-text4)",
+			// separator: "var(--color-border)",
 			black: {
 				50: "hsla(0, 0%, 0%, 0.02)",
 				100: "hsla(0, 0%, 0%, 0.06)",
@@ -31,7 +41,6 @@ module.exports = {
 				950: "hsla(0, 0%, 100%, 0.95)",
 				DEFAULT: "hsla(0, 0%, 100%, 1)",
 			},
-
 			blue: {
 				50: "hsla(206, 100%, 98%, 100%)",
 				100: "hsla(206, 100%, 95%, 100%)",
@@ -76,8 +85,10 @@ module.exports = {
 			},
 			transparent: "transparent",
 		},
-
 		extend: {
+			transitionProperty: {
+				height: "height",
+			},
 			fontFamily: {
 				sans: [
 					"system-ui",
@@ -89,90 +100,17 @@ module.exports = {
 				mono: ["system-mono", "SF Mono", "Roboto Mono", "monospace"],
 			},
 			boxShadow: {
-				card: `rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.16) 0px 1px 1px 0px, 
-					rgba(64, 68, 82, 0.16) 0px 0px 0px 1px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(64, 68, 82, 0.12) 0px 2px 5px 0px`,
-				cardInverse: `rgba(0,0,0,0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, 
-					rgba(255, 255, 255, 0.16) 0px 0px 0px 1px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.50) 0px 2px 5px 0px`,
-
-				cardSelected: `rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.16) 0px 1px 1px 0px, 
-					hsla(210, 100%, 00%, 100%) 0px 0px 0px 1px, 
-					hsla(210, 100%, 50%, 100%) 0px 0px 0px 6px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(64, 68, 82, 0.12) 0px 2px 5px 0px`,
-				cardSelectedInverse: `rgba(0,0,0,0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, 
-					rgba(255, 255, 255, 0.16) 0px 0px 0px 1px, 
-
-					hsla(206, 100%, 0%, 100%) 0px 0px 0px 2px, 
-					
-					hsla(206, 100%, 55%, 100%) 0px 0px 0px 6px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.50) 0px 2px 5px 0px`,
-
-				pressable: `rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, 
-					rgba(64, 68, 82, 0.16) 0px 0px 0px 1px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(64, 68, 82, 0.08) 0px 2px 5px 0px`,
-				pressableInverse: `rgba(0,0,0,0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.18) 0px 1px 1px 0px, 
-					rgba(255, 255, 255, 0.30) 0px 0px 0px 0.75px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.24) 0px 2px 5px 0px`,
-
-				pressableNoBorder: `rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, 
-
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(64, 68, 82, 0.08) 0px 2px 5px 0px`,
-				pressableNoBorderInverse: `rgba(0,0,0,0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.18) 0px 1px 1px 0px, 
-
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0.24) 0px 2px 5px 0px`,
-
-				inputable: `rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					inset rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, 
-					rgba(64, 68, 82, 0.16) 0px 0px 0px 1px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					inset rgba(64, 68, 82, 0.08) 0px 2px 5px 0px`,
-				inputableInverse: `rgba(0,0,0,0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					inset rgba(255, 255, 255, 0.16) 0px 0px 0px 0.75px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px, 
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px`,
-
-				// inverseField:
-				// 	"0px 0 0 0.75px hsla(180, 00%, 100%, 20%), 0px 0.25px 0.75px rgba(0, 0, 0, 1), 0px 1px 0.75px rgba(0, 0, 0, 0.50)",
-				// field:
-				// 	"0px 0 0 0.75px hsla(180, 00%, 0%, 10%), 0px 0.25px 0.25px rgba(0, 0, 0, 0.15), 0px 1px 0.75px rgba(0, 0, 0, 0.05)",
-				inverseFieldBottom: "0 0.75px 0 0 hsla(180, 00%, 100%, 20%)",
-				fieldBottom: "0 0.75px 0 0 hsla(180, 00%, 0%, 10%)",
-				inverseFieldRight: "0.75px 0 0 0 hsla(180, 00%, 100%, 20%)",
-				fieldRight: "0.75px 0 0 0 hsla(180, 00%, 0%, 10%)",
+				card: "var(--shadow-card)",
+				cardSelected: "var(--shadow-card-focus)",
+				pressable: "var(--shadow-pressable)",
+				pressableHover: "var(--shadow-pressable-hover)",
+				pressableFocus: "var(--shadow-pressable-focus)",
+				pressableDisabled: "var(--shadow-pressable-Disabled)",
+				input: "var(--shadow-input)",
+				fieldBottom: "0px 1px 0px 0px rgba(0, 0, 0, 0.08)",
+				inverseFieldBottom: "0px 1px 0px 0px rgba(255, 255, 255, 0.20)",
+				fieldRight: "1px 0px 0px 0px rgba(0, 0, 0, 0.08)",
+				inverseFieldRight: "1px 0px 0px 0px rgba(255, 255, 255, 0.20)",
 			},
 		},
 	},

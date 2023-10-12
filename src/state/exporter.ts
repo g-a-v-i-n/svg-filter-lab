@@ -20,6 +20,7 @@ import {
 	Element,
 } from "@/types";
 import { nodeMetadata } from "@components/nodes";
+import { STRING } from "../lib/attrTypes";
 
 export function topologicalSort(edges: EdgeState[]): string[] {
 	const dimunitiveEdges = edges.map((edge) => {
@@ -39,6 +40,7 @@ function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
 	const connectedEdges = getConnectedEdges([newNode], edges);
 
 	metadata.inputs.forEach((input: NodeInputKey) => {
+		// input = input === "in1" ? "in" : input;
 		const edgeConnectedToThisInput = connectedEdges.find(
 			({ targetHandle }) => targetHandle === input,
 		);
@@ -48,8 +50,11 @@ function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
 		// if it is, we need to get the source node's value property and set it as the input value.
 		// if it isn't, we need to set the input value to null.
 		if (!edgeConnectedToThisInput) {
-			newNode.data[input] = null;
-			newNode.data.ast.attributes[input] = { value: null, type: "null" };
+			// newNode.data[input] = null;
+			newNode.data.ast.attributes[input] = {
+				value: "SourceGraphic",
+				type: STRING,
+			};
 			return;
 		}
 
@@ -59,7 +64,7 @@ function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
 		// otherwise, we need to get the value property from the data object
 		if (upstreamNode?.type === "source") {
 			const value = upstreamNode?.data.attributes.value.value
-				? { value: upstreamNode?.data.attributes.value.value, type: "string" }
+				? { value: upstreamNode?.data.attributes.value.value, type: STRING }
 				: { value: null, type: "null" };
 
 			newNode.data.ast.attributes[input] = value;
@@ -67,7 +72,7 @@ function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
 		} else {
 			newNode.data.ast.attributes[input] = {
 				value: edgeConnectedToThisInput?.source, // ID of the upstream node
-				type: "string",
+				type: STRING,
 			};
 		}
 	});
@@ -101,7 +106,8 @@ export function exporter(
 			return node.type !== "source";
 		})
 		.map((node: NodeState) => {
-			return toXml(toXast(node.data.ast));
+			node.data.ast.attributes.result = { value: node.id, type: STRING };
+			return toXml(toXast(node.data.ast), { closeEmptyElements: true });
 		});
 
 	// we discard all nodes following the nodeId arg
@@ -116,6 +122,12 @@ export function exporter(
 
 function toXast(element: Element): XastElement | XastText {
 	if (element.omit) return { type: "text", value: "" };
+
+	if ("in1" in element.attributes) {
+		element.attributes.in = element.attributes.in1;
+		delete element.attributes.in1;
+	}
+
 	return {
 		type: "element",
 		name: element.tagName,

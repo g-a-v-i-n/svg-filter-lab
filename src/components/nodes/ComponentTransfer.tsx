@@ -1,20 +1,25 @@
 import { memo } from "react";
+import { cloneDeep } from "lodash";
 import { Container } from "../nodeParts/Container";
 import useStore from "@state/store";
 import { State, Element } from "@/types";
-import { Select, SelectItem, Separator } from "../nodeParts/Select";
+import {
+	Select,
+	SelectItem,
+	Separator as SelectSeparator,
+} from "../nodeParts/Select";
 import { NodeProps } from "reactflow";
-import { Divider } from "../nodeParts/Divider";
 import { SectionSwitch } from "../nodeParts/SectionSwitch";
 import { StringInput } from "../nodeParts/StringInput";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { Switch } from "../nodeParts/Switch";
+import { Separator } from "../nodeParts/Separator";
 
 export const meta = {
 	title: "Component Transfer",
 	tagName: "feComponentTransfer",
 	nodeType: "componentTransfer",
-	icon: "􀟗",
+	icon: "􀧏",
 	width: 220,
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer",
 	cat: "",
@@ -45,7 +50,7 @@ function ComponentTransfer(props: NodeProps) {
 				data={data}
 				switchColorClassName="bg-red-500 dark:bg-red-400"
 			/>
-			<Divider />
+			<Separator />
 			<ChannelRow
 				label="Green"
 				tag="feFuncG"
@@ -55,7 +60,7 @@ function ComponentTransfer(props: NodeProps) {
 				data={data}
 				switchColorClassName="bg-green-500 dark:bg-green-400"
 			/>
-			<Divider />
+			<Separator />
 			<ChannelRow
 				label="Blue"
 				tag="feFuncB"
@@ -65,7 +70,7 @@ function ComponentTransfer(props: NodeProps) {
 				data={data}
 				switchColorClassName="bg-blue-500 dark:bg-blue-400"
 			/>
-			<Divider />
+			<Separator />
 			<ChannelRow
 				label="Alpha"
 				tag="feFuncA"
@@ -113,7 +118,7 @@ function ChannelRow({
 						}
 					>
 						<SelectItem value="identity">Identity</SelectItem>
-						<Separator />
+						<SelectSeparator />
 						<SelectItem value="table">Table</SelectItem>
 						<SelectItem value="linear">Linear</SelectItem>
 						<SelectItem value="discrete">Discrete</SelectItem>
@@ -193,20 +198,20 @@ function ChannelRow({
 
 export const Node = memo(ComponentTransfer);
 
-export const defaultState = {
+export const initialState = {
 	ast: {
 		tagName: "feComponentTransfer",
 		attributes: {},
 		children: [
-			makeDefaultChannelState("feFuncR"),
-			makeDefaultChannelState("feFuncG"),
-			makeDefaultChannelState("feFuncB"),
-			makeDefaultChannelState("feFuncA"),
+			makeInitialChannelState("feFuncR"),
+			makeInitialChannelState("feFuncG"),
+			makeInitialChannelState("feFuncB"),
+			makeInitialChannelState("feFuncA"),
 		],
 	},
 };
 
-function makeDefaultChannelState(tagName: string) {
+function makeInitialChannelState(tagName: string) {
 	return {
 		type: "element",
 		tagName: tagName,
@@ -242,4 +247,48 @@ function makeDefaultChannelState(tagName: string) {
 			},
 		},
 	} as Element;
+}
+
+export function importer(node: XastElement) {
+	const state = cloneDeep(initialState);
+
+	// if (node.attributes?.type) {
+	// 	state.ast.attributes.type.value = node.attributes.type;
+	// }
+
+	// if (state.ast.attributes.type.value === "matrix") {
+	// 	if (node.attributes.values) {
+	// 		state.ast.attributes.matrixValues.value = string.toMatrix(
+	// 			node.attributes.values,
+	// 			4,
+	// 			5,
+	// 		);
+	// 	}
+	// }
+
+	// if (state.ast.attributes.type.value === "saturate") {
+	// 	if (node.attributes.values) {
+	// 		state.ast.attributes.saturateValues.value = string.toNumber(
+	// 			node.attributes.values,
+	// 		);
+	// 	}
+	// }
+
+	// if (state.ast.attributes.type.value === "hueRotate") {
+	// 	if (node.attributes.values) {
+	// 		state.ast.attributes.hueRotateValues.value = string.toNumber(
+	// 			node.attributes.values,
+	// 		);
+	// 	}
+	// }
+
+	// if (state.ast.attributes.type.value === "luminanceToAlpha") {
+	// 	if (node.attributes.values) {
+	// 		state.ast.attributes.luminanceToAlphaValues.value = string.toNumber(
+	// 			node.attributes.values,
+	// 		);
+	// 	}
+	// }
+
+	return state;
 }

@@ -140,3 +140,20 @@
   margin-top: -0.3788em;
   display: table;
 }
+
+.cs-text-xxxs {
+  font-size: 8px;
+  line-height: 13.6367px;
+}
+
+.cs-text-xxxs::before {
+  content: "";
+  margin-bottom: -0.5212em;
+  display: table;
+}
+
+.cs-text-xxxs::after {
+  content: "";
+  margin-top: -0.4788em;
+  display: table;
+}

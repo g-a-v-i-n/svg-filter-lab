@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { NumericFormat } from "react-number-format";
 import FieldLabel from "./FieldLabel";
+import { Separator } from "./Separator";
+import { InputRow } from "./InputRow";
 
 export type NumberInputProps = {
 	title: string;
@@ -17,6 +19,8 @@ export type NumberInputProps = {
 	hasValue: boolean;
 	hasError: boolean;
 	defaultValue?: number;
+	labelSpan?: string;
+	inputSpan?: string;
 };
 
 export function NumberInput({
@@ -24,11 +28,13 @@ export function NumberInput({
 	onChange,
 	step = 1,
 	precision = 0.1,
-	className = "",
+	className,
 	allowNegative = false,
 	value,
 	max = Infinity,
 	min = -Infinity,
+	labelSpan,
+	inputSpan,
 }: NumberInputProps) {
 	const [shiftHeld, setShiftHeld] = useState(false);
 
@@ -45,25 +51,27 @@ export function NumberInput({
 	);
 
 	return (
-		<div className={"flex w-full px-2 h-8 items-center justify-between z-10"}>
-			<FieldLabel className="">{title}</FieldLabel>
-			<div className="pressable flex rounded h-5">
-				<NumericFormat
-					className={clsx(
-						"w-20 flex cs-text items-center text-right bg-transparent px-1",
-						className,
-					)}
-					type={"text"}
-					value={value}
-					isAllowed={(values) => {
-						const { floatValue } = values;
-						if (floatValue === undefined) return false;
-						return floatValue <= max && floatValue >= min;
-					}}
-					onChange={(e) => onChange(Number(e.target.value))}
-					allowNegative={allowNegative}
-				/>
-				<div className="flex flex-col h-full border-l borderSecondary fieldDivY">
+		<InputRow label={title} labelSpan={labelSpan} inputSpan={inputSpan}>
+			<div className="flex gap-1 w-full">
+				<div className="inputable w-full flex rounded items-center h-[22px]">
+					<NumericFormat
+						className={clsx(
+							"flex cs-text items-center text-right bg-transparent px-1 w-full ",
+							className,
+						)}
+						type={"text"}
+						value={value}
+						isAllowed={(values) => {
+							const { floatValue } = values;
+							if (floatValue === undefined) return false;
+							return floatValue <= max && floatValue >= min;
+						}}
+						onChange={(e) => onChange(Number(e.target.value))}
+						allowNegative={allowNegative}
+					/>
+				</div>
+
+				<div className="flex flex-col fieldDivY rounded-full pressable h-[22px] w-[14px]">
 					<DetentButton
 						onClick={() =>
 							onChange(
@@ -74,7 +82,7 @@ export function NumberInput({
 					>
 						􀆇
 					</DetentButton>
-
+					<Separator />
 					<DetentButton
 						onClick={() =>
 							onChange(
@@ -93,7 +101,7 @@ export function NumberInput({
 					</DetentButton>
 				</div>
 			</div>
-		</div>
+		</InputRow>
 	);
 }
 
@@ -113,7 +121,7 @@ function DetentButton(props: DetentButtonProps) {
 				props.className,
 			)}
 		>
-			<span className="cs-text-xxs textTertiary text-center font-semibold hover:textPrimary">
+			<span className="cs-text-xxxs text-3 text-center font-black hover:text-1">
 				{props.children}
 			</span>
 		</button>
@@ -141,7 +149,7 @@ function calculateAndFormat(
 			throw new Error("Invalid operation. Use 'add' or 'subtract'.");
 	}
 
-	console.log(value, step, result, precision, result.toFixed(precision));
+	// console.log(value, step, result, precision, result.toFixed(precision));
 
 	return parseFloat(result.toFixed(precision));
 }

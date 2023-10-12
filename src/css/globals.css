@@ -8,7 +8,7 @@
 
 html,
 body {
-  @apply textPrimary bg font-sans !cursor-default antialiased;
+  @apply text-1 bg-base font-sans !cursor-default antialiased;
 }
 
 input {
@@ -28,16 +28,16 @@ span {
 }
 
 
-.selectContent {
+.slideUp {
   animation-duration: 0.2s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.selectContent[data-side='top'] {
+.slideUp[data-side='top'] {
   animation-name: slideUp;
 }
 
-.selectContent[data-side='bottom'] {
+.slideUp[data-side='bottom'] {
   animation-name: slideDown;
 }
 

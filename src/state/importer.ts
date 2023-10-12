@@ -1,15 +1,11 @@
-import { nodeMetadata } from "@components/nodes";
+import { nodeMetadata, nodeTypesByTagName, importers } from "@components/nodes";
 import { uuid } from "@lib/uuid";
 import { fromXml } from "xast-util-from-xml";
 import { remove } from "unist-util-remove";
 import string from "../lib/string";
 import { XastElement } from "../../types";
 
-import { age } from "../lib/inkscape/age";
-
 export function importer(filterText: string) {
-	// filterText = age;
-
 	let xast;
 
 	// Parse the filter text into an xast tree
@@ -27,67 +23,160 @@ export function importer(filterText: string) {
 	const filterElement = xast.children[0] as XastElement;
 
 	// Get the children of the filter element, which should be the filter stack
-	const filterStack = filterElement.children as XastElement[];
+	let filterStack = filterElement.children as XastElement[];
 
 	// We need to do three things in order.
-	// 1. First, change `in` attributes to `in1` attributes, because `in` is a reserved word and cannot be destructured. This is what the editor uses.
-	// 2. Second, make all existing in1 and in2 values unique. SVG filters can have multiple elements with the same id, because they are overwritten by duplicates moving down the element list.
-	// We can't do that in the editor, because we need to use these IDs as unique IDs for each node and edges.
-	// 3. Third, fill in any missing in1 and in2 values. SVG filters let you have implied connections between elements as you move down the element list. We can't do that in the editor, because edges need to be explicit.
-	const normalizedFilterStack = fillInInputs(
-		uniquifyInputIds(
-			filterStack
-				// @ts-ignore. NB: We have already filtered out any non-elements, but TS doesn't know that and I don't want to write a type guard.
-				.map(setInToIn1),
-		),
-	);
+	// 1. First, change `in` attributes to `in1` attributes, because `in` is a reserved word and cannot be destructured.
+	// This is what the editor uses. We can't do that in the editor, because we need to use these IDs as unique IDs for each node and edges.
+	filterStack = filterStack
+		// Immediately change the tag name to the editor's version which drops the `fe` prefix
+		.map(setTagName)
+		// Set the `in` attribute to `in1` so we can destructure it
+		// @ts-ignore. NB: We have already filtered out any non-elements, but TS doesn't know that and I don't want to write a type guard.
+		.map(setInToIn1);
 
-	const nodes = importNodes(normalizedFilterStack);
-	const edges = importEdges(normalizedFilterStack);
+	// 2. Second, make all existing in1 and in2 values unique.
+	// SVG filters can have multiple elements with the same id, because they are overwritten by duplicates moving down the element list.
+	filterStack = uniquifyInputIds(filterStack);
+
+	// 3. Third, fill in any missing in1 and in2 values.
+	// SVG filters let you have implied connections between elements as you move down the element list. We can't do that in the editor, because edges need to be explicit.
+	filterStack = fillInInputs(filterStack);
+
+	const nodes = importNodes(filterStack);
+	const edges = importEdges(filterStack);
 
 	return { nodes, edges };
 }
 
+// if in1 or in2 is a reserved id, we need to add a source node to the stack and connect it to the node
+function attachSourceNodes(filterStack: XastElement[]) {
+	const newNodes = [];
+
+	filterStack.forEach((node) => {
+		const in1 = node.attributes.in1;
+		const in2 = node.attributes.in2;
+		const result = node.attributes.result;
+
+		if (reservedIds.includes(in1)) {
+			const newId = uuid(node.type);
+			newNodes.push({
+				type: "element",
+				name: "source",
+				attributes: {
+					source: in1,
+					result: newId,
+				},
+			});
+			node.attributes.in1 = newId;
+		}
+
+		if (reservedIds.includes(in2)) {
+			const newId = uuid(node.type);
+			newNodes.push({
+				type: "element",
+				name: "source",
+				attributes: {
+					source: in2,
+					result: newId,
+				},
+			});
+			node.attributes.in2 = newId;
+		}
+	});
+
+	return [...newNodes, ...filterStack];
+}
+
 function importNodes(filterStack: XastElement[]) {
-	const nodes = filterStack.map((tag, i) => {
-		// const name = nodeTypesByTagName[tag.name];
-
-		const attributes = Object.entries(tag.attributes).reduce(
-			(acc, [key, value]) => {
-				if (key === "result") {
-					acc[key] = value;
-				}
-				return acc;
-			},
-			{},
-		);
-
+	const nodes = filterStack.map((element, idx) => {
 		return {
-			id: tag.attributes.result,
-			type: name,
-			data: {
-				ast: {},
-			},
+			id: element.attributes.result,
+			type: element.name,
+			data: importers[element.name](element),
+			selected: false,
+			dragging: false,
+			position: { x: idx * 250, y: 0 },
 		};
 	});
 
 	return nodes;
 }
 
-function importEdges(filterStack: XastElement[]) {}
-// export const reservedIds = [
-//     "SourceGraphic",
-//     "SourceAlpha",
-//     "BackgroundImage",
-//     "BackgroundAlpha",
-//     "FillPaint",
-//     "StrokePaint",
-// ]
+const reservedIds = [
+	"SourceGraphic",
+	"SourceAlpha",
+	"BackgroundImage",
+	"BackgroundAlpha",
+	"FillPaint",
+	"StrokePaint",
+];
+
+function importEdges(nodes: XastElement[]) {
+	const in1Edges = {};
+	const in2Edges = {};
+
+	nodes.forEach((node) => {
+		// console.log(node);
+		const in1 = node.attributes.in1;
+		const in2 = node.attributes.in2;
+		const result = node.attributes.result;
+
+		if (in1) {
+			if (in1 in in1Edges) {
+				in1Edges[in1].push(result);
+			} else {
+				in1Edges[in1] = [result];
+			}
+		}
+
+		if (in2) {
+			if (in2 in in2Edges) {
+				in2Edges[in2].push(result);
+			} else {
+				in2Edges[in2] = [result];
+			}
+		}
+	});
+
+	const edges1 = Object.entries(in1Edges).map(([source, targets]) => {
+		return targets.map((target) => {
+			return {
+				id: uuid("e"),
+				type: "custom",
+				source,
+				sourceHandle: "result",
+				target,
+				targetHandle: "in1",
+			};
+		});
+	});
+
+	const edges2 = Object.entries(in2Edges).map(([source, targets]) => {
+		return targets.map((target) => {
+			return {
+				id: uuid("e"),
+				type: "custom",
+				source,
+				sourceHandle: "result",
+				target,
+				targetHandle: "in2",
+			};
+		});
+	});
+
+	return [...edges1.flat(), ...edges2.flat()];
+}
 
 function setInToIn1(elem: XastElement) {
 	const in1 = elem.attributes.in;
 	delete elem.attributes.in;
 	elem.attributes.in1 = in1;
+	return elem;
+}
+
+function setTagName(elem: XastElement) {
+	elem.name = nodeTypesByTagName[elem.name];
 	return elem;
 }
 
@@ -123,7 +212,7 @@ export function uniquifyInputIds(tags) {
 				tag.attributes.in1 = aliases[in1];
 			} else {
 				// if this id has no result id at all, it may be an error, or it could be a reserved id.
-				console.log(in1);
+				// console.log(in1);
 			}
 		}
 
@@ -133,7 +222,7 @@ export function uniquifyInputIds(tags) {
 				tag.attributes.in2 = aliases[in2];
 			} else {
 				// if this id has no result id at all, it may be an error, or it could be a reserved id.
-				console.log(in2);
+				// console.log(in2);
 			}
 		}
 
@@ -153,7 +242,8 @@ export function fillInInputs(tags) {
 		if (in1) {
 			// noop
 		} else {
-			if (allowedInputs[tag.name].includes("in1")) {
+			const metadata = nodeMetadata[tag.name];
+			if (metadata.inputs.includes("in1")) {
 				tag.attributes.in1 = lastUnsetResult;
 			}
 		}
@@ -161,7 +251,8 @@ export function fillInInputs(tags) {
 		if (in2) {
 			// noop
 		} else {
-			if (allowedInputs[tag.name].includes("in2")) {
+			const metadata = nodeMetadata[tag.name];
+			if (metadata.inputs.includes("in2")) {
 				tag.attributes.in2 = lastUnsetResult;
 			}
 		}
@@ -310,26 +401,4 @@ export function fillInInputs(tags) {
 //         nodes,
 //         edges,
 //     }
-// }
-
-// const nodeTypesByTagName = {
-//     // Util filter tags
-//     source: "source",
-//     // SVG filter tags
-//     feBlend: "blend",
-//     feColorMatrix: "colorMatrix",
-//     feComponentTransfer: "componentTransfer",
-//     feComposite: "composite",
-//     feConvolveMatrix: "convolveMatrix",
-//     feDiffuseLighting: "diffuseLighting",
-//     feDisplacementMap: "displacementMap",
-//     feFlood: "flood",
-//     feGaussianBlur: "gaussianBlur",
-//     feImage: "image",
-//     feMerge: "merge",
-//     feMorphology: "morphology",
-//     feOffset: "offset",
-//     feSpecularLighting: "specularLighting",
-//     feTile: "tile",
-//     feTurbulence: "turbulence",
 // }

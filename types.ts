@@ -2,6 +2,7 @@ import { NodeProps, EdgeProps, Node, Edge } from "reactflow";
 
 // @ts-expect-error NB Gavin: Library `xast` exposes no types
 import { Element as _XastElement } from "@types/xast";
+import { type } from "os";
 
 // Basic Types
 export type ZustandSet = (
@@ -35,7 +36,7 @@ export type Attribute<Value, Type> = {
 	aliasOf?: string;
 	primary?: (data: Element) => boolean;
 	// noError?: boolean;
-	noValue?: boolean;
+	// noValue?: boolean;
 };
 
 // Element
@@ -84,6 +85,16 @@ export type NodeMetadata = {
 export type NodeInputKey = "in1" | "in2";
 export type NodeOutputKey = "result";
 
+export type In1 = {
+	value: inType;
+	type: "string";
+};
+
+export type In2 = {
+	value: inKey;
+	type: "string";
+};
+
 // Attribute-level Enums
 export type NodeTypeEnum =
 	| "blend"
@@ -102,6 +113,7 @@ export type NodeTypeEnum =
 	| "tile"
 	| "turbulence"
 	| "filter"
+	| "source"
 	| "componentTransfer";
 
 export type TagNameEnum =
@@ -128,7 +140,8 @@ export type TagNameEnum =
 	| "feFuncA"
 	| "feFuncB"
 	| "feFuncG"
-	| "feFuncR";
+	| "feFuncR"
+	| "";
 
 export type BlendModeKey =
 	| "normal"
@@ -146,3 +159,32 @@ export type BlendModeKey =
 	| "saturation"
 	| "color"
 	| "luminosity";
+
+export type ColorMatrixTypeKey =
+	| "matrix"
+	| "saturate"
+	| "hueRotate"
+	| "luminanceToAlpha";
+
+export type CompositeOperatorKey =
+	| "over"
+	| "in"
+	| "out"
+	| "atop"
+	| "xor"
+	| "arithmetic";
+
+export type ConvolveMatrixEdgeModeKey = "duplicate" | "wrap" | "none";
+
+export type DisplacementMapChannelSelectorKey = "R" | "G" | "B" | "A";
+
+export type GaussianBlurEdgeModeKey = "duplicate" | "wrap" | "none";
+
+export type inType =
+	| "SourceGraphic"
+	| "SourceAlpha"
+	| "BackgroundImage"
+	| "BackgroundAlpha"
+	| "FillPaint"
+	| "StrokePaint"
+	| string;

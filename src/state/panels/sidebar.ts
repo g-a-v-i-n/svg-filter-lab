@@ -1,7 +1,6 @@
 import { uuid } from "@lib/uuid";
-import nodeDefinitions from "@state/nodes/index";
 import { State, ZustandSet } from "@/types";
-import { defaultState } from "@components/nodes";
+import { initialState } from "@components/nodes";
 
 // export type OnDragOver = (event: React.DragEvent) => void
 // export type OnDrop = (
@@ -36,7 +35,7 @@ export const createSidebarSlice = (set: ZustandSet) => ({
 
 		set((state: State) => {
 			if (state.xyfInstance?.project === undefined) {
-				console.log(state);
+				// console.log(state);
 			}
 			const position = state.xyfInstance?.project({
 				x: event.clientX - reactFlowBounds.left,
@@ -48,7 +47,7 @@ export const createSidebarSlice = (set: ZustandSet) => ({
 				// xyFlow specific, key must be called type
 				type: nodeType,
 				position: position,
-				data: defaultState[nodeType],
+				data: initialState[nodeType],
 			};
 
 			state.nodes.push(newNode);

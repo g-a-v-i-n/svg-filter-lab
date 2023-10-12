@@ -23,7 +23,7 @@ export const meta = {
 	nodeType: "blend",
 	icon: "􀟗",
 	width: 200,
-	attributeOrder: ["mode"],
+	// attributeOrder: ["mode"],
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
 	cat: "",
 	inputs: ["in1", "in2"],
@@ -79,7 +79,7 @@ function Blend(props: NodeProps) {
 
 export const Node = memo(Blend);
 
-export const defaultState = {
+export const initialState = {
 	ast: {
 		tagName: "feBlend",
 		attributes: {
@@ -95,7 +95,7 @@ export const defaultState = {
 export function importer(node: XastElement) {
 	return {
 		ast: {
-			...defaultState.ast,
+			...initialState.ast,
 			attributes: {
 				mode: parse.mode(node),
 			},
@@ -109,8 +109,7 @@ const parse = {
 		if (mode === null) {
 			return {
 				type: STRING,
-				value: null,
-				noValue: true,
+				value: "normal",
 			};
 		}
 		return {

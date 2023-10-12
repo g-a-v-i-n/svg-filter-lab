@@ -17,6 +17,9 @@ dependencies:
   '@types/xast':
     specifier: ^2.0.1
     version: 2.0.1
+  '@ungap/structured-clone':
+    specifier: ^1.2.0
+    version: 1.2.0
   allotment:
     specifier: ^1.19.2
     version: 1.19.2(react-dom@18.2.0)(react@18.2.0)
@@ -2058,6 +2061,10 @@ packages:
     resolution: {integrity: sha512-6i0aC7jV6QzQB8ne1joVZ0eSFIstHsCrobmOtghM11yGlH0j43FKL2UhWdELkyps0zuf7qVTUVCCR+tgSlyLLw==}
     dependencies:
       '@types/yargs-parser': 21.0.0
+
+  /@ungap/structured-clone@1.2.0:
+    resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+    dev: false
 
   /@vitejs/plugin-react-swc@3.3.2(vite@4.4.5):
     resolution: {integrity: sha512-VJFWY5sfoZerQRvJrh518h3AcQt6f/yTuWn4/TRB+dqmYU0NX1qz7qM5Wfd+gOQqUzQW4gxKqKN3KpE/P3+zrA==}

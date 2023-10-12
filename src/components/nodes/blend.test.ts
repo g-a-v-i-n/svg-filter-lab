@@ -49,7 +49,6 @@ test("Mode attribute with without value is parsed to state", () => {
 				mode: {
 					type: STRING,
 					value: null,
-					noValue: true,
 				},
 			},
 			children: [],
@@ -60,9 +59,9 @@ test("Mode attribute with without value is parsed to state", () => {
 	remove(xast, (node) => node.type !== "element");
 
 	// @ts-expect-error NB Gavin: filterText is static and has known ouput
-	const blendAst = xast.children[0].children[0];
+	const ast = xast.children[0].children[0];
 
-	const astState = importer(blendAst);
+	const astState = importer(ast);
 
 	expect(JSON.stringify(astState)).toStrictEqual(JSON.stringify(expected));
 });

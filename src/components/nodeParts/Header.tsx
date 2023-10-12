@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import useStore from "../../state/store";
 
 export type HeaderProps = {
@@ -6,6 +7,7 @@ export type HeaderProps = {
 	title: string;
 	mdn: string;
 	className?: string;
+	selected: boolean;
 };
 
 export function Header({
@@ -14,21 +16,30 @@ export function Header({
 	title,
 	mdn,
 	className = "",
+	selected,
 }: HeaderProps) {
 	const deleteNode = useStore((state) => state.deleteNode);
 
 	return (
-		<div
-			className={`flex items-center justify-between p-2 border-b borderSecondary ${className}`}
-		>
+		<div className={`flex items-center justify-between p-2 ${className}`}>
 			<div className="flex gap-x-1 items-center">
-				<span className="cs-text font-medium ">{icon}</span>
-				<span className="cs-text font-medium">{title}</span>
+				<div
+					className={clsx(
+						"flex gap-x-1 items-center font-medium transition-colors",
+						{
+							"text-1 text-inherit": selected,
+							"text-2 text-inherit": !selected,
+						},
+					)}
+				>
+					<span className="cs-text">{icon}</span>
+					<span className="cs-text">{title}</span>
+				</div>
 				<a
 					href={mdn}
 					rel="noreferrer"
 					target="_blank"
-					className="inline textQuaternary hover:textPrimary text-xs font-bold rounded"
+					className="inline text-4 hover:text-1 text-xs font-bold rounded"
 				>
 					􁊈
 				</a>
@@ -38,7 +49,7 @@ export function Header({
 				<button
 					type="button"
 					onClick={() => deleteNode(id)}
-					className="textTertiary hover:textPrimary h-4 w-4 rounded-full flex items-center justify-center"
+					className="text-3 hover:text-1 h-4 w-4 rounded-full flex items-center justify-center"
 				>
 					<span className="font-extrabold">􀁡</span>
 				</button>

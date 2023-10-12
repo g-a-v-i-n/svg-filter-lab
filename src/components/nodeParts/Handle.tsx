@@ -14,6 +14,8 @@ export type HandleProps = {
 export function Handle({ className, title, ...props }: HandleProps) {
 	title = title === "in1" ? "In" : title === "in2" ? "In2" : "Result";
 
+	console.log(props);
+
 	return (
 		<RFHandle
 			className={clsx({

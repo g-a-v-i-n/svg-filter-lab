@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import ReactFlow, { ReactFlowProvider, Background } from "reactflow";
 // @ts-ignore: allotment has incorrectly bundled or missing types
 import { Allotment } from "allotment";
@@ -9,7 +9,6 @@ import Edge from "@components/edges/Edge";
 import ConnectionLine from "@components/edges/ConnectionLine";
 import { Sidebar } from "@components/sidebar/Sidebar";
 import { nodeTypes } from "@components/nodes";
-import { importer } from "./state/importer";
 
 const edgeTypes = {
 	custom: Edge,
@@ -17,8 +16,6 @@ const edgeTypes = {
 
 const Home = () => {
 	const RFWrapper = useRef(null);
-
-	console.log("importer", importer(""));
 
 	const {
 		nodes,
@@ -30,7 +27,30 @@ const Home = () => {
 		onDrop,
 		onDragOver,
 		setXyfInstance,
+		importFilter,
 	} = useStore();
+
+	useEffect(() => {
+		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+		if (
+			localStorage.theme === "dark" ||
+			(!("theme" in localStorage) &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches)
+		) {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+
+		// Whenever the user explicitly chooses light mode
+		localStorage.theme = "light";
+
+		// Whenever the user explicitly chooses dark mode
+		localStorage.theme = "dark";
+
+		// Whenever the user explicitly chooses to respect the OS preference
+		localStorage.removeItem("theme");
+	});
 
 	if (process.env.NODE_ENV !== "development") {
 		return (
@@ -41,7 +61,12 @@ const Home = () => {
 	}
 
 	return (
-		<main className="w-full h-[100dvh] flex">
+		<main className="relative w-full h-[100dvh] flex">
+			<div className="absolute right-0 top-0 p-8 z-50">
+				<button type="button" onClick={() => importFilter()}>
+					Import
+				</button>
+			</div>
 			<Allotment>
 				<Allotment.Pane minSize={100} maxSize={220} preferredSize={220}>
 					<Sidebar />

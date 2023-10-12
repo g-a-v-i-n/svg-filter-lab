@@ -8,6 +8,7 @@ import { NodeInputKey, NodeOutputKey, TagNameEnum } from "@/types";
 import useStore from "@state/store";
 import { exporter } from "@state/exporter";
 import { Preview } from "./Preview";
+import { Separator } from "./Separator";
 
 export type ContainerProps = {
 	selected: boolean;
@@ -44,27 +45,27 @@ export function Container(props: ContainerProps) {
 
 	const filterText = exporter(id, nodes, edges);
 
-	console.log(filterText);
-
 	return (
 		<div
 			style={{ width: `${width}px` }}
 			className={clsx(
-				" rounded-xl outline-none bg-white dark:bg-black transition-all",
+				"rounded-xl outline-none bg-base transition-all",
 				{
-					// "shadow-2xl": dragging,
-					"shadow-card dark:shadow-cardInverse": !dragging,
-					"shadow-cardSelected dark:shadow-cardSelectedInverse": selected,
-					// borderPrimary: !selected,
-					// "border-blue-400 dark:border-blue-700 ring-[8px] ring-blue-500/30 dark:ring-blue-400/40":
-					// 	selected,
+					"shadow-card": !dragging,
+					"shadow-cardSelected": selected,
 				},
 				className,
 			)}
 		>
-			<div className="flex flex-col surface rounded-xl">
-				<Header id={id} title={title} icon={icon} mdn={mdn} />
-
+			<div className="flex flex-col rounded-xl surface-1">
+				<Header
+					id={id}
+					title={title}
+					icon={icon}
+					mdn={mdn}
+					selected={selected}
+				/>
+				<Separator />
 				<div className="flex w-full justify-between py-2">
 					<div className="flex flex-col gap-y-2">
 						{inputs.map((input: NodeInputKey, index: number) => (
@@ -91,8 +92,15 @@ export function Container(props: ContainerProps) {
 						))}
 					</div>
 				</div>
-				<Preview />
-				<ControlGroup>{children}</ControlGroup>
+
+				<ControlGroup>
+					<Separator />
+					{children}
+					<Separator />
+				</ControlGroup>
+
+				<Preview filterId={id} filterText={filterText} />
+
 				{/* <Footer /> */}
 			</div>
 		</div>

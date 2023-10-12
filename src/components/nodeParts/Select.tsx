@@ -25,32 +25,24 @@ export const Select = forwardRef(
 				<SelectPrimitive.Trigger
 					ref={forwardedRef}
 					className={clsx(
-						"w-full flex justify-between items-center h-8 text-sm p-2 cursor-default",
+						"w-full flex justify-between items-center h-8 text-sm p-2 cursor-pointer",
 						className,
 					)}
 				>
 					<FieldLabel>{title}</FieldLabel>
-					<div className="flex items-center gap-x-1.5">
-						<SelectPrimitive.Value className="cs-text" />
-						<SelectPrimitive.Icon>
-							<div className="flex items-center justify-center h-5 w-5 pressable">
-								<span className="textPrimary cs-text-xs font-normal">􀆈</span>
-							</div>
+					<div className="group flex items-center justify-center gap-x-1 pl-2">
+						<SelectPrimitive.Value className="cs-text text-2" />
+						<SelectPrimitive.Icon className="cs-text-xs pressable flex items-center justify-center h-[18px] w-[18px] rounded text-3 text-center font-bold group-hover:text-1">
+							􀆈
 						</SelectPrimitive.Icon>
 					</div>
 				</SelectPrimitive.Trigger>
 				<SelectPrimitive.Portal>
 					<SelectPrimitive.Content
 						data-side={"bottom"}
-						className="surfaceTertiary selectContent textPrimary rounded-lg shadow-lg backdrop-blur-2xl border borderPrimary"
+						className="elevated text-1 rounded-lg shadow-lg backdrop-blur-3xl border border-primary"
 					>
-						{/* <SelectPrimitive.ScrollUpButton className="w-full flex surfaceTertiary items-center justify-center">
-							<span className="textSecondary cs-text-sm font-bold">􀆈</span>
-						</SelectPrimitive.ScrollUpButton> */}
 						<SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-						{/* <SelectPrimitive.ScrollDownButton className="w-full flex surfaceTertiary items-center justify-center">
-							<span className="textSecondary cs-text-sm font-bold">􀆈</span>
-						</SelectPrimitive.ScrollDownButton> */}
 					</SelectPrimitive.Content>
 				</SelectPrimitive.Portal>
 			</SelectPrimitive.Root>

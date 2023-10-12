@@ -10,7 +10,7 @@ export function Footer({ className, ...props }: FooterProps) {
 		>
 			{/* <h4 className="font-sans text-primary cs-text">Preview</h4> */}
 			{/* preview button here 􀁭 */}
-			<div className="text-tertiary cs-text">Animate 􀁭</div>
+			<div className="text-label3 cs-text">Animate 􀁭</div>
 		</div>
 	);
 }

@@ -1,3 +1,4 @@
+import { Separator } from "./Separator";
 import React from "react";
 
 export type ControlGroupProps = {
@@ -11,10 +12,11 @@ export function ControlGroup({
 	...props
 }: ControlGroupProps) {
 	return (
-		<div {...props} className={`flex flex-col ${className}`}>
-			<div className="surfaceSecondary border-t borderPrimary flex flex-col w-full nodrag pt-1 rounded-b-xl">
-				{children}
-			</div>
+		<div
+			{...props}
+			className={`flex flex-col surface-2 w-full nodrag ${className}`}
+		>
+			{children}
 		</div>
 	);
 }
