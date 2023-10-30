@@ -27,7 +27,7 @@ export function NumberInput({
 	title,
 	onChange,
 	step = 1,
-	precision = 0.1,
+	precision = 3,
 	className,
 	allowNegative = false,
 	value,
@@ -37,6 +37,7 @@ export function NumberInput({
 	inputSpan,
 }: NumberInputProps) {
 	const [shiftHeld, setShiftHeld] = useState(false);
+	const [altHeld, setAltHeld] = useState(false);
 
 	useHotkeys(
 		"shift",
@@ -50,32 +51,49 @@ export function NumberInput({
 		[shiftHeld],
 	);
 
+	useHotkeys(
+		"alt",
+		(event) => {
+			setAltHeld(event.type === "keydown");
+		},
+		{
+			keydown: true,
+			keyup: true,
+		},
+		[altHeld],
+	);
+
 	return (
 		<InputRow label={title} labelSpan={labelSpan} inputSpan={inputSpan}>
-			<div className="flex gap-1 w-full">
-				<div className="inputable w-full flex rounded items-center h-[22px]">
-					<NumericFormat
-						className={clsx(
-							"flex cs-text items-center text-right bg-transparent px-1 w-full ",
-							className,
-						)}
-						type={"text"}
-						value={value}
-						isAllowed={(values) => {
-							const { floatValue } = values;
-							if (floatValue === undefined) return false;
-							return floatValue <= max && floatValue >= min;
-						}}
-						onChange={(e) => onChange(Number(e.target.value))}
-						allowNegative={allowNegative}
-					/>
-				</div>
+			<div className="flex gap-1 w-full items-center h-8">
+				<NumericFormat
+					className={clsx(
+						"input w-full flex rounded items-center h-[22px] cs-text text-right bg-transparent px-1",
+						className,
+					)}
+					type={"text"}
+					value={value}
+					isAllowed={(values) => {
+						const { floatValue } = values;
+						if (floatValue === undefined) return false;
+						return floatValue <= max && floatValue >= min;
+					}}
+					onChange={(e) => onChange(Number(e.target.value))}
+					allowNegative={allowNegative}
+				/>
 
-				<div className="flex flex-col fieldDivY rounded-full pressable h-[22px] w-[14px]">
+				<div className="flex flex-col divide-y divide-gray-50 rounded-full button h-[22px] w-[14px]">
 					<DetentButton
 						onClick={() =>
 							onChange(
-								calculateAndFormat(value, step, precision, "add", shiftHeld),
+								calculateAndFormat(
+									value,
+									step,
+									precision,
+									"add",
+									shiftHeld,
+									altHeld,
+								),
 							)
 						}
 						className=""
@@ -92,6 +110,7 @@ export function NumberInput({
 									precision,
 									"subtract",
 									shiftHeld,
+									altHeld,
 								),
 							)
 						}
@@ -121,7 +140,7 @@ function DetentButton(props: DetentButtonProps) {
 				props.className,
 			)}
 		>
-			<span className="cs-text-xxxs text-3 text-center font-black hover:text-1">
+			<span className="cs-text-xxxs text-gray-500 text-center font-black font-gray-900 hover:text-gray-900">
 				{props.children}
 			</span>
 		</button>
@@ -134,9 +153,10 @@ function calculateAndFormat(
 	precision: number,
 	operation: "add" | "subtract",
 	shiftHeld: boolean,
+	altHeld: boolean,
 ) {
 	let result;
-	const multiplier = shiftHeld ? 10 : 1;
+	const multiplier = shiftHeld ? 10 : altHeld ? 0.1 : 1;
 
 	switch (operation) {
 		case "add":
@@ -148,8 +168,6 @@ function calculateAndFormat(
 		default:
 			throw new Error("Invalid operation. Use 'add' or 'subtract'.");
 	}
-
-	// console.log(value, step, result, precision, result.toFixed(precision));
 
 	return parseFloat(result.toFixed(precision));
 }

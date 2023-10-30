@@ -7,11 +7,10 @@ import * as Composite from "./Composite";
 // import * as Offset from "./Offset";
 // import * as Tile from "./Tile";
 import * as Turbulence from "./Turbulence";
-// import * as DisplacementMap from "./DisplacementMap";
+import * as DisplacementMap from "./DisplacementMap";
 // import * as ConvolveMatrix from "./ConvolveMatrix";
 import * as GaussianBlur from "./GaussianBlur";
 // import * as SpecularLighting from "./SpecularLighting";
-import * as Source from "./Source";
 import { NodeMetadata, NodeState } from "@/types";
 
 export const nodeTypes = {
@@ -24,10 +23,9 @@ export const nodeTypes = {
 	// offset: Offset.Node,
 	// tile: Tile.Node,
 	turbulence: Turbulence.Node,
-	// displacementMap: DisplacementMap.Node,
+	displacementMap: DisplacementMap.Node,
 	// convolveMatrix: ConvolveMatrix.Node,
 	gaussianBlur: GaussianBlur.Node,
-	source: Source.Node,
 };
 
 export const initialState = {
@@ -40,10 +38,9 @@ export const initialState = {
 	// offset: Offset.initialState,
 	// tile: Tile.initialState,
 	turbulence: Turbulence.initialState,
-	// displacementMap: DisplacementMap.initialState,
+	displacementMap: DisplacementMap.initialState,
 	// convolveMatrix: ConvolveMatrix.initialState,
 	gaussianBlur: GaussianBlur.initialState,
-	source: Source.initialState,
 } as { [key: string]: NodeState["data"] };
 
 export const nodeMetadata = {
@@ -56,15 +53,12 @@ export const nodeMetadata = {
 	// offset: Offset.meta,
 	// tile: Tile.meta,
 	turbulence: Turbulence.meta,
-	// displacementMap: DisplacementMap.meta,
+	displacementMap: DisplacementMap.meta,
 	// convolveMatrix: ConvolveMatrix.meta,
 	gaussianBlur: GaussianBlur.meta,
-	source: Source.meta,
 } as { [key: string]: NodeMetadata };
 
 export const nodeTypesByTagName = {
-	// Util filter tags
-	source: "source",
 	// SVG filter tags
 	feBlend: "blend",
 	feColorMatrix: "colorMatrix",
@@ -94,8 +88,7 @@ export const importers = {
 	// offset: Offset.importer,
 	// tile: Tile.importer,
 	turbulence: Turbulence.importer,
-	// displacementMap: DisplacementMap.importer,
+	displacementMap: DisplacementMap.importer,
 	// convolveMatrix: ConvolveMatrix.importer,
 	gaussianBlur: GaussianBlur.importer,
-	source: Source.importer,
 };

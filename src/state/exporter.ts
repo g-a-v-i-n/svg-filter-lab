@@ -8,9 +8,9 @@ import { toXml } from "xast-util-to-xml";
 import { Element as XastElement, Text as XastText } from "@types/xast";
 
 // import nodeDefinitions from './nodes/index'
-import { getNodeById } from "./common";
+import { getNodeById } from "../lib/node";
 import {
-	NodeInputKey,
+	NodeTargetKey,
 	EdgeState,
 	NodeState,
 	NodeMetadata,
@@ -39,39 +39,21 @@ function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
 	// @ts-ignore
 	const connectedEdges = getConnectedEdges([newNode], edges);
 
-	metadata.inputs.forEach((input: NodeInputKey) => {
-		// input = input === "in1" ? "in" : input;
-		const edgeConnectedToThisInput = connectedEdges.find(
-			({ targetHandle }) => targetHandle === input,
+	metadata.targets.forEach((targetKey: NodeTargetKey) => {
+		const edgeConnectedToThisTarget = connectedEdges.find(
+			({ targetHandle }) => targetHandle === targetKey,
 		);
 
-		// we need to know if this edge is connected to a source node because if it is, we need to
-		// get the value property from the attributes object instead of the id of an upstream connected node
-		// if it is, we need to get the source node's value property and set it as the input value.
-		// if it isn't, we need to set the input value to null.
-		if (!edgeConnectedToThisInput) {
-			// newNode.data[input] = null;
-			newNode.data.ast.attributes[input] = {
-				value: "SourceGraphic",
-				type: STRING,
-			};
-			return;
-		}
-
-		const upstreamNode = getNodeById(nodes, edgeConnectedToThisInput?.source);
-
-		// if the upstream node is a source node, we need to get the value property from the attributes object
-		// otherwise, we need to get the value property from the data object
-		if (upstreamNode?.type === "source") {
-			const value = upstreamNode?.data.attributes.value.value
-				? { value: upstreamNode?.data.attributes.value.value, type: STRING }
-				: { value: null, type: "null" };
-
-			newNode.data.ast.attributes[input] = value;
-			// This is handles the case where a node is connected
+		if (!edgeConnectedToThisTarget) {
+			// If the target has no connect edges, we want to use the value from the in1 or in2 dropdown
+			// newNode.data.ast.attributes[targetKey] = {
+			// 	value: newNode.data.ast[targetKey].value, // ID of the upstream node
+			// 	type: STRING,
+			// };
 		} else {
-			newNode.data.ast.attributes[input] = {
-				value: edgeConnectedToThisInput?.source, // ID of the upstream node
+			// If the target has connected edges, we want to use the ID of the upstream node
+			newNode.data.ast.attributes[targetKey] = {
+				value: edgeConnectedToThisTarget.source, // ID of the upstream node
 				type: STRING,
 			};
 		}
@@ -86,6 +68,7 @@ export function exporter(
 	nodes: NodeState[],
 	edges: EdgeState[],
 ) {
+	console.log("exporter called");
 	// if there are no nodes, return an empty string
 	if (nodes.length === 0) return "";
 
@@ -96,15 +79,9 @@ export function exporter(
 	const orderedNodeIds =
 		nodes.length === 1 ? [nodes[0].id] : topologicalSort(edges);
 
-	// // With the ordered filter IDs, get the node data for each node and run the exporter for each.
+	// With the ordered filter IDs, get the node data for each node and run the exporter for each.
 	const stack = orderedNodeIds
-		.map((id: string) => {
-			return nodes.find((node) => node.id === id) as NodeState;
-		})
-		.filter((node: NodeState) => {
-			// Note we are using the React Flow node type here, not the node type from node data state
-			return node.type !== "source";
-		})
+		.map((id) => getNodeById(nodes, id))
 		.map((node: NodeState) => {
 			node.data.ast.attributes.result = { value: node.id, type: STRING };
 			return toXml(toXast(node.data.ast), { closeEmptyElements: true });
@@ -114,7 +91,7 @@ export function exporter(
 	const index = orderedNodeIds.indexOf(nodeId);
 	const filteredStack = stack.slice(0, index + 1);
 
-	const filterText = `<filter id="filter-${nodeId}">${filteredStack.join(
+	const filterText = `<filter x="-50%" y="-50%" width="200%" height="200%" id="filter-${nodeId}">${filteredStack.join(
 		"\n",
 	)}</filter>`;
 	return filterText;

@@ -1,4 +1,5 @@
-@import "./type.css";
+@import "./animation.css";
+@import "./typography.css";
 @import "./color.css";
 @import "./reactFlow.css";
 
@@ -8,7 +9,7 @@
 
 html,
 body {
-  @apply text-1 bg-base font-sans !cursor-default antialiased;
+  @apply text-gray-900 bg-base font-sans antialiased;
 }
 
 input {
@@ -27,38 +28,29 @@ span {
   @apply cs-text;
 }
 
-
-.slideUp {
-  animation-duration: 0.2s;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+.center {
+  @apply flex items-center justify-center;
 }
 
-.slideUp[data-side='top'] {
-  animation-name: slideUp;
-}
-
-.slideUp[data-side='bottom'] {
-  animation-name: slideDown;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+.button {
+  @apply shadow-button text-gray-500 transition-all bg-white dark:bg-gray-100;
+  &:hover {
+    @apply shadow-button-hover;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  &:focus {
+    @apply shadow-button-focus;
+  }
+  &:disabled {
+    @apply shadow-button-disabled;
   }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+.input {
+  @apply rounded bg-transparent;
+  &:hover {
+    @apply shadow-input-hover dark:bg-black/20 bg-white;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  &:focus {
+    @apply shadow-input-focus dark:bg-black/20 bg-white;
   }
 }

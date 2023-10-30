@@ -1,9 +1,11 @@
+@import "reactflow/dist/base.css";
+
 .react-flow__attribution {
-  display: none;
+  display: none !important;
 }
 
 .react-flow__pane {
-  cursor: default;
+  cursor: default !important;
 }
 
 .react-flow__node {
@@ -20,5 +22,29 @@
 }
 
 .react-flow__background > pattern > circle {
-  @apply fill-black-200 dark:fill-white-200;
+  @apply fill-gray-200 dark:fill-gray-200;
 }
+
+.react-flow__handle-left, .react-flow__handle-right {
+  top: auto;
+  left: 0;
+  transform: none;
+}
+
+.react-flow__handle-right {
+  top: auto;
+  right: 0;
+  transform: none;
+}
+
+.react-flow__handle {
+  position: initial;
+  background: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* puts edges on top */
+/* .react-flow__edges {
+  z-index: 40;
+} */

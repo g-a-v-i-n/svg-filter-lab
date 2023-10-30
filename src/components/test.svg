@@ -1,0 +1,55 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!-- Sample Rectangle -->
+    <rect x="10" y="10" width="100" height="100" fill="green" id="sampleRect" />
+
+    <!-- Filters -->
+    <defs>
+        <filter id="filterSourceGraphic" x="0" y="0" width="100%" height="100%">
+            <feImage result="result" xlink:href="#sampleRect" x="0" y="0" width="100%" height="100%" />
+        </filter>
+        
+        <filter id="filterSourceAlpha" x="0" y="0" width="100%" height="100%">
+            <feComposite in="SourceAlpha" operator="in" result="result" />
+        </filter>
+
+        <filter id="filterBackgroundImage" x="0" y="0" width="100%" height="100%">
+            <feImage result="result" xlink:href="#sampleRect" x="0" y="0" width="100%" height="100%" />
+            <feBlend mode="normal" in="BackgroundImage" in2="result" />
+        </filter>
+
+        <filter id="filterBackgroundAlpha" x="0" y="0" width="100%" height="100%">
+            <feComposite in="BackgroundAlpha" operator="in" result="result" />
+        </filter>
+
+        <filter id="filterFillPaint" x="0" y="0" width="100%" height="100%">
+            <feFlood flood-color="red" result="floodFill" />
+            <feComposite in="FillPaint" in2="floodFill" operator="in" result="result" />
+        </filter>
+
+        <filter id="filterStrokePaint" x="0" y="0" width="100%" height="100%">
+            <feFlood flood-color="blue" result="floodStroke" />
+            <feComposite in="StrokePaint" in2="floodStroke" operator="in" result="result" />
+        </filter>
+    </defs>
+
+    <!-- Rectangles with applied filters -->
+    <rect x="10" y="130" width="100" height="100" fill="green" filter="url(#filterSourceGraphic)" />
+    <text x="120" y="190">SourceGraphic</text>
+    
+    <rect x="10" y="250" width="100" height="100" fill="green" filter="url(#filterSourceAlpha)" />
+    <text x="120" y="310">SourceAlpha</text>
+    
+    <rect x="10" y="370" width="100" height="100" fill="green" filter="url(#filterBackgroundImage)" />
+    <text x="120" y="430">BackgroundImage</text>
+    
+    <rect x="300" y="130" width="100" height="100" fill="green" filter="url(#filterBackgroundAlpha)" />
+    <text x="410" y="190">BackgroundAlpha</text>
+    
+    <rect x="300" y="250" width="100" height="100" fill="green" filter="url(#filterFillPaint)" />
+    <text x="410" y="310">FillPaint</text>
+    
+    <rect x="300" y="370" width="100" height="100" fill="green" filter="url(#filterStrokePaint)" />
+    <text x="410" y="430">StrokePaint</text>
+
+</svg>

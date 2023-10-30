@@ -2,7 +2,7 @@ import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import clsx from "clsx";
 import { forwardRef, Ref } from "react";
-import FieldLabel from "./FieldLabel";
+import { InputRow } from "./InputRow";
 
 export type SelectProps = {
 	title: string;
@@ -12,40 +12,45 @@ export type SelectProps = {
 	hasValue: boolean;
 	hasError: boolean;
 	defaultValue: string;
+	labelSpan?: string;
+	inputSpan?: string;
 	onValueChange: (val: string) => void;
 };
 
 export const Select = forwardRef(
 	(
-		{ children, title, className, ...props }: SelectProps,
+		{ children, title, className, labelSpan, inputSpan, ...props }: SelectProps,
 		forwardedRef: Ref<HTMLButtonElement>,
 	) => {
 		return (
-			<SelectPrimitive.Root {...props}>
-				<SelectPrimitive.Trigger
-					ref={forwardedRef}
-					className={clsx(
-						"w-full flex justify-between items-center h-8 text-sm p-2 cursor-pointer",
-						className,
-					)}
-				>
-					<FieldLabel>{title}</FieldLabel>
-					<div className="group flex items-center justify-center gap-x-1 pl-2">
-						<SelectPrimitive.Value className="cs-text text-2" />
-						<SelectPrimitive.Icon className="cs-text-xs pressable flex items-center justify-center h-[18px] w-[18px] rounded text-3 text-center font-bold group-hover:text-1">
-							􀆈
-						</SelectPrimitive.Icon>
-					</div>
-				</SelectPrimitive.Trigger>
-				<SelectPrimitive.Portal>
-					<SelectPrimitive.Content
-						data-side={"bottom"}
-						className="elevated text-1 rounded-lg shadow-lg backdrop-blur-3xl border border-primary"
-					>
-						<SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-					</SelectPrimitive.Content>
-				</SelectPrimitive.Portal>
-			</SelectPrimitive.Root>
+			<InputRow label={title} labelSpan={labelSpan} inputSpan={inputSpan}>
+				<div className="flex justify-end items-center w-full h-8">
+					<SelectPrimitive.Root {...props}>
+						<SelectPrimitive.Trigger
+							ref={forwardedRef}
+							className={clsx(
+								"flex items-center justify-end cursor-pointer",
+								className,
+							)}
+						>
+							<div className="group flex items-center justify-center gap-x-2 pl-2">
+								<SelectPrimitive.Value className="cs-text text-gray-700" />
+								<SelectPrimitive.Icon className="button cs-text-xs flex items-center justify-center h-[18px] w-[18px] rounded text-gray-500 text-center font-bold group-hover:text-gray-900">
+									􀆈
+								</SelectPrimitive.Icon>
+							</div>
+						</SelectPrimitive.Trigger>
+						<SelectPrimitive.Portal>
+							<SelectPrimitive.Content
+								data-side={"bottom"}
+								className="slide-up text-gray-900 rounded-lg shadow-lg backdrop-blur-3xl border border-gray-200"
+							>
+								<SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+							</SelectPrimitive.Content>
+						</SelectPrimitive.Portal>
+					</SelectPrimitive.Root>
+				</div>
+			</InputRow>
 		);
 	},
 );
@@ -67,7 +72,7 @@ export const SelectItem = forwardRef(
 					{...props}
 					ref={forwardedRef}
 					className={clsx(
-						"textSecondary hover:textPrimary hover:bg-black-200 dark:hover:bg-white-200 rounded w-full user-select-none cursor-pointer outline-none flex items-center relative px-8 py-2 hover:bg-inverseTheme",
+						"text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded w-full user-select-none cursor-pointer outline-none flex items-center relative px-8 py-2",
 						className,
 					)}
 				>
@@ -90,7 +95,7 @@ export const Separator = forwardRef(
 		return (
 			<SelectPrimitive.Separator
 				ref={ref}
-				className="w-full border-t borderPrimary"
+				className="w-full border-t border-gray-100"
 				{...props}
 			/>
 		);

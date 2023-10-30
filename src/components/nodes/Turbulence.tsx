@@ -9,6 +9,7 @@ import { NUMBER, STRING } from "@lib/attrTypes";
 import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
+import { parseInput } from "@/src/lib/parseInput";
 
 export const meta = {
 	title: "Turbulence",
@@ -19,14 +20,15 @@ export const meta = {
 	// attributeOrder: ["mode"],
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
 	cat: "",
-	inputs: [],
-	outputs: ["result"],
+	targets: [],
+	sources: ["result"],
 } as NodeMetadata;
 
 function Turbulence(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -83,6 +85,10 @@ export const initialState = {
 	ast: {
 		tagName: "feTurbulence",
 		attributes: {
+			in1: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
 			type: {
 				type: STRING,
 				value: "turbulence",
@@ -110,6 +116,10 @@ export const initialState = {
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
+
+	// if (node.attributes?.in1) {
+	// 	state.ast.attributes.in1 = parseInput.in1(node);
+	// }
 
 	if (node.attributes?.type) {
 		state.ast.attributes.type.value = node.attributes.type;

@@ -9,24 +9,26 @@ import { NUMBER, STRING } from "@lib/attrTypes";
 import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
+import { parseInput } from "@/src/lib/parseInput";
 
 export const meta = {
 	title: "Composite",
 	tagName: "feComposite",
 	nodeType: "composite",
-	icon: "􀟗",
+	icon: "􀀃",
 	width: 200,
 	attributeOrder: ["mode"],
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite",
 	cat: "",
-	inputs: ["in1", "in2"],
-	outputs: ["result"],
+	targets: ["in1", "in2"],
+	sources: ["result"],
 } as NodeMetadata;
 
 function Composite(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -96,8 +98,16 @@ export const Node = memo(Composite);
 
 export const initialState = {
 	ast: {
-		tagName: "feComposite",
+		tagName: meta.tagName,
 		attributes: {
+			in1: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
+			in2: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
 			operator: {
 				type: STRING,
 				value: "over",
@@ -130,21 +140,33 @@ export const initialState = {
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
 
+	if (node.attributes?.in1) {
+		state.ast.attributes.in1 = parseInput.in1(node);
+	}
+
+	if (node.attributes?.in2) {
+		state.ast.attributes.in2 = parseInput.in2(node);
+	}
+
 	if (node.attributes?.operator) {
 		state.ast.attributes.operator.value = node.attributes.operator;
 	}
 
-	if (state.ast.attributes.operator.value === "artihmetic") {
-		if (node.attributes.k1) {
+	if (node.attributes?.operator === "arithmetic") {
+		if (node.attributes?.k1) {
+			state.ast.attributes.k1.omit = false;
 			state.ast.attributes.k1.value = string.toNumber(node.attributes.k1);
 		}
-		if (node.attributes.k2) {
+		if (node.attributes?.k2) {
+			state.ast.attributes.k2.omit = false;
 			state.ast.attributes.k2.value = string.toNumber(node.attributes.k2);
 		}
-		if (node.attributes.k3) {
+		if (node.attributes?.k3) {
+			state.ast.attributes.k3.omit = false;
 			state.ast.attributes.k3.value = string.toNumber(node.attributes.k3);
 		}
-		if (node.attributes.k4) {
+		if (node.attributes?.k4) {
+			state.ast.attributes.k4.omit = false;
 			state.ast.attributes.k4.value = string.toNumber(node.attributes.k4);
 		}
 	}

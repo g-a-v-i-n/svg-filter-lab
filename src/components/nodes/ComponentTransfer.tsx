@@ -14,6 +14,7 @@ import { StringInput } from "../nodeParts/StringInput";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { Switch } from "../nodeParts/Switch";
 import { Separator } from "../nodeParts/Separator";
+import { parseInput } from "@/src/lib/parseInput";
 
 export const meta = {
 	title: "Component Transfer",
@@ -23,14 +24,15 @@ export const meta = {
 	width: 220,
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComponentTransfer",
 	cat: "",
-	inputs: ["in1"],
-	outputs: ["result"],
+	targets: ["in1"],
+	sources: ["result"],
 };
 
 function ComponentTransfer(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -200,8 +202,10 @@ export const Node = memo(ComponentTransfer);
 
 export const initialState = {
 	ast: {
-		tagName: "feComponentTransfer",
-		attributes: {},
+		tagName: meta.tagName,
+		attributes: {
+			in1: "SourceGraphic",
+		},
 		children: [
 			makeInitialChannelState("feFuncR"),
 			makeInitialChannelState("feFuncG"),
@@ -251,6 +255,10 @@ function makeInitialChannelState(tagName: string) {
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
+
+	if (node.attributes?.in1) {
+		state.ast.attributes.in1 = parseInput.in1(node);
+	}
 
 	// if (node.attributes?.type) {
 	// 	state.ast.attributes.type.value = node.attributes.type;

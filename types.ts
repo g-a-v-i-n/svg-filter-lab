@@ -2,7 +2,6 @@ import { NodeProps, EdgeProps, Node, Edge } from "reactflow";
 
 // @ts-expect-error NB Gavin: Library `xast` exposes no types
 import { Element as _XastElement } from "@types/xast";
-import { type } from "os";
 
 // Basic Types
 export type ZustandSet = (
@@ -77,21 +76,22 @@ export type NodeMetadata = {
 	width: number;
 	tagName: TagNameEnum;
 	mdn: string;
-	inputs: NodeInputKey[] | [];
-	outputs: NodeOutputKey[] | [];
+	// Targets and sources are react-flow nomenclature
+	targets: NodeTargetKey[] | [];
+	sources: NodeSourceKey[] | [];
 };
 
 // Node Input/Output Types
-export type NodeInputKey = "in1" | "in2";
-export type NodeOutputKey = "result";
+export type NodeTargetKey = "in1" | "in2";
+export type NodeSourceKey = "result";
 
 export type In1 = {
-	value: inType;
+	value: NodeTargetKey;
 	type: "string";
 };
 
 export type In2 = {
-	value: inKey;
+	value: NodeTargetKey;
 	type: "string";
 };
 
@@ -112,8 +112,6 @@ export type NodeTypeEnum =
 	| "source"
 	| "tile"
 	| "turbulence"
-	| "filter"
-	| "source"
 	| "componentTransfer";
 
 export type TagNameEnum =
@@ -140,8 +138,7 @@ export type TagNameEnum =
 	| "feFuncA"
 	| "feFuncB"
 	| "feFuncG"
-	| "feFuncR"
-	| "";
+	| "feFuncR";
 
 export type BlendModeKey =
 	| "normal"

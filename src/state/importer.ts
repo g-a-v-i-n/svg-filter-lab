@@ -32,7 +32,6 @@ export function importer(filterText: string) {
 		// Immediately change the tag name to the editor's version which drops the `fe` prefix
 		.map(setTagName)
 		// Set the `in` attribute to `in1` so we can destructure it
-		// @ts-ignore. NB: We have already filtered out any non-elements, but TS doesn't know that and I don't want to write a type guard.
 		.map(setInToIn1);
 
 	// 2. Second, make all existing in1 and in2 values unique.
@@ -58,7 +57,7 @@ function attachSourceNodes(filterStack: XastElement[]) {
 		const in2 = node.attributes.in2;
 		const result = node.attributes.result;
 
-		if (reservedIds.includes(in1)) {
+		if (sourceKeys.includes(in1)) {
 			const newId = uuid(node.type);
 			newNodes.push({
 				type: "element",
@@ -71,7 +70,7 @@ function attachSourceNodes(filterStack: XastElement[]) {
 			node.attributes.in1 = newId;
 		}
 
-		if (reservedIds.includes(in2)) {
+		if (sourceKeys.includes(in2)) {
 			const newId = uuid(node.type);
 			newNodes.push({
 				type: "element",
@@ -103,7 +102,7 @@ function importNodes(filterStack: XastElement[]) {
 	return nodes;
 }
 
-const reservedIds = [
+const sourceKeys = [
 	"SourceGraphic",
 	"SourceAlpha",
 	"BackgroundImage",
@@ -117,12 +116,11 @@ function importEdges(nodes: XastElement[]) {
 	const in2Edges = {};
 
 	nodes.forEach((node) => {
-		// console.log(node);
 		const in1 = node.attributes.in1;
 		const in2 = node.attributes.in2;
 		const result = node.attributes.result;
 
-		if (in1) {
+		if (in1 && !sourceKeys.includes(in1)) {
 			if (in1 in in1Edges) {
 				in1Edges[in1].push(result);
 			} else {
@@ -130,7 +128,7 @@ function importEdges(nodes: XastElement[]) {
 			}
 		}
 
-		if (in2) {
+		if (in2 && !sourceKeys.includes(in2)) {
 			if (in2 in in2Edges) {
 				in2Edges[in2].push(result);
 			} else {
@@ -243,7 +241,7 @@ export function fillInInputs(tags) {
 			// noop
 		} else {
 			const metadata = nodeMetadata[tag.name];
-			if (metadata.inputs.includes("in1")) {
+			if (metadata.targets.includes("in1")) {
 				tag.attributes.in1 = lastUnsetResult;
 			}
 		}
@@ -252,7 +250,7 @@ export function fillInInputs(tags) {
 			// noop
 		} else {
 			const metadata = nodeMetadata[tag.name];
-			if (metadata.inputs.includes("in2")) {
+			if (metadata.targets.includes("in2")) {
 				tag.attributes.in2 = lastUnsetResult;
 			}
 		}
@@ -332,7 +330,7 @@ export function fillInInputs(tags) {
 //             }
 //         ];
 
-//         if (reservedIds.includes(tag.attributes.in1)) {
+//         if (sourceKeys.includes(tag.attributes.in1)) {
 //             nodesToAdd[0].data.in1 = newId;
 //             nodesToAdd.push({
 //                 id: newId,
@@ -346,7 +344,7 @@ export function fillInInputs(tags) {
 //             )
 //         }
 
-//         if (reservedIds.includes(tag.attributes.in2)) {
+//         if (sourceKeys.includes(tag.attributes.in2)) {
 //             nodesToAdd[0].data.in2 = newId;
 //             nodesToAdd.push({
 //                 id: newId,

@@ -35,23 +35,19 @@ export function MatrixInput({
 			)}
 		>
 			<FieldLabel>{props.title}</FieldLabel>
-			<div
-				className={`flex flex-col inputable fieldDivY ${
-					disabled ? "opacity-50" : ""
-				}`}
-			>
+			<div className={`flex flex-col  p-0.5 ${disabled ? "opacity-50" : ""}`}>
 				{[...Array(rows)].map((_, i) => {
 					return (
-						<div className="flex fieldDivX" key={`${props.title}-rows-${i}`}>
+						<div className="flex" key={`${props.title}-rows-${i}`}>
 							{[...Array(cols)].map((_, j) => {
 								const inputCns = clsx(
-									{
-										"rounded-tl-sm": i === 0 && j === 0,
-										"rounded-tr-sm": i === 0 && j === cols - 1,
-										"rounded-bl-sm": i === rows - 1 && j === 0,
-										"rounded-br-sm": i === rows - 1 && j === cols - 1,
-									},
-									"w-full h-5 text-center font-mono cs-text bg-transparent relative focus:z-10",
+									// {
+									// 	"rounded-tl-sm": i === 0 && j === 0,
+									// 	"rounded-tr-sm": i === 0 && j === cols - 1,
+									// 	"rounded-bl-sm": i === rows - 1 && j === 0,
+									// 	"rounded-br-sm": i === rows - 1 && j === cols - 1,
+									// },
+									"input w-full h-5 text-center font-mono cs-text bg-transparent relative focus:z-10",
 								);
 								return (
 									<NumericFormat

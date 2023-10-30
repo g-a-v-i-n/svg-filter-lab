@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import ReactFlow, { ReactFlowProvider, Background } from "reactflow";
+import ReactFlow, { ReactFlowProvider, Background, Controls } from "reactflow";
 // @ts-ignore: allotment has incorrectly bundled or missing types
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
@@ -30,6 +30,8 @@ const Home = () => {
 		importFilter,
 	} = useStore();
 
+	console.log("app rendered");
+
 	useEffect(() => {
 		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 		if (
@@ -55,7 +57,7 @@ const Home = () => {
 	if (process.env.NODE_ENV !== "development") {
 		return (
 			<main className="w-full h-[100dvh] flex items-center justify-center">
-				<div className="textSecondary">Coming Soon</div>
+				<div className="text-gray-700">Coming Soon</div>
 			</main>
 		);
 	}
@@ -73,7 +75,7 @@ const Home = () => {
 				</Allotment.Pane>
 				<Allotment.Pane minSize={200}>
 					<ReactFlowProvider>
-						<div ref={RFWrapper} className={"w-full h-full"}>
+						<div ref={RFWrapper} className="w-full h-full relative">
 							<ReactFlow
 								nodes={nodes}
 								edges={edges}
@@ -96,6 +98,7 @@ const Home = () => {
 							>
 								<Background color="#ccc" variant="dots" />
 							</ReactFlow>
+							<Controls />
 						</div>
 					</ReactFlowProvider>
 				</Allotment.Pane>

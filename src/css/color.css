@@ -1,234 +1,64 @@
 @layer base {
   :root {
-    --h1:                         32px;
-    --h2:                         26px;
-    --h3:                         20px;
-    --h4:                         16px;
-    --h5:                         14px;
-    --h6:                         14px;
-    --p:                          14px;
-    --mini:                       12px;
-    --micro:                      10px;
-    --nano:                       8px;
+    /* base */
+    --color-gray-base:               rgba(255,255,255, 1);
+    /* scale */
+    --color-gray-50:                 rgba(0, 0, 0, 0.03);
+    --color-gray-100:                rgba(0, 0, 0, 0.08);
+    --color-gray-200:                rgba(0, 0, 0, 0.19);
+    --color-gray-300:                rgba(0, 0, 0, 0.33);
+    --color-gray-400:                rgba(0, 0, 0, 0.44);
+    --color-gray-500:                rgba(0, 0, 0, 0.55);
+    --color-gray-600:                rgba(0, 0, 0, 0.66);
+    --color-gray-700:                rgba(0, 0, 0, 0.77);
+    --color-gray-800:                rgba(0, 0, 0, 0.88);
+    --color-gray-900:                rgba(0, 0, 0, 0.99);
+    --color-gray-max:                rgba(0, 0, 0, 1);
+
+    /* button shadows */
+    --shadow-button:              0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 0px 0px 1px rgba(0, 0, 0, 0.10);
+    --shadow-button-hover:        0px 2px 4px -2px rgba(0, 0, 0, 0.07), 0px 4px 6px -1px rgba(2, 6, 0, 0.07), 0px 0px 0px 1px rgba(0,0,0, 0.20);
+    --shadow-button-focus:        0px 0px 0px 3px rgba(4, 121, 255, 0.50), 0px 1px 3px 0px rgba(0,0,0, 0.10), 0px 1px 2px -1px rgba(0,0,0, 0.10);
+    --shadow-button-disabled:     0px 0px 0px 1px rgba(0,0,0 ,0.10);
+    /* input shadows */
+    --shadow-input-hover:         0px 0px 0px 1px rgba(0, 0, 0, 0.10);
+    --shadow-input-focus:         0px 0px 0px 2px rgba(4, 121, 255, 0.50);
+    /* card shadows */
+    --shadow-card:                0px 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 1px 2px -1px rgba(0, 0, 0, 0.20);
+    --shadow-card-focus:          0px 0px 0px 4px rgba(0, 0, 0, 0.30),  0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
+    /* inset shadow */
+    --shadow-inner-border:        0px 0px 0px 1px rgba(0, 0, 0, 0.08) inset;
   }
 
-  :root {
-    --color-base:                 rgba(255, 255, 255, 1);
-    --color-surface1:             rgba(255, 255, 255, 1);
-    --color-surface2:             rgba(0, 0, 0, 0.03);
-    --color-surface3:             rgba(0, 0, 0, 0.08);
-    --color-elevated:             rgba(220, 220, 220, 0.70);
-    --color-text1:                rgba(0, 0, 0, 0.90);
-    --color-text2:                rgba(0, 0, 0, 0.70);
-    --color-text3:                rgba(0, 0, 0, 0.50);
-    --color-text4:                rgba(0, 0, 0, 0.30);
-    --color-border:               rgba(0, 0, 0, 0.10);
-    --color-pressable:            #FFF;
-    --color-noodle:               #666;
-    --shadow-pressable:           0px 1px 3px 0px rgba(2, 6, 23, 0.10), 0px 1px 2px -1px rgba(2, 6, 23, 0.10), 0px 0px 0px 1px rgba(2, 6, 23, 0.10);
-    --shadow-pressable-hover:     0px 2px 4px -2px rgba(2, 6, 23, 0.07), 0px 4px 6px -1px rgba(2, 6, 23, 0.07), 0px 0px 0px 1px rgba(2, 6, 23, 0.15);
-    --shadow-pressable-focus:     0px 0px 0px 3px rgba(4, 121, 255, 0.50), 0px 1px 3px 0px rgba(2, 6, 23, 0.10), 0px 1px 2px -1px rgba(2, 6, 23, 0.10);
-    --shadow-pressable-disabled:  0px 0px 0px 1px rgba(2, 6, 23, 0.10);
-    --shadow-input:               0px 0px 0px 1px rgba(0, 0, 0, 0.10);
-    --shadow-card:                0px 0px 0px 1px rgba(0, 0, 0, 0.20), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
-    --shadow-card-focus:          0px 0px 0px 1px #2D5C92, 0px 0px 0px 6px rgba(4, 121, 255, 0.50), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
-  }
-
-  :root[class~="dark"] {
-    --color-base:                 rgba(8, 8, 8, 1);
-    --color-surface1:             rgba(255, 255, 255, 0.04);
-    --color-surface2:             rgba(255, 255, 255, 0.08);
-    --color-surface3:             rgba(255, 255, 255, 0.12);
-    --color-elevated:             rgba(55, 55, 55, 0.70);
-    --color-text1:                rgba(255, 255, 255, 1);
-    --color-text2:                rgba(255, 255, 255, 0.77);
-    --color-text3:                rgba(255, 255, 255, 0.55);
-    --color-text4:                rgba(255, 255, 255, 0.33);
-    --color-border:               rgba(255, 255, 255, 0.10);
-    --color-pressable:            #FFF;
-    --color-noodle:               #666;
-    --shadow-pressable:           0px 0px 0px 1px rgba(255, 255, 255, 0.30), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
-    --shadow-pressable-hover:     0px 0px 0px 1px rgba(255, 255, 255, 0.30), 0px 2px 4px -2px rgba(0, 0, 0, 0.40), 0px 4px 6px -1px rgba(0, 0, 0, 0.40);
-    --shadow-pressable-focus:     0px 0px 0px 3px rgba(4, 121, 255, 0.50), 0px 2px 4px -2px rgba(0, 0, 0, 0.07), 0px 4px 6px -1px rgba(0, 0, 0, 0.07);
-    --shadow-pressable-disabled:  0px 0px 0px 1px rgba(255, 255, 255, 0.40);
-    --shadow-input:               0px 0px 0px 1px rgba(255, 255, 255, 0.10);
-    --shadow-card:                0px 0px 0px 1px rgba(255, 255, 255, 0.30), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
-    --shadow-card-focus:          0px 0px 0px 1px #73A6DF, 0px 0px 0px 6px rgba(4, 121, 255, 0.50), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
-  }
-}
-
-@layer components {
-  .bg-base {
-    background-color: var(--color-base);
-  }
-
-  .surface-1 {
-    background-color: var(--color-surface1);
-  }
-
-  .surface-2 {
-    background-color: var(--color-surface2);
-  }
-
-  .surface-3 {
-    background-color: var(--color-surface3);
-  }
-
-  .elevated {
-    background-color: var(--color-elevated);
-  }
-
-  .surface-pressable {
-    background-color: var(--color-pressable);
-  }
-
-  .text-1 {
-    color: var(--color-text1);
-  }
-
-  .text-2 {
-    color: var(--color-text2);
-  }
-
-  .text-3 {
-    color: var(--color-text3);
-  }
-
-  .text-4 {
-    color: var(--color-text4);
-  }
-
-  .bg-border {
-    background-color: var(--color-border);
-  }
-
-  .border-primary {
-    border-color: var(--color-border);
-  }
-
-  .border-elevated {
-    border-color: var(--color-elevated);
-  }
-
-  .noodle {
-    stroke: var(--color-noodle);
-  }
-
-  .pressable {
-    @apply shadow-pressable surface-pressable text-3 transition-all;
-    &:hover {
-      @apply shadow-pressableHover;
-    }
-    &:focus {
-      @apply shadow-pressableFocus;
-    }
-    &:disabled {
-      @apply shadow-pressableDisabled;
-    }
-  }
-
-  .inputable {
-    @apply rounded;
-    &:hover {
-      @apply shadow-input dark:bg-black/20 bg-white;
-    }
-    &:focus {
-      @apply shadow-input dark:bg-black/20 bg-white;
-    }
-  }
-
-  .image-border {
+    :root[class~="dark"] {
+    /* base */
+    --color-gray-base:               rgba(13,13,13, 1);
+    /* scale */
+    --color-gray-50:                 rgba(255, 255, 255, 0.03);
+    --color-gray-100:                rgba(255, 255, 255, 0.10);
+    --color-gray-200:                rgba(255, 255, 255, 0.19);
+    --color-gray-300:                rgba(255, 255, 255, 0.33);
+    --color-gray-400:                rgba(255, 255, 255, 0.44);
+    --color-gray-500:                rgba(255, 255, 255, 0.55);
+    --color-gray-600:                rgba(255, 255, 255, 0.66);
+    --color-gray-700:                rgba(255, 255, 255, 0.77);
+    --color-gray-800:                rgba(255, 255, 255, 0.88);
+    --color-gray-900:                rgba(255, 255, 255, 0.99);
+    --color-gray-max:                rgba(255, 255, 255, 1);
+    /* button shadows */
+    --shadow-button:              0px 0px 0px 1px rgba(255, 255, 255, 0.30), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
+    --shadow-button-hover:        0px 0px 0px 1px rgba(255, 255, 255, 0.30), 0px 2px 4px -2px rgba(0, 0, 0, 0.40), 0px 4px 6px -1px rgba(0, 0, 0, 0.40);
+    --shadow-button-focus:        0px 0px 0px 2px rgba(4, 121, 255, 0.50), 0px 2px 4px -2px rgba(0, 0, 0, 0.07), 0px 4px 6px -1px rgba(0, 0, 0, 0.07);
+    --shadow-button-disabled:     0px 0px 0px 1px rgba(255, 255, 255, 0.40);
+    /* input shadows */
+    --shadow-input-hover:         0px 0px 0px 1px rgba(255, 255, 255, 0.10);
+    --shadow-input-focus:         0px 0px 0px 2px rgba(4, 121, 255, 0.50);
+    /* card shadows */
+    --shadow-card:                0px 0px 0px 1px rgba(255, 255, 255, 0.20), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
+    --shadow-card-focus:          0px 0px 0px 4px rgba(255, 255, 255, 0.40),  0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
+    /* inset shadow */
+    --shadow-inner-border:        0px 0px 0px 1px rgba(255, 255, 255, 0.06) inset;
+    /* inset border */
 
   }
 }
-
-/* 
-@layer components {
-  .textPrimary {
-    @apply text-black-950 dark:text-white-950;
-  }
-
-  .textSecondary {
-    @apply text-black-700 dark:text-white-700;
-  }
-
-  .textTertiary {
-    @apply text-black-500 dark:text-white-500;
-  }
-
-  .textQuaternary {
-    @apply text-black-300 dark:text-white-300;
-  }
-
-
-  .bg {
-    @apply bg-white dark:bg-black-800;
-  }
-
-
-  .surface {
-    @apply bg-white dark:bg-white-100;
-  }
-
-  .surfaceSecondary {
-    @apply bg-black-50 dark:bg-white-50;
-  }
-
-  .surfaceTertiary {
-    @apply bg-black-100 dark:bg-white-100;
-  }
-
-  .surfacePressable {
-    @apply bg-white dark:bg-white-200;
-  }
-
-  .surfaceInputable {
-    @apply bg-white dark:bg-black-200;
-  }
-
-
-  .borderPrimary {
-    @apply border-black-100 dark:border-white-100;
-  }
-
-  .borderSecondary {
-    @apply border-black/5 dark:border-white/5;
-  }
-
-  .strokePrimary {
-    @apply stroke-black-400 dark:stroke-white-400;
-  }
-
-  .borderTheme { 
-    @apply border-blue-500 dark:border-blue-300;
-  }
-
-  .borderSecondaryTheme {
-    @apply border-blue-300 dark:border-blue-200;
-  }
-  
-  .field {
-    @apply shadow-field dark:shadow-inverseField ;
-  }
-
-  .fieldDivY > *:not(:last-child) {
-    @apply shadow-fieldBottom dark:shadow-inverseFieldBottom;
-  }
-
-  .fieldDivX > *:not(:last-child) {
-    @apply shadow-fieldRight dark:shadow-inverseFieldRight;
-  }
-
-  .pressable {
-    @apply shadow-pressable dark:shadow-pressableInverse rounded surfacePressable;
-  }
-
-  .inputable {
-    @apply shadow-input dark:shadow-inputInverse rounded surfaceInputable;
-  }
-
-  .pressable:hover {
-
-  }
-} 
-*/

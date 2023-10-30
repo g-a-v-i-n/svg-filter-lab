@@ -24,11 +24,10 @@ export default function CustomEdge(props: EdgeProps) {
 				strokeWidth="5px"
 				className={clsx({
 					"transition-colors": true,
-					noodle: !selected,
-					"noodle-selected": selected,
+					"stroke-[#8c8c8c] dark:stroke-[#737373]": !selected,
+					"stroke-gray-max": selected,
 				})}
 				fill="none"
-				strokeLinecap="round"
 			/>
 		</>
 	);

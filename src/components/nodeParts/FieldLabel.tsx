@@ -12,7 +12,10 @@ export default function FieldLabel({
 }: FieldLabelProps) {
 	return (
 		<div className={`flex items-center ${className}`}>
-			<label {...props} className={"text-3 cs-text flex-none text-left pr-2"}>
+			<label
+				{...props}
+				className={"text-gray-500 cs-text flex-none text-left pr-2"}
+			>
 				{children}
 			</label>
 		</div>

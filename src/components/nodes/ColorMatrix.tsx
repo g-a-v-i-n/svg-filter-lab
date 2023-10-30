@@ -9,6 +9,7 @@ import { NumberInput } from "../nodeParts/NumberInput";
 import string from "@lib/string";
 import { STRING, NUMBER, MATRIX } from "@lib/attrTypes";
 import { cloneDeep } from "lodash";
+import { parseInput } from "@/src/lib/parseInput";
 
 export const meta = {
 	title: "Color Matrix",
@@ -19,14 +20,15 @@ export const meta = {
 	// attributeOrder: ["mode"],
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix",
 	cat: "",
-	inputs: ["in1"],
-	outputs: ["result"],
+	targets: ["in1"],
+	sources: ["result"],
 };
 
 function ColorMatrix(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -108,8 +110,12 @@ export const Node = memo(ColorMatrix);
 
 export const initialState = {
 	ast: {
-		tagName: "feColorMatrix",
+		tagName: meta.tagName,
 		attributes: {
+			in1: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
 			type: {
 				type: STRING,
 				value: "matrix",
@@ -154,6 +160,10 @@ export const initialState = {
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
+
+	if (node.attributes?.in1) {
+		state.ast.attributes.in1 = parseInput.in1(node);
+	}
 
 	if (node.attributes?.type) {
 		state.ast.attributes.type.value = node.attributes.type;

@@ -10,7 +10,7 @@ const orderedNodeMetadata = Object.values(nodeMetadata).sort((a, b) =>
 
 export function Sidebar() {
 	return (
-		<aside className="relative w-full h-full bg-black-100 dark:bg-white-100 backdrop-blur-3xl flex flex-col gap-1 p-1 flex-none">
+		<aside className="relative w-full h-full bg-gray-50 backdrop-blur-3xl flex flex-col gap-1 p-1 flex-none">
 			<span className="p-2 font-semibold">Filter Elements</span>
 			{orderedNodeMetadata.map((meta: NodeDefinition) => {
 				return (

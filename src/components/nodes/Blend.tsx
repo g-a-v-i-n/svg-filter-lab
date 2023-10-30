@@ -14,6 +14,7 @@ import {
 import { Select, SelectItem, Separator } from "../nodeParts/Select";
 import string from "@lib/string";
 import { STRING } from "@lib/attrTypes";
+import { parseInput } from "@lib/parseInput";
 
 import { NodeProps } from "reactflow";
 
@@ -23,17 +24,17 @@ export const meta = {
 	nodeType: "blend",
 	icon: "􀟗",
 	width: 200,
-	// attributeOrder: ["mode"],
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
 	cat: "",
-	inputs: ["in1", "in2"],
-	outputs: ["result"],
+	targets: ["in1", "in2"],
+	sources: ["result"],
 } as NodeMetadata;
 
 function Blend(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -81,8 +82,16 @@ export const Node = memo(Blend);
 
 export const initialState = {
 	ast: {
-		tagName: "feBlend",
+		tagName: meta.tagName,
 		attributes: {
+			in1: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
+			in2: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
 			mode: {
 				type: STRING,
 				value: "normal",
@@ -97,6 +106,8 @@ export function importer(node: XastElement) {
 		ast: {
 			...initialState.ast,
 			attributes: {
+				in1: parseInput.in1(node),
+				in2: parseInput.in2(node),
 				mode: parse.mode(node),
 			},
 		},

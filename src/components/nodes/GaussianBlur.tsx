@@ -9,6 +9,7 @@ import { NUMBER, STRING } from "@lib/attrTypes";
 import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
+import { parseInput } from "@/src/lib/parseInput";
 
 export const meta = {
 	title: "GaussianBlur",
@@ -18,14 +19,15 @@ export const meta = {
 	width: 200,
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur",
 	cat: "",
-	inputs: ["in1"],
-	outputs: ["result"],
+	targets: ["in1"],
+	sources: ["result"],
 } as NodeMetadata;
 
 function GaussianBlur(props: NodeProps) {
 	const { id, data, selected, dragging } = props;
 
 	const containerProps = {
+		data,
 		id,
 		selected,
 		dragging,
@@ -53,6 +55,10 @@ export const initialState = {
 	ast: {
 		tagName: "feGaussianBlur",
 		attributes: {
+			in1: {
+				type: STRING,
+				value: "SourceGraphic",
+			},
 			stdDeviation: {
 				type: NUMBER,
 				value: 0,
@@ -64,6 +70,10 @@ export const initialState = {
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
+	if (node.attributes?.in1) {
+		state.ast.attributes.in1 = parseInput.in1(node);
+	}
+
 	if (node.attributes.stdDeviation) {
 		state.ast.attributes.stdDeviation.value = string.toNumber(
 			node.attributes.stdDeviation,

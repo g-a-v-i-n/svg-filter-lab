@@ -14,7 +14,7 @@ export function ControlGroup({
 	return (
 		<div
 			{...props}
-			className={`flex flex-col surface-2 w-full nodrag ${className}`}
+			className={`flex flex-col bg-gray-50 w-full nodrag overflow-hidden rounded-b-xl ${className}`}
 		>
 			{children}
 		</div>

@@ -21,14 +21,14 @@ export function Header({
 	const deleteNode = useStore((state) => state.deleteNode);
 
 	return (
-		<div className={`flex items-center justify-between p-2 ${className}`}>
+		<div className={`flex items-center justify-between px-2 h-8 ${className}`}>
 			<div className="flex gap-x-1 items-center">
 				<div
 					className={clsx(
 						"flex gap-x-1 items-center font-medium transition-colors",
 						{
-							"text-1 text-inherit": selected,
-							"text-2 text-inherit": !selected,
+							"text-gray-900 text-inherit": selected,
+							"text-gray-600 text-inherit": !selected,
 						},
 					)}
 				>
@@ -39,7 +39,7 @@ export function Header({
 					href={mdn}
 					rel="noreferrer"
 					target="_blank"
-					className="inline text-4 hover:text-1 text-xs font-bold rounded"
+					className="inline text-gray-300 hover:text-gray-900 text-xs font-bold rounded"
 				>
 					􁊈
 				</a>
@@ -49,7 +49,7 @@ export function Header({
 				<button
 					type="button"
 					onClick={() => deleteNode(id)}
-					className="text-3 hover:text-1 h-4 w-4 rounded-full flex items-center justify-center"
+					className="text-gray-500 hover:text-gray-900 h-4 w-4 rounded-full flex items-center justify-center"
 				>
 					<span className="font-extrabold">􀁡</span>
 				</button>
