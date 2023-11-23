@@ -9,20 +9,21 @@ import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
 import { parseTarget } from "@/src/lib/parseTarget";
+import { ColorInput } from "../nodeParts/ColorInput";
 
 export const meta = {
-	title: "Gaussian blur",
-	tagName: "feGaussianBlur",
-	nodeType: "gaussianBlur",
-	icon: "􀴿",
+	title: "Offset",
+	tagName: "feOffset",
+	nodeType: "offset",
+	icon: "􀟦",
 	width: 220,
-	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur",
+	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feDropShadow",
 	cat: "",
 	targets: ["in1"],
 	sources: ["result"],
 } as NodeMetadata;
 
-function GaussianBlur(props: NodeProps) {
+function Offset(props: NodeProps) {
 	const { id, selected, dragging } = props;
 	const { data, setAttr } = useStore((state: State) => ({
 		data: state.data[id],
@@ -42,17 +43,24 @@ function GaussianBlur(props: NodeProps) {
 	return (
 		<Container {...containerProps}>
 			<NumberInput
-				title="Std. deviation"
+				title="dX"
 				labelSpan="col-span-4"
 				inputSpan="col-span-2"
-				value={attributes.stdDeviation.value}
-				onChange={(v: number) => setAttr("attributes.stdDeviation.value", v)}
+				value={attributes.dx.value}
+				onChange={(v: number) => setAttr("attributes.dx.value", v)}
+			/>
+			<NumberInput
+				title="dY"
+				labelSpan="col-span-4"
+				inputSpan="col-span-2"
+				value={attributes.dy.value}
+				onChange={(v: number) => setAttr("attributes.dy.value", v)}
 			/>
 		</Container>
 	);
 }
 
-export const Node = memo(GaussianBlur);
+export const Node = memo(Offset);
 
 export const initialState = {
 	tagName: meta.tagName,
@@ -61,7 +69,11 @@ export const initialState = {
 			type: STRING,
 			value: "SourceGraphic",
 		},
-		stdDeviation: {
+		dx: {
+			type: NUMBER,
+			value: 0,
+		},
+		dy: {
 			type: NUMBER,
 			value: 0,
 		},
@@ -75,10 +87,12 @@ export function importer(node: XastElement) {
 		state.attributes.in1 = parseTarget.in1(node);
 	}
 
-	if (node.attributes.stdDeviation) {
-		state.attributes.stdDeviation.value = string.toNumber(
-			node.attributes.stdDeviation,
-		);
+	if (node.attributes.dx) {
+		state.attributes.dx.value = string.toNumber(node.attributes.dx);
+	}
+
+	if (node.attributes.dy) {
+		state.attributes.dy.value = string.toNumber(node.attributes.dy);
 	}
 	return state;
 }

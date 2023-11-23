@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import clsx from "clsx";
-import { getConnectedEdges, getOutgoers } from "reactflow";
+import { getConnectedEdges } from "reactflow";
 import { ControlGroup } from "./ControlGroup";
 import { Header } from "./Header";
-import { NodeTargetKey, NodeSourceKey, State } from "@/types";
+import { NodeTargetKey, NodeSourceKey } from "@/types";
 import useStore from "@state/store";
 import { exporter } from "@state/exporter";
 import { Separator } from "./Separator";
 import { TargetHandleRow } from "./TargetHandleRow";
 import { SourceHandleRow } from "./SourceHandleRow";
-import { getNodeById } from "@/src/lib/node";
+import { Node as ReactFlowNode } from "reactflow";
+
+function getOutgoers(nodeId, edges) {
+	return edges.filter((edge) => edge.source === nodeId);
+}
 
 export type ContainerProps = {
 	selected: boolean;
@@ -21,7 +25,7 @@ export type ContainerProps = {
 	icon: string;
 	width: number;
 	mdn: string;
-	data: any;
+	// data: { ast: { [key: string]: any } };
 	targets: NodeTargetKey[] | [];
 	sources: NodeSourceKey[] | [];
 };
@@ -38,20 +42,37 @@ export function Container(props: ContainerProps) {
 		mdn,
 		sources,
 		targets,
-		data,
+		// data,
 	} = props;
 
-	console.log("container rendered");
+	const thisNode = {
+		id,
+		type: "custom",
+	} as ReactFlowNode;
 
-	const nodes = useStore((state) => state.nodes);
-	const edges = useStore((state) => state.edges);
+	const isSelected = selected;
 
-	const setAttr = useStore((state: State) => state.setAttr(id));
+	const { edges, setAttr, data } = useStore((state) => {
+		return {
+			setAttr: state.setAttr(id),
+			edges: state.edges,
+			data: state.data,
+		};
+	});
 
-	const thisNode = getNodeById(nodes, id);
-	const connectedEdges = getConnectedEdges([thisNode], edges);
+	const { attributes } = data[id].ast;
 
-	const filterText = exporter(id, nodes, edges);
+	const outgoers = useMemo(() => {
+		return getOutgoers(thisNode, edges);
+	}, [edges]);
+
+	const connectedEdges = useMemo(() => {
+		return getConnectedEdges([thisNode], edges);
+	}, [edges]);
+
+	const filterText = useMemo(() => {
+		return exporter(id, edges, connectedEdges, data);
+	}, [id, edges, connectedEdges, data]);
 
 	return (
 		<div
@@ -84,13 +105,14 @@ export function Container(props: ContainerProps) {
 					return (
 						<TargetHandleRow
 							key={`${id}-source-in${index + 1}`}
-							selected={selected}
+							label={`in${index + 1}`}
+							isSelected={isSelected}
 							nodeId={id}
 							handleId={source} // id of source handle used by RF
 							isConnected={isConnected} // is this source connected to another node?
 							connectedTo={connectedTo} // id of node connected to this source if any
 							dropdown={{
-								value: data.ast.attributes[`in${index + 1}`].value,
+								value: attributes[`in${index + 1}`].value,
 								onValueChange: (v: string) =>
 									setAttr(`attributes.in${index + 1}.value`, v as BlendModeKey),
 							}}
@@ -103,24 +125,23 @@ export function Container(props: ContainerProps) {
 				})}
 				{sources.length > 0 && <Separator />}
 				{sources.map((source, index) => {
-					const outGoers = getOutgoers(thisNode, nodes, edges);
-
 					return (
 						<SourceHandleRow
 							key={`${index}-${source}`}
-							selected={selected}
+							isSelected={isSelected}
+							label={`result`}
 							id={source}
 							filterId={id}
-							isConnected={outGoers.length > 0 ? true : false}
+							isConnected={outgoers.length > 0 ? true : false}
 							filterText={filterText}
 						/>
 					);
 				})}
 
-				{/* <ControlGroup>
+				<ControlGroup>
 					<Separator />
 					{children}
-				</ControlGroup> */}
+				</ControlGroup>
 			</div>
 		</div>
 	);

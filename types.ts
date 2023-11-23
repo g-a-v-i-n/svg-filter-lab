@@ -2,6 +2,7 @@ import { NodeProps, EdgeProps, Node, Edge } from "reactflow";
 
 // @ts-expect-error NB Gavin: Library `xast` exposes no types
 import { Element as _XastElement } from "@types/xast";
+import { type } from "os";
 
 // Basic Types
 export type ZustandSet = (
@@ -9,7 +10,48 @@ export type ZustandSet = (
 	shouldReplace?: boolean | undefined,
 ) => void;
 export type Matrix = number[][];
-export type Color = string;
+export type RGBColor = {
+	type: "rgb";
+	value: { r: number; g: number; b: number };
+};
+export type RGBAColor = {
+	type: "rgba";
+	value: { r: number; g: number; b: number; a: number };
+};
+export type HSLColor = {
+	type: "hsl";
+	value: { h: number; s: number; l: number };
+};
+export type HSLAColor = {
+	type: "hsla";
+	value: { h: number; s: number; l: number; a: number };
+};
+export type HexColor = {
+	type: "hex";
+	value: string;
+};
+export type HexAlphaColor = {
+	type: "hexa";
+	value: string;
+};
+export type HSVColor = {
+	type: "hsv";
+	value: { h: number; s: number; v: number };
+};
+export type HSVAColor = {
+	type: "hsva";
+	value: { h: number; s: number; v: number; a: number };
+};
+export type Color =
+	| RGBColor
+	| RGBAColor
+	| HSLColor
+	| HSLAColor
+	| HexColor
+	| HexAlphaColor
+	| HSVColor
+	| HSVAColor;
+// export type Color = string;
 export type State = {
 	[key: string]: any;
 };
@@ -102,6 +144,8 @@ export type NodeTypeEnum =
 	| "composite"
 	| "convolveMatrix"
 	| "displacementMap"
+	| "diffuseLighting"
+	| "specularLighting"
 	| "dropShadow"
 	| "flood"
 	| "gaussianBlur"

@@ -1,35 +1,43 @@
-import {
-	Handle as RFHandle,
-	Position,
-	HandleProps as RFHandleProps,
-} from "reactflow";
+import { Handle as RFHandle, HandleProps as RFHandleProps } from "reactflow";
 import clsx from "clsx";
 
 export type HandleProps = {
-	selected: boolean;
+	isSelected: boolean;
 	className?: string;
 	isConnected: boolean;
+	label: string;
 } & RFHandleProps;
 
 export function Handle({
 	className = "",
-	selected,
+	isSelected,
 	isConnected,
+	label,
 	...props
 }: HandleProps) {
 	return (
 		<RFHandle
 			className={clsx(
+				"rounded-full w-5 h-5 flex-none flex border-gray-400 justify-center items-center bg-transparent z-40 ",
 				{
-					"rounded-l-sm": props.position === Position.Right,
-					"rounded-r-sm": props.position === Position.Left,
-					"bg-gray-500": isConnected,
-					// "bg-blue": props.selected,
+					"border-gray-300": !isSelected,
+					"border-gray-700": isSelected,
+					"hover:border-gray-700": !isConnected,
 				},
-				"h-6 w-[4px] flex-none transition-colors bg-gray-200 hover:bg-gray-max",
 				className,
 			)}
 			{...props}
-		/>
+		>
+			{isConnected ? (
+				<div
+					className={clsx("w-3 h-3 rounded-full", {
+						"bg-gray-400": !isSelected,
+						"bg-gray-700": isSelected,
+					})}
+				/>
+			) : (
+				<div />
+			)}
+		</RFHandle>
 	);
 }

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { SelectItem, Separator } from "./Select";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Handle } from "./Handle";
+import { MicroTag } from "./MicroTag";
 
 export type HandleProps = {
 	handleId: string;
@@ -10,6 +11,7 @@ export type HandleProps = {
 	selected: boolean;
 	isConnected: boolean;
 	connectedTo: string | false;
+	label: string;
 	dropdown: {
 		value: string;
 		onValueChange: (val: string) => void;
@@ -22,12 +24,13 @@ export type HandleProps = {
 export function TargetHandleRow({
 	type,
 	position,
-	selected,
+	isSelected,
 	isConnected,
 	connectedTo,
 	handleId,
 	nodeId,
 	dropdown,
+	label,
 	...props
 }: HandleProps) {
 	const unitFilterId = `filter-unit-${nodeId}-${handleId}`;
@@ -40,17 +43,18 @@ export function TargetHandleRow({
 	const filterId = isConnected ? `filter-${connectedTo}` : unitFilterId;
 
 	return (
-		<div className="h-8 flex items-center justify-between gap-1 pr-2">
+		<div className="w-full relative h-8 flex items-center justify-between pl-1 pr-2">
+			<Handle
+				id={handleId}
+				type={"target"}
+				position={Position.Left}
+				isSelected={isSelected}
+				isConnected={isConnected}
+				label={label}
+				className="absolute top-1.5 -left-7"
+				{...props}
+			/>
 			<div className="flex items-center gap-1">
-				<Handle
-					id={handleId}
-					type={"target"}
-					position={Position.Left}
-					selected={selected}
-					isConnected={isConnected}
-					{...props}
-				/>
-
 				<div className="shadow-inset size-6 rounded-sm overflow-hidden">
 					<svg className="size-6" viewBox="0 0 1000 1000">
 						<defs dangerouslySetInnerHTML={{ __html: unitFilterText }} />
@@ -59,6 +63,7 @@ export function TargetHandleRow({
 						</g>
 					</svg>
 				</div>
+				<MicroTag>{label}</MicroTag>
 			</div>
 			{isConnected ? (
 				<div />

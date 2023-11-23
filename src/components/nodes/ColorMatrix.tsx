@@ -9,15 +9,14 @@ import { NumberInput } from "../nodeParts/NumberInput";
 import string from "@lib/string";
 import { STRING, NUMBER, MATRIX } from "@lib/attrTypes";
 import { cloneDeep } from "lodash";
-import { parseInput } from "@/src/lib/parseInput";
+import { parseTarget } from "@/src/lib/parseTarget";
 
 export const meta = {
 	title: "Color Matrix",
 	tagName: "feColorMatrix",
 	nodeType: "colorMatrix",
 	icon: "􀝦",
-	width: 240,
-	// attributeOrder: ["mode"],
+	width: 220,
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix",
 	cat: "",
 	targets: ["in1"],
@@ -25,23 +24,27 @@ export const meta = {
 };
 
 function ColorMatrix(props: NodeProps) {
-	const { id, data, selected, dragging } = props;
+	const { id, selected, dragging } = props;
+	const { data, setAttr } = useStore((state: State) => ({
+		data: state.data[id],
+		setAttr: state.setAttr(id),
+	}));
 
 	const containerProps = {
-		data,
 		id,
 		selected,
 		dragging,
+		data,
 		...meta,
 	};
 
-	const setAttr = useStore((state: State) => state.setAttr(id));
+	const attributes = data.ast.attributes;
 
 	return (
 		<Container {...containerProps}>
 			<Select
 				title="Type"
-				value={data.ast.attributes.type.value}
+				value={attributes.type.value}
 				onValueChange={(v: string) =>
 					setAttr("attributes.type", {
 						type: "string",
@@ -56,7 +59,7 @@ function ColorMatrix(props: NodeProps) {
 				<SelectItem value="luminanceToAlpha">Luminance to Alpha</SelectItem>
 			</Select>
 
-			{data.ast.attributes.type.value === "matrix" && (
+			{attributes.type.value === "matrix" && (
 				<>
 					<MatrixInput
 						title="Values"
@@ -65,37 +68,37 @@ function ColorMatrix(props: NodeProps) {
 						onChange={(v: number, i: number, j: number) =>
 							setAttr(`attributes.matrixValues.value[${i}][${j}]`, v as number)
 						}
-						value={data.ast.attributes.matrixValues.value as number[][]}
+						value={attributes.matrixValues.value as number[][]}
 					/>
 				</>
 			)}
-			{data.ast.attributes.type.value === "saturate" && (
+			{attributes.type.value === "saturate" && (
 				<>
 					<NumberInput
 						title="Values"
-						value={data.ast.attributes.saturateValues.value as number}
+						value={attributes.saturateValues.value as number}
 						onChange={(v: number) =>
 							setAttr("attributes.saturateValues.value", v as number)
 						}
 					/>
 				</>
 			)}
-			{data.ast.attributes.type.value === "hueRotate" && (
+			{attributes.type.value === "hueRotate" && (
 				<>
 					<NumberInput
 						title="Values"
-						value={data.ast.attributes.hueRotateValues.value as number}
+						value={attributes.hueRotateValues.value as number}
 						onChange={(v: number) =>
 							setAttr("attributes.hueRotateValues.value", v as number)
 						}
 					/>
 				</>
 			)}
-			{data.ast.attributes.type.value === "luminanceToAlpha" && (
+			{attributes.type.value === "luminanceToAlpha" && (
 				<>
 					<NumberInput
 						title="Values"
-						value={data.ast.attributes.luminanceToAlphaValues.value as number}
+						value={attributes.luminanceToAlphaValues.value as number}
 						onChange={(v: number) =>
 							setAttr("attributes.luminanceToAlphaValues.value", v as number)
 						}
@@ -109,69 +112,66 @@ function ColorMatrix(props: NodeProps) {
 export const Node = memo(ColorMatrix);
 
 export const initialState = {
-	ast: {
-		tagName: meta.tagName,
-		attributes: {
-			in1: {
-				type: STRING,
-				value: "SourceGraphic",
-			},
-			type: {
-				type: STRING,
-				value: "matrix",
-			},
-			matrixValues: {
-				type: MATRIX,
-				aliasOf: "values",
-				primary: (element: Element) =>
-					element.attributes.type.value === "matrix",
-				value: [
-					[1, 0, 0, 0, 0],
-					[0, 1, 0, 0, 0],
-					[0, 0, 1, 0, 0],
-					[0, 0, 0, 1, 0],
-				],
-			},
-			saturateValues: {
-				type: NUMBER,
-				aliasOf: "values",
-				primary: (element: Element) =>
-					element.attributes.type.value === "saturate",
-				value: 1,
-			},
-			hueRotateValues: {
-				type: NUMBER,
-				aliasOf: "values",
-				primary: (element: Element) =>
-					element.attributes.type.value === "hueRotate",
-				value: 1,
-			},
-			luminanceToAlphaValues: {
-				type: NUMBER,
-				aliasOf: "values",
-				primary: (element: Element) =>
-					element.attributes.type.value === "luminanceToAlpha",
-				value: 1,
-			},
+	tagName: meta.tagName,
+	attributes: {
+		in1: {
+			type: STRING,
+			value: "SourceGraphic",
 		},
-		children: [],
+		type: {
+			type: STRING,
+			value: "matrix",
+		},
+		matrixValues: {
+			type: MATRIX,
+			aliasOf: "values",
+			primary: (element: Element) => element.attributes.type.value === "matrix",
+			value: [
+				[1, 0, 0, 0, 0],
+				[0, 1, 0, 0, 0],
+				[0, 0, 1, 0, 0],
+				[0, 0, 0, 1, 0],
+			],
+		},
+		saturateValues: {
+			type: NUMBER,
+			aliasOf: "values",
+			primary: (element: Element) =>
+				element.attributes.type.value === "saturate",
+			value: 1,
+		},
+		hueRotateValues: {
+			type: NUMBER,
+			aliasOf: "values",
+			primary: (element: Element) =>
+				element.attributes.type.value === "hueRotate",
+			value: 1,
+		},
+		luminanceToAlphaValues: {
+			type: NUMBER,
+			aliasOf: "values",
+			primary: (element: Element) =>
+				element.attributes.type.value === "luminanceToAlpha",
+			value: 1,
+		},
 	},
+	children: [],
 } as NodeState["data"];
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
 
 	if (node.attributes?.in1) {
-		state.ast.attributes.in1 = parseInput.in1(node);
+		state.attributes.in1 = parseTarget.in1(node);
 	}
 
 	if (node.attributes?.type) {
-		state.ast.attributes.type.value = node.attributes.type;
+		state.attributes.type.value = node.attributes.type;
 	}
 
-	if (state.ast.attributes.type.value === "matrix") {
+	if (state.attributes.type.value === "matrix") {
 		if (node.attributes.values) {
-			state.ast.attributes.matrixValues.value = string.toMatrix(
+			state.attributes.matrixValues.value = string.toMatrix(
 				node.attributes.values,
 				4,
 				5,
@@ -179,25 +179,25 @@ export function importer(node: XastElement) {
 		}
 	}
 
-	if (state.ast.attributes.type.value === "saturate") {
+	if (state.attributes.type.value === "saturate") {
 		if (node.attributes.values) {
-			state.ast.attributes.saturateValues.value = string.toNumber(
+			state.attributes.saturateValues.value = string.toNumber(
 				node.attributes.values,
 			);
 		}
 	}
 
-	if (state.ast.attributes.type.value === "hueRotate") {
+	if (state.attributes.type.value === "hueRotate") {
 		if (node.attributes.values) {
-			state.ast.attributes.hueRotateValues.value = string.toNumber(
+			state.attributes.hueRotateValues.value = string.toNumber(
 				node.attributes.values,
 			);
 		}
 	}
 
-	if (state.ast.attributes.type.value === "luminanceToAlpha") {
+	if (state.attributes.type.value === "luminanceToAlpha") {
 		if (node.attributes.values) {
-			state.ast.attributes.luminanceToAlphaValues.value = string.toNumber(
+			state.attributes.luminanceToAlphaValues.value = string.toNumber(
 				node.attributes.values,
 			);
 		}

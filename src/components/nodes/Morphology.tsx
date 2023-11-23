@@ -9,20 +9,21 @@ import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
 import { parseTarget } from "@/src/lib/parseTarget";
+import { Select, SelectItem } from "../nodeParts/Select";
 
 export const meta = {
-	title: "Gaussian blur",
-	tagName: "feGaussianBlur",
-	nodeType: "gaussianBlur",
-	icon: "􀴿",
+	title: "Morphology",
+	tagName: "feMorphology",
+	nodeType: "morphology",
+	icon: "􀟇",
 	width: 220,
-	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur",
+	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMorphology",
 	cat: "",
 	targets: ["in1"],
 	sources: ["result"],
 } as NodeMetadata;
 
-function GaussianBlur(props: NodeProps) {
+function Flood(props: NodeProps) {
 	const { id, selected, dragging } = props;
 	const { data, setAttr } = useStore((state: State) => ({
 		data: state.data[id],
@@ -41,18 +42,28 @@ function GaussianBlur(props: NodeProps) {
 
 	return (
 		<Container {...containerProps}>
+			<Select
+				title="Operator"
+				value={attributes.operator.value}
+				onValueChange={(v: string) =>
+					setAttr("attributes.operator.value", v as "erode" | "dilate")
+				}
+			>
+				<SelectItem value="erode">Erode</SelectItem>
+				<SelectItem value="dilate">Dilate</SelectItem>
+			</Select>
 			<NumberInput
-				title="Std. deviation"
+				title="Radius"
 				labelSpan="col-span-4"
 				inputSpan="col-span-2"
-				value={attributes.stdDeviation.value}
-				onChange={(v: number) => setAttr("attributes.stdDeviation.value", v)}
+				value={attributes.radius.value}
+				onChange={(v: number) => setAttr("attributes.radius.value", v)}
 			/>
 		</Container>
 	);
 }
 
-export const Node = memo(GaussianBlur);
+export const Node = memo(Flood);
 
 export const initialState = {
 	tagName: meta.tagName,
@@ -61,7 +72,11 @@ export const initialState = {
 			type: STRING,
 			value: "SourceGraphic",
 		},
-		stdDeviation: {
+		operator: {
+			type: STRING,
+			value: "dilate",
+		},
+		radius: {
 			type: NUMBER,
 			value: 0,
 		},
@@ -75,10 +90,12 @@ export function importer(node: XastElement) {
 		state.attributes.in1 = parseTarget.in1(node);
 	}
 
-	if (node.attributes.stdDeviation) {
-		state.attributes.stdDeviation.value = string.toNumber(
-			node.attributes.stdDeviation,
-		);
+	if (node.attributes.operator) {
+		state.attributes.operator.value = node.attributes.operator;
+	}
+
+	if (node.attributes.radius) {
+		state.attributes.radius.value = string.toNumber(node.attributes.radius);
 	}
 	return state;
 }

@@ -1,97 +1,96 @@
-import { getConnectedEdges } from "reactflow";
+import { Edge, Node } from "reactflow";
 
 // @ts-ignore - package does not contain types
 import toposort from "toposort";
 import { cloneDeep } from "lodash";
-
 import { toXml } from "xast-util-to-xml";
 import { Element as XastElement, Text as XastText } from "@types/xast";
+import string from "@lib/string";
 
-// import nodeDefinitions from './nodes/index'
-import { getNodeById } from "../lib/node";
 import {
-	NodeTargetKey,
 	EdgeState,
 	NodeState,
-	NodeMetadata,
 	Attribute,
 	AttributeType,
 	AttributeValue,
 	Element,
+	Matrix,
+	Color,
 } from "@/types";
-import { nodeMetadata } from "@components/nodes";
 import { STRING } from "../lib/attrTypes";
 
 export function topologicalSort(edges: EdgeState[]): string[] {
-	const dimunitiveEdges = edges.map((edge) => {
+	const _edges = edges.map((edge) => {
 		return [edge.source, edge.target];
 	});
 
-	const order = toposort(dimunitiveEdges) as string[];
+	const order = toposort(_edges) as string[];
 	return order;
 }
 
-function fillInputs(node: NodeState, nodes: NodeState[], edges: EdgeState[]) {
-	const newNode = cloneDeep(node);
-	const metadata = nodeMetadata[node.type] as NodeMetadata;
+const getAncestors = (edges: Edge[], nodeId: string): string[] => {
+	const ancestors = new Set<string>();
 
-	// get edges connected to the node
-	// @ts-ignore
-	const connectedEdges = getConnectedEdges([newNode], edges);
+	const findAncestors = (currentId: string) => {
+		edges.forEach((edge) => {
+			if (edge.target === currentId) {
+				ancestors.add(edge.source);
+				findAncestors(edge.source);
+			}
+		});
+	};
 
-	metadata.targets.forEach((targetKey: NodeTargetKey) => {
-		const edgeConnectedToThisTarget = connectedEdges.find(
-			({ targetHandle }) => targetHandle === targetKey,
-		);
-
-		if (!edgeConnectedToThisTarget) {
-			// If the target has no connect edges, we want to use the value from the in1 or in2 dropdown
-			// newNode.data.ast.attributes[targetKey] = {
-			// 	value: newNode.data.ast[targetKey].value, // ID of the upstream node
-			// 	type: STRING,
-			// };
-		} else {
-			// If the target has connected edges, we want to use the ID of the upstream node
-			newNode.data.ast.attributes[targetKey] = {
-				value: edgeConnectedToThisTarget.source, // ID of the upstream node
-				type: STRING,
-			};
-		}
-	});
-
-	return newNode;
-}
+	findAncestors(nodeId);
+	return Array.from(ancestors);
+};
 
 // operates on entire document. Entrypoint for export codepaths
 export function exporter(
 	nodeId: string,
-	nodes: NodeState[],
 	edges: EdgeState[],
+	connectedEdges: Edge[],
+	data: { [key: string]: any },
 ) {
-	console.log("exporter called");
-	// if there are no nodes, return an empty string
+	// console.log("exporter");
+	const nodes = Object.values(data);
+	// console.log("render: ", data, nodes);
+	// If there are no nodes, return an empty string
 	if (nodes.length === 0) return "";
 
-	// Fill in the missing inputs and outputs in node.data
-	nodes = nodes.map((node) => fillInputs(node, nodes, edges));
+	const upstreamNodeIds = [nodeId, ...getAncestors(edges, nodeId)];
+	const incomingEdges = connectedEdges.filter((edge) => edge.target === nodeId);
+	const order = topologicalSort(edges);
 
-	// Toposort the nodes. If there is only one node, we don't need to sort.
-	const orderedNodeIds =
-		nodes.length === 1 ? [nodes[0].id] : topologicalSort(edges);
-
-	// With the ordered filter IDs, get the node data for each node and run the exporter for each.
-	const stack = orderedNodeIds
-		.map((id) => getNodeById(nodes, id))
+	// Create the stack of filter element text to be used in the filter tag
+	const stack = nodes
+		// remove nodes that are not upstream of the selected node
+		.filter((node) => upstreamNodeIds.includes(node.id))
+		// sort nodes by topological order
+		.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
+		// convert nodes to xml
 		.map((node: NodeState) => {
-			node.data.ast.attributes.result = { value: node.id, type: STRING };
-			return toXml(toXast(node.data.ast), { closeEmptyElements: true });
+			console.log("exporter: ", data[node.id]);
+			if (!data[node.id]) return "";
+
+			const dataCopy = cloneDeep(data[node.id]);
+
+			const in1 = incomingEdges.find((edge) => edge.target === "in1");
+			const in2 = incomingEdges.find((edge) => edge.target === "in2");
+
+			if (in1) {
+				dataCopy.ast.attributes.in1 = { value: in1.source, type: STRING };
+			}
+
+			if (in2) {
+				dataCopy.ast.attributes.in2 = { value: in2.source, type: STRING };
+			}
+			dataCopy.ast.attributes.result = { value: node.id, type: STRING };
+
+			const xast = toXast(dataCopy.ast);
+			return toXml(xast, { closeEmptyElements: true, tightClose: false });
 		});
 
-	// we discard all nodes following the nodeId arg
-	const index = orderedNodeIds.indexOf(nodeId);
-	const filteredStack = stack.slice(0, index + 1);
-
-	const filterText = `<filter x="-50%" y="-50%" width="200%" height="200%" id="filter-${nodeId}">${filteredStack.join(
+	const filterText = `<filter x="-50%" y="-50%" width="200%" height="200%" id="filter-${nodeId}">${stack.join(
 		"\n",
 	)}</filter>`;
 	return filterText;
@@ -127,7 +126,7 @@ function toXast(element: Element): XastElement | XastText {
 				// if the attribute is an alias, we want to use the alias name instead of the original name
 				acc[attrValue?.aliasOf || attrName] =
 					// parsers are indexed by attribute type, ie string, number, etc
-					parsers[attrValue.type](attrValue);
+					parsers[attrValue.type](attrValue.value);
 				return acc;
 			},
 			{},
@@ -137,29 +136,25 @@ function toXast(element: Element): XastElement | XastText {
 }
 
 export const parsers = {
-	string: (attrValue: Attribute<string, "string">) => {
-		return attrValue.value;
+	string: (value: string) => {
+		return value;
 	},
-	number: (attrValue: Attribute<number, "number">) => {
-		return attrValue.value.toString();
+	number: (value: number) => {
+		return string.fromNumber(value);
 	},
-	boolean: (attrValue: Attribute<boolean, "boolean">) => {
-		return attrValue.value.toString();
+	boolean: (value: boolean) => {
+		return string.fromBoolean(value);
 	},
-	array: (attrValue: Attribute<number[], "array">) => {
-		return attrValue.value.join(" ");
+	array: (value: number[]) => {
+		return string.fromArray(value);
 	},
-	matrix: (attrValue: Attribute<number[][], "matrix">) => {
-		return attrValue.value.map((row) => row.join(" ")).join(" ");
+	matrix: (value: Matrix) => {
+		return string.fromMatrix(value);
 	},
-	color: (attrValue: Attribute<string, "color">) => {
-		return attrValue.value;
+	color: (value: Color) => {
+		return string.fromColor(value);
 	},
-	null: (attrValue: Attribute<null, "null">) => {
+	null: (value: null) => {
 		return "";
 	},
-} as {
-	[key: string]: (
-		attrValue: Attribute<AttributeValue, AttributeType>,
-	) => string;
 };

@@ -2,39 +2,46 @@ import create from "zustand";
 import { temporal } from "zundo";
 import { immer } from "zustand/middleware/immer";
 import { createSidebarSlice } from "./panels/sidebar";
-import { createXyFlowSlice } from "./xyFlow";
+import { createReactFlowSlice } from "./reactFlow";
 import { set as _set } from "lodash";
 import { NodeInstance, State } from "@/types";
 import { importer } from "./importer";
-import { warpedRainbow as testImportFilter } from "../lib/inkscape/warped-rainbow";
+// import { warpedRainbow as testImportFilter } from "../lib/inkscape/warped-rainbow"; // works
+// import { gardenOfDelights as testImportFilter } from "../lib/inkscape/garden-of-delights"; // missing edges
+// import { neon as testImportFilter } from "../lib/inkscape/neon"; // cyclic graph
+// import { pencil as testImportFilter } from "../lib/inkscape/pencil"; // small, missing edges
+// import { watercolor as testImportFilter } from "../lib/inkscape/watercolor"; // bizarre edges, maybe missing edges. Source graphic set on input when there is actually an edge
+// import { swissCheese as testImportFilter } from "../lib/inkscape/swiss-cheese"; // seems to work?
+// import { tigerFur as testImportFilter } from "../lib/inkscape/tiger-fur"; // seems to work?
+// import { riddled as testImportFilter } from "../lib/inkscape/riddled"; // works
+import { marble as testImportFilter } from "../lib/inkscape/marble"; //
+import { getNodeIndexById } from "../lib/node";
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create<any>()(
 	temporal(
 		immer((set) => ({
-			// React Flow / xyFlow
-			...createXyFlowSlice(set),
-
-			// Panel slices
+			...createReactFlowSlice(set),
 			...createSidebarSlice(set),
+
+			data: {},
 
 			// Handles node attribute changes
 			setAttr: (id: string) => (path: string, value: any) => {
 				set((state: State) => {
+					// console.log(id, path, value);
 					// Find the index of the node with the given ID
-					const index = state.nodes.findIndex(
-						(node: NodeInstance) => node.id === id,
-					);
-					const root = state.nodes[index].data.ast;
-					_set(root, path, value);
+					// const root = state[id];
+					_set(state.data[id].ast, path, value);
 				});
 			},
 
 			importFilter: (filter: string) => {
 				set((state: State) => {
-					const { nodes, edges } = importer(testImportFilter);
+					const { nodes, edges, data } = importer(testImportFilter);
 					state.edges = edges;
 					state.nodes = nodes;
+					state.data = data;
 				});
 			},
 

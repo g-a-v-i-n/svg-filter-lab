@@ -26,7 +26,6 @@ export function MatrixInput({
 	disabled,
 	...props
 }: MatrixInputProps) {
-	console.log(value);
 	return (
 		<div
 			className={clsx(
@@ -55,7 +54,6 @@ export function MatrixInput({
 										className={inputCns}
 										value={value[i][j]}
 										onChange={(e) => {
-											console.log(e.target.value, i, j);
 											onChange(Number(e.target.value), i, j);
 										}}
 										allowNegative

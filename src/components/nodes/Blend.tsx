@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Container } from "../nodeParts/Container";
 import useStore from "@state/store";
+import useShallow from "zustand/shallow";
 import {
 	State,
 	BlendModeKey,
@@ -14,8 +15,8 @@ import {
 import { Select, SelectItem, Separator } from "../nodeParts/Select";
 import string from "@lib/string";
 import { STRING } from "@lib/attrTypes";
-import { parseInput } from "@lib/parseInput";
-
+import { parseTarget } from "@lib/parseTarget";
+import { get } from "lodash";
 import { NodeProps } from "reactflow";
 
 export const meta = {
@@ -23,7 +24,7 @@ export const meta = {
 	tagName: "feBlend",
 	nodeType: "blend",
 	icon: "􀟗",
-	width: 200,
+	width: 220,
 	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feBlend",
 	cat: "",
 	targets: ["in1", "in2"],
@@ -31,23 +32,27 @@ export const meta = {
 } as NodeMetadata;
 
 function Blend(props: NodeProps) {
-	const { id, data, selected, dragging } = props;
+	const { id, selected, dragging } = props;
+	const { data, setAttr } = useStore((state: State) => ({
+		data: state.data[id],
+		setAttr: state.setAttr(id),
+	}));
 
 	const containerProps = {
-		data,
 		id,
 		selected,
 		dragging,
+		data,
 		...meta,
 	};
 
-	const setAttr = useStore((state: State) => state.setAttr(id));
+	const attributes = data.ast.attributes;
 
 	return (
 		<Container {...containerProps}>
 			<Select
 				title="Mode"
-				value={data.ast.attributes.mode.value}
+				value={attributes.mode.value}
 				onValueChange={(v: string) =>
 					setAttr("attributes.mode.value", v as BlendModeKey)
 				}
@@ -81,35 +86,31 @@ function Blend(props: NodeProps) {
 export const Node = memo(Blend);
 
 export const initialState = {
-	ast: {
-		tagName: meta.tagName,
-		attributes: {
-			in1: {
-				type: STRING,
-				value: "SourceGraphic",
-			},
-			in2: {
-				type: STRING,
-				value: "SourceGraphic",
-			},
-			mode: {
-				type: STRING,
-				value: "normal",
-			},
+	tagName: meta.tagName,
+	attributes: {
+		in1: {
+			type: STRING,
+			value: "SourceGraphic",
 		},
-		children: [],
+		in2: {
+			type: STRING,
+			value: "SourceGraphic",
+		},
+		mode: {
+			type: STRING,
+			value: "normal",
+		},
 	},
+	children: [],
 } as NodeState["data"];
 
 export function importer(node: XastElement) {
 	return {
-		ast: {
-			...initialState.ast,
-			attributes: {
-				in1: parseInput.in1(node),
-				in2: parseInput.in2(node),
-				mode: parse.mode(node),
-			},
+		...initialState,
+		attributes: {
+			in1: parseTarget.in1(node),
+			in2: parseTarget.in2(node),
+			mode: parse.mode(node),
 		},
 	};
 }

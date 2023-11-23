@@ -80,9 +80,10 @@ export function NumberInput({
 					}}
 					onChange={(e) => onChange(Number(e.target.value))}
 					allowNegative={allowNegative}
+					allowLeadingZeros
 				/>
 
-				<div className="flex flex-col divide-y divide-gray-50 rounded-full button h-[22px] w-[14px]">
+				<div className="flex flex-col divide-y divide-gray-100 rounded-full button h-[22px] w-[14px]">
 					<DetentButton
 						onClick={() =>
 							onChange(
@@ -100,7 +101,7 @@ export function NumberInput({
 					>
 						􀆇
 					</DetentButton>
-					<Separator />
+
 					<DetentButton
 						onClick={() =>
 							onChange(

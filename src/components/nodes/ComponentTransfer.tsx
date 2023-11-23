@@ -14,7 +14,8 @@ import { StringInput } from "../nodeParts/StringInput";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { Switch } from "../nodeParts/Switch";
 import { Separator } from "../nodeParts/Separator";
-import { parseInput } from "@/src/lib/parseInput";
+import { parseTarget } from "@/src/lib/parseTarget";
+import { NUMBER, STRING } from "@/src/lib/attrTypes";
 
 export const meta = {
 	title: "Component Transfer",
@@ -29,17 +30,21 @@ export const meta = {
 };
 
 function ComponentTransfer(props: NodeProps) {
-	const { id, data, selected, dragging } = props;
+	const { id, selected, dragging } = props;
+	const { data, setAttr } = useStore((state: State) => ({
+		data: state.data[id],
+		setAttr: state.setAttr(id),
+	}));
 
 	const containerProps = {
-		data,
 		id,
 		selected,
 		dragging,
+		data,
 		...meta,
 	};
 
-	const setAttr = useStore((state: State) => state.setAttr(id));
+	const ast = data.ast;
 
 	return (
 		<Container {...containerProps}>
@@ -49,7 +54,7 @@ function ComponentTransfer(props: NodeProps) {
 				id="red"
 				index={0}
 				setAttr={setAttr}
-				data={data}
+				ast={ast}
 				switchColorClassName="bg-red-500 dark:bg-red-400"
 			/>
 			<Separator />
@@ -59,7 +64,7 @@ function ComponentTransfer(props: NodeProps) {
 				id="green"
 				index={1}
 				setAttr={setAttr}
-				data={data}
+				ast={ast}
 				switchColorClassName="bg-green-500 dark:bg-green-400"
 			/>
 			<Separator />
@@ -69,7 +74,7 @@ function ComponentTransfer(props: NodeProps) {
 				id="blue"
 				index={2}
 				setAttr={setAttr}
-				data={data}
+				ast={ast}
 				switchColorClassName="bg-blue-500 dark:bg-blue-400"
 			/>
 			<Separator />
@@ -79,7 +84,7 @@ function ComponentTransfer(props: NodeProps) {
 				id="alpha"
 				index={3}
 				setAttr={setAttr}
-				data={data}
+				ast={ast}
 				switchColorClassName="bg-black-500 dark:bg-white-400"
 			/>
 		</Container>
@@ -92,11 +97,11 @@ function ChannelRow({
 	id,
 	index,
 	setAttr,
-	data,
+	ast,
 	switchColorClassName,
 }) {
-	const isOn = !data.ast.children[index].omit;
-	const type = data.ast.children[index].attributes.type.value;
+	const isOn = !ast.children[index].omit;
+	const type = ast.children[index].attributes.type.value;
 
 	return (
 		<>
@@ -131,7 +136,7 @@ function ChannelRow({
 						<>
 							<NumberInput
 								title="Slope"
-								value={data.ast.children[index].attributes.slope.value}
+								value={ast.children[index].attributes.slope.value}
 								onChange={(v: number) =>
 									setAttr(`children[${index}].attributes.slope.value`, v)
 								}
@@ -139,7 +144,7 @@ function ChannelRow({
 
 							<NumberInput
 								title="Intercept"
-								value={data.ast.children[index].attributes.intercept.value}
+								value={ast.children[index].attributes.intercept.value}
 								onChange={(v: number) =>
 									setAttr(`children[${index}].attributes.intercept.value`, v)
 								}
@@ -151,21 +156,21 @@ function ChannelRow({
 						<>
 							<NumberInput
 								title="Amplitude"
-								value={data.ast.children[index].attributes.amplitude.value}
+								value={ast.children[index].attributes.amplitude.value}
 								onChange={(v: number) =>
 									setAttr(`children[${index}].attributes.amplitude.value`, v)
 								}
 							/>
 							<NumberInput
 								title="Exponent"
-								value={data.ast.children[index].attributes.exponent.value}
+								value={ast.children[index].attributes.exponent.value}
 								onChange={(v: number) =>
 									setAttr(`children[${index}].attributes.exponent.value`, v)
 								}
 							/>
 							<NumberInput
 								title="Offset"
-								value={data.ast.children[index].attributes.offset.value}
+								value={ast.children[index].attributes.offset.value}
 								onChange={(v: number) =>
 									setAttr(`children[${index}].attributes.offset.value`, v)
 								}
@@ -176,7 +181,7 @@ function ChannelRow({
 					{type === "table" && (
 						<StringInput
 							title="Table Values"
-							value={data.ast.children[index].attributes.tableValues.value}
+							value={ast.children[index].attributes.tableValues.value}
 							onChange={(v: string) =>
 								setAttr(`children[${index}].attributes.tableValues.value`, v)
 							}
@@ -186,7 +191,7 @@ function ChannelRow({
 					{type === "discrete" && (
 						<StringInput
 							title="Table Values"
-							value={data.ast.children[index].attributes.tableValues.value}
+							value={ast.children[index].attributes.tableValues.value}
 							onChange={(v: string) =>
 								setAttr(`children[${index}].attributes.tableValues.value`, v)
 							}
@@ -201,18 +206,19 @@ function ChannelRow({
 export const Node = memo(ComponentTransfer);
 
 export const initialState = {
-	ast: {
-		tagName: meta.tagName,
-		attributes: {
-			in1: "SourceGraphic",
+	tagName: meta.tagName,
+	attributes: {
+		in1: {
+			type: STRING,
+			value: "SourceGraphic",
 		},
-		children: [
-			makeInitialChannelState("feFuncR"),
-			makeInitialChannelState("feFuncG"),
-			makeInitialChannelState("feFuncB"),
-			makeInitialChannelState("feFuncA"),
-		],
 	},
+	children: [
+		makeInitialChannelState("feFuncR"),
+		makeInitialChannelState("feFuncG"),
+		makeInitialChannelState("feFuncB"),
+		makeInitialChannelState("feFuncA"),
+	],
 };
 
 function makeInitialChannelState(tagName: string) {
@@ -222,31 +228,31 @@ function makeInitialChannelState(tagName: string) {
 		omit: false,
 		attributes: {
 			type: {
-				type: "string",
+				type: STRING,
 				value: "identity",
 			},
 			slope: {
-				type: "number",
+				type: NUMBER,
 				value: 1,
 			},
 			intercept: {
-				type: "number",
+				type: NUMBER,
 				value: 0,
 			},
 			amplitude: {
-				type: "number",
+				type: NUMBER,
 				value: 1,
 			},
 			exponent: {
-				type: "number",
+				type: NUMBER,
 				value: 1,
 			},
 			offset: {
-				type: "number",
+				type: NUMBER,
 				value: 0,
 			},
 			tableValues: {
-				type: "string",
+				type: STRING,
 				value: "0, 1",
 			},
 		},
@@ -257,7 +263,7 @@ export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
 
 	if (node.attributes?.in1) {
-		state.ast.attributes.in1 = parseInput.in1(node);
+		state.ast.attributes.in1 = parseTarget.in1(node);
 	}
 
 	// if (node.attributes?.type) {

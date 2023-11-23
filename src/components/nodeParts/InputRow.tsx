@@ -21,7 +21,7 @@ export function InputRow({
 			className={clsx("grid grid-cols-6 gap-1 grid-flow-auto px-2", className)}
 		>
 			<FieldLabel className={clsx(labelSpan)}>{label}</FieldLabel>
-			<div className={clsx(inputSpan)}>{children}</div>
+			<div className={clsx(inputSpan, "justify-items-end")}>{children}</div>
 		</div>
 	);
 }

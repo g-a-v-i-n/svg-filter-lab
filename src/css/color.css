@@ -27,14 +27,14 @@
     --shadow-card:                0px 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 1px 2px -1px rgba(0, 0, 0, 0.20);
     --shadow-card-focus:          0px 0px 0px 4px rgba(0, 0, 0, 0.30),  0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
     /* inset shadow */
-    --shadow-inner-border:        0px 0px 0px 1px rgba(0, 0, 0, 0.08) inset;
+    --shadow-inner-border:        0px 0px 0px 1px rgba(0, 0, 0, 0.20) inset;
   }
 
     :root[class~="dark"] {
     /* base */
     --color-gray-base:               rgba(13,13,13, 1);
     /* scale */
-    --color-gray-50:                 rgba(255, 255, 255, 0.03);
+    --color-gray-50:                 rgba(255, 255, 255, 0.05);
     --color-gray-100:                rgba(255, 255, 255, 0.10);
     --color-gray-200:                rgba(255, 255, 255, 0.19);
     --color-gray-300:                rgba(255, 255, 255, 0.33);
@@ -57,7 +57,7 @@
     --shadow-card:                0px 0px 0px 1px rgba(255, 255, 255, 0.20), 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
     --shadow-card-focus:          0px 0px 0px 4px rgba(255, 255, 255, 0.40),  0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 1px 2px -1px rgba(0, 0, 0, 0.30);
     /* inset shadow */
-    --shadow-inner-border:        0px 0px 0px 1px rgba(255, 255, 255, 0.06) inset;
+    --shadow-inner-border:        0px 0px 0px 1px rgba(255, 255, 255, 0.20) inset;
     /* inset border */
 
   }

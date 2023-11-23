@@ -9,7 +9,7 @@ import {
 import { uuid } from "@lib/uuid";
 import { EdgeInstance, NodeInstance, State, ZustandSet } from "@/types";
 
-export function createXyFlowSlice(set: ZustandSet) {
+export function createReactFlowSlice(set: ZustandSet) {
 	return {
 		nodes: [] as NodeInstance[],
 		edges: [] as EdgeInstance[],
@@ -19,12 +19,12 @@ export function createXyFlowSlice(set: ZustandSet) {
 		connectedEdges: [],
 
 		// Used to store the ReactFlowInstance ref for the drag-and-drop flow
-		xyfInstance: null,
+		reactFlowInstance: null,
 
 		// Called when the ReactFlowInstance ref is set on mount
-		setXyfInstance: (instance: ReactFlowInstance) => {
+		setReactFlowInstance: (instance: ReactFlowInstance) => {
 			set((state: State) => {
-				state.xyfInstance = instance;
+				state.reactFlowInstance = instance;
 			});
 		},
 
@@ -42,8 +42,6 @@ export function createXyFlowSlice(set: ZustandSet) {
 			set((state: State) => {
 				// if the source node is the same as the target node, return
 				if (source === target) return;
-
-				console.log(source, target, targetHandle);
 
 				// constrain to a single connection per input handle
 				const existingEdge = state.edges.find(

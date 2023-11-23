@@ -5,25 +5,26 @@ import { State, NodeMetadata, NodeState, XastElement } from "@/types";
 import { NUMBER, STRING, COLOR } from "@lib/attrTypes";
 
 import { NodeProps } from "reactflow";
-import { cloneDeep, set } from "lodash";
+import { cloneDeep } from "lodash";
 import { parseTarget } from "@/src/lib/parseTarget";
 import { ColorInput } from "../nodeParts/ColorInput";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { Select, SelectItem } from "../nodeParts/Select";
+import string from "@lib/string";
 
 export const meta = {
-	title: "Diffuse lighting",
-	tagName: "feDiffuseLighting",
-	nodeType: "diffuseLighting",
-	icon: "􀇯",
+	title: "Specular lighting",
+	tagName: "feSpecularLighting",
+	nodeType: "specularLighting",
+	icon: "􁣇",
 	width: 220,
-	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feDiffuseLighting",
+	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feSpecularLighting",
 	cat: "",
 	targets: ["in1"],
 	sources: ["result"],
 } as NodeMetadata;
 
-function DiffuseLighting(props: NodeProps) {
+function SpecularLighting(props: NodeProps) {
 	const { id, selected, dragging } = props;
 	const { data, setAttr } = useStore((state: State) => ({
 		data: state.data[id],
@@ -71,6 +72,30 @@ function DiffuseLighting(props: NodeProps) {
 				value={attributes["lighting-color"].value}
 				onChange={(v: string) => {
 					setAttr("attributes['lighting-color'].value", v as string);
+				}}
+			/>
+
+			<NumberInput
+				title="Surface scale"
+				value={attributes.surfaceScale.value}
+				onChange={(v: number) => {
+					setAttr("attributes.surfaceScale.value", v as number);
+				}}
+			/>
+
+			<NumberInput
+				title="Specular constant"
+				value={attributes.specularConstant.value}
+				onChange={(v: number) => {
+					setAttr("attributes.specularConstant.value", v as number);
+				}}
+			/>
+
+			<NumberInput
+				title="Specular exponent"
+				value={attributes.specularExponent.value}
+				onChange={(v: number) => {
+					setAttr("attributes.specularExponent.value", v as number);
 				}}
 			/>
 
@@ -189,7 +214,7 @@ function DiffuseLighting(props: NodeProps) {
 	);
 }
 
-export const Node = memo(DiffuseLighting);
+export const Node = memo(SpecularLighting);
 
 export const initialState = {
 	tagName: meta.tagName,
@@ -202,6 +227,18 @@ export const initialState = {
 			type: STRING,
 			omit: true,
 			value: "distant",
+		},
+		surfaceScale: {
+			type: NUMBER,
+			value: 1,
+		},
+		specularConstant: {
+			type: NUMBER,
+			value: 1,
+		},
+		specularExponent: {
+			type: NUMBER,
+			value: 1,
 		},
 		"lighting-color": {
 			type: COLOR,
@@ -301,8 +338,90 @@ export function importer(node: XastElement) {
 		state.attributes.in1 = parseTarget.in1(node);
 	}
 
-	if (node.attributes.kernalMatrix) {
-		state.attributes.kernalMatrix.value = node.attributes.kernalMatrix;
+	if (node.attributes["lighting-color"]) {
+		state.attributes["lighting-color"].value = string.toColor(
+			node.attributes["lighting-color"],
+		);
+	}
+
+	if (node.attributes.surfaceScale) {
+		state.attributes.surfaceScale.value = node.attributes.surfaceScale;
+	}
+
+	if (node.attributes.specularConstant) {
+		state.attributes.specularConstant.value = node.attributes.specularConstant;
+	}
+
+	if (node.attributes.specularExponent) {
+		state.attributes.specularExponent.value = node.attributes.specularExponent;
+	}
+
+	if (node.children) {
+		const child = node.children[0];
+		const { name } = child.name;
+
+		if (name === "feDistantLight") {
+			state.attributes.lightType.value = "distant";
+			state.children[0].omit = false;
+			state.children[1].omit = true;
+			state.children[2].omit = true;
+		}
+		if (name === "fePointLight") {
+			state.attributes.lightType.value = "point";
+			state.children[0].omit = true;
+			state.children[1].omit = false;
+			state.children[2].omit = true;
+		}
+		if (name === "feSpotLight") {
+			state.attributes.lightType.value = "spot";
+			state.children[0].omit = true;
+			state.children[1].omit = true;
+			state.children[2].omit = false;
+		}
+
+		if (child.attributes.azimuth) {
+			state.children[0].attributes.azimuth.value = child.attributes.azimuth;
+		}
+		if (child.attributes.elevation) {
+			state.children[0].attributes.elevation.value = child.attributes.elevation;
+		}
+
+		if (child.attributes.x) {
+			state.children[1].attributes.x.value = child.attributes.x;
+		}
+		if (child.attributes.y) {
+			state.children[1].attributes.y.value = child.attributes.y;
+		}
+		if (child.attributes.z) {
+			state.children[1].attributes.z.value = child.attributes.z;
+		}
+
+		if (node.children[0].attributes.x) {
+			state.children[2].attributes.x.value = child.attributes.x;
+		}
+		if (child.attributes.y) {
+			state.children[2].attributes.y.value = child.attributes.y;
+		}
+		if (child.attributes.z) {
+			state.children[2].attributes.z.value = child.attributes.z;
+		}
+		if (child.attributes.pointsAtX) {
+			state.children[2].attributes.pointsAtX.value = child.attributes.pointsAtX;
+		}
+		if (child.attributes.pointsAtY) {
+			state.children[2].attributes.pointsAtY.value = child.attributes.pointsAtY;
+		}
+		if (child.attributes.pointsAtZ) {
+			state.children[2].attributes.pointsAtZ.value = child.attributes.pointsAtZ;
+		}
+		if (child.attributes.specularExponent) {
+			state.children[2].attributes.specularExponent.value =
+				child.attributes.specularExponent;
+		}
+		if (child.attributes.limitingConeAngle) {
+			state.children[2].attributes.limitingConeAngle.value =
+				child.attributes.limitingConeAngle;
+		}
 	}
 	return state;
 }

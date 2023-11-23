@@ -3,52 +3,55 @@ import { Container } from "../nodeParts/Container";
 import useStore from "@state/store";
 import { State, NodeMetadata, NodeState, XastElement } from "@/types";
 import { Select, SelectItem } from "../nodeParts/Select";
-import string from "@lib/string";
 import { NUMBER, STRING } from "@lib/attrTypes";
 
 import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
-import { parseInput } from "@/src/lib/parseInput";
+import { parseTarget } from "@/src/lib/parseTarget";
 
 export const meta = {
 	title: "Displacement map",
 	tagName: "feDisplacementMap",
 	nodeType: "displacementMap",
 	icon: "􁁬",
-	width: 200,
-	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite",
+	width: 220,
+	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feDisplacementMap",
 	cat: "",
 	targets: ["in1", "in2"],
 	sources: ["result"],
 } as NodeMetadata;
 
 function DisplacementMap(props: NodeProps) {
-	const { id, data, selected, dragging } = props;
+	const { id, selected, dragging } = props;
+	const { data, setAttr } = useStore((state: State) => ({
+		data: state.data[id],
+		setAttr: state.setAttr(id),
+	}));
 
 	const containerProps = {
-		data,
 		id,
 		selected,
 		dragging,
+		data,
 		...meta,
 	};
 
-	const setAttr = useStore((state: State) => state.setAttr(id));
+	const attributes = data.ast.attributes;
 
 	return (
 		<Container {...containerProps}>
 			<NumberInput
 				title="Scale"
-				value={data.ast.attributes.scale.value}
+				value={attributes.scale.value}
 				onChange={(v: number) => setAttr("attributes.scale.value", v)}
 			/>
 
 			<Select
 				title="X channel"
-				value={data.ast.attributes.xChannel.value}
+				value={attributes.xChannelSelector.value}
 				onValueChange={(v: string) => {
-					setAttr("attributes.xChannel.value", v as string);
+					setAttr("attributes.xChannelSelector.value", v as string);
 				}}
 			>
 				<SelectItem value="R">Red</SelectItem>
@@ -59,9 +62,9 @@ function DisplacementMap(props: NodeProps) {
 
 			<Select
 				title="Y channel"
-				value={data.ast.attributes.yChannel.value}
+				value={attributes.yChannelSelector.value}
 				onValueChange={(v: string) => {
-					setAttr("attributes.yChannel.value", v as string);
+					setAttr("attributes.yChannelSelector.value", v as string);
 				}}
 			>
 				<SelectItem value="R">Red</SelectItem>
@@ -76,55 +79,53 @@ function DisplacementMap(props: NodeProps) {
 export const Node = memo(DisplacementMap);
 
 export const initialState = {
-	ast: {
-		tagName: meta.tagName,
-		attributes: {
-			in1: {
-				type: STRING,
-				value: "SourceGraphic",
-			},
-			in2: {
-				type: STRING,
-				value: "SourceGraphic",
-			},
-			scale: {
-				type: NUMBER,
-				value: 0,
-			},
-			xChannel: {
-				type: STRING,
-				value: "A",
-			},
-			yChannel: {
-				type: STRING,
-				value: "A",
-			},
+	tagName: meta.tagName,
+	attributes: {
+		in1: {
+			type: STRING,
+			value: "SourceGraphic",
 		},
-		children: [],
+		in2: {
+			type: STRING,
+			value: "SourceGraphic",
+		},
+		scale: {
+			type: NUMBER,
+			value: 0,
+		},
+		xChannelSelector: {
+			type: STRING,
+			value: "A",
+		},
+		yChannelSelector: {
+			type: STRING,
+			value: "A",
+		},
 	},
+	children: [],
 } as NodeState["data"];
 
 export function importer(node: XastElement) {
 	const state = cloneDeep(initialState);
 
 	if (node.attributes?.in1) {
-		state.ast.attributes.in1 = parseInput.in1(node);
+		state.attributes.in1 = parseTarget.in1(node);
 	}
 
 	if (node.attributes?.in2) {
-		state.ast.attributes.in2 = parseInput.in2(node);
+		state.attributes.in2 = parseTarget.in2(node);
 	}
 
 	if (node.attributes?.scale) {
-		state.ast.attributes.scale.value = node.attributes.scale;
+		state.attributes.scale.value = node.attributes.scale;
 	}
 
-	if (node.attributes?.xChannel) {
-		state.ast.attributes.xChannel.value = node.attributes.xChannel;
+	if (node.attributes?.xChannelSelector) {
+		state.attributes.xChannelSelector.value = node.attributes.xChannelSelector;
 	}
 
-	if (node.attributes?.yChannel) {
-		state.ast.attributes.yChannel.value = node.attributes.yChannel;
+	if (node.attributes?.yChannelSelector) {
+		state.attributes.yChannelSelector.value = node.attributes.yChannelSelector;
 	}
 
 	return state;

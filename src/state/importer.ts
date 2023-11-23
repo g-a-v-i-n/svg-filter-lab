@@ -1,9 +1,13 @@
-import { nodeMetadata, nodeTypesByTagName, importers } from "@components/nodes";
-import { uuid } from "@lib/uuid";
 import { fromXml } from "xast-util-from-xml";
 import { remove } from "unist-util-remove";
-import string from "../lib/string";
-import { XastElement } from "../../types";
+import {
+	nodeMetadata,
+	nodeTypesByElementName,
+	importers,
+} from "@components/nodes";
+import { uuid } from "@lib/uuid";
+import sourceKeys, { valueIsASourceKey } from "@lib/sourceKeys";
+import { XastElement } from "@/types";
 
 export function importer(filterText: string) {
 	let xast;
@@ -25,74 +29,51 @@ export function importer(filterText: string) {
 	// Get the children of the filter element, which should be the filter stack
 	let filterStack = filterElement.children as XastElement[];
 
-	// We need to do three things in order.
-	// 1. First, change `in` attributes to `in1` attributes, because `in` is a reserved word and cannot be destructured.
+	// 1. Change `in` attributes to `in1` attributes, because `in` is a reserved word and cannot be destructured.
 	// This is what the editor uses. We can't do that in the editor, because we need to use these IDs as unique IDs for each node and edges.
 	filterStack = filterStack
-		// Immediately change the tag name to the editor's version which drops the `fe` prefix
-		.map(setTagName)
+		// Change the element name to the editor's version which drops the `fe` prefix
+		.map(setElementName)
 		// Set the `in` attribute to `in1` so we can destructure it
 		.map(setInToIn1);
 
-	// 2. Second, make all existing in1 and in2 values unique.
+	// normalize
+
+	// console.log(JSON.stringify(filterStack, null, 2));
+
+	// 2. If there is an element with a `result` attribute which doesn't appear in any other nodes's `in1` or `in2` attributes, the result attribute on these elements should be removed.
+	filterStack = removeSingularResultAttributes(filterStack);
+
+	// 3. Make all existing in1 and in2 values unique.
 	// SVG filters can have multiple elements with the same id, because they are overwritten by duplicates moving down the element list.
 	filterStack = uniquifyInputIds(filterStack);
 
-	// 3. Third, fill in any missing in1 and in2 values.
+	// 4. Fill in any missing in1 and in2 values.
 	// SVG filters let you have implied connections between elements as you move down the element list. We can't do that in the editor, because edges need to be explicit.
 	filterStack = fillInInputs(filterStack);
 
 	const nodes = importNodes(filterStack);
+	const data = importData(filterStack);
 	const edges = importEdges(filterStack);
 
-	return { nodes, edges };
+	console.log("importer: ", data);
+
+	return { nodes, edges, data };
 }
 
-// if in1 or in2 is a reserved id, we need to add a source node to the stack and connect it to the node
-function attachSourceNodes(filterStack: XastElement[]) {
-	const newNodes = [];
+// function assignNormalizedIds(elements: XastElement[]) {
+// 	const aliases = new Map<string, string>();
 
-	filterStack.forEach((node) => {
-		const in1 = node.attributes.in1;
-		const in2 = node.attributes.in2;
-		const result = node.attributes.result;
+// 	elements.forEach(element => {
 
-		if (sourceKeys.includes(in1)) {
-			const newId = uuid(node.type);
-			newNodes.push({
-				type: "element",
-				name: "source",
-				attributes: {
-					source: in1,
-					result: newId,
-				},
-			});
-			node.attributes.in1 = newId;
-		}
-
-		if (sourceKeys.includes(in2)) {
-			const newId = uuid(node.type);
-			newNodes.push({
-				type: "element",
-				name: "source",
-				attributes: {
-					source: in2,
-					result: newId,
-				},
-			});
-			node.attributes.in2 = newId;
-		}
-	});
-
-	return [...newNodes, ...filterStack];
-}
+// 	})
+// }
 
 function importNodes(filterStack: XastElement[]) {
 	const nodes = filterStack.map((element, idx) => {
 		return {
 			id: element.attributes.result,
 			type: element.name,
-			data: importers[element.name](element),
 			selected: false,
 			dragging: false,
 			position: { x: idx * 250, y: 0 },
@@ -102,14 +83,20 @@ function importNodes(filterStack: XastElement[]) {
 	return nodes;
 }
 
-const sourceKeys = [
-	"SourceGraphic",
-	"SourceAlpha",
-	"BackgroundImage",
-	"BackgroundAlpha",
-	"FillPaint",
-	"StrokePaint",
-];
+function importData(filterStack: XastElement[]) {
+	const data = filterStack.reduce((acc, element, idx) => {
+		const id = element.attributes.result;
+		return {
+			...acc,
+			[id as string]: {
+				ast: importers[element.name](element),
+				id,
+			},
+		};
+	}, {});
+
+	return data;
+}
 
 function importEdges(nodes: XastElement[]) {
 	const in1Edges = {};
@@ -120,7 +107,7 @@ function importEdges(nodes: XastElement[]) {
 		const in2 = node.attributes.in2;
 		const result = node.attributes.result;
 
-		if (in1 && !sourceKeys.includes(in1)) {
+		if (in1 && !valueIsASourceKey(in1)) {
 			if (in1 in in1Edges) {
 				in1Edges[in1].push(result);
 			} else {
@@ -128,7 +115,7 @@ function importEdges(nodes: XastElement[]) {
 			}
 		}
 
-		if (in2 && !sourceKeys.includes(in2)) {
+		if (in2 && !valueIsASourceKey(in2)) {
 			if (in2 in in2Edges) {
 				in2Edges[in2].push(result);
 			} else {
@@ -173,33 +160,33 @@ function setInToIn1(elem: XastElement) {
 	return elem;
 }
 
-function setTagName(elem: XastElement) {
-	elem.name = nodeTypesByTagName[elem.name];
+function setElementName(elem: XastElement) {
+	elem.name = nodeTypesByElementName[elem.name];
 	return elem;
 }
 
-export function uniquifyInputIds(tags) {
+export function uniquifyInputIds(elements: XastElement[]) {
 	const aliases = {
 		// oldId: 'newId'
 	};
 
-	const newTags = tags.map((tag) => {
-		const in1 = tag.attributes.in1;
-		const in2 = tag.attributes.in2;
-		const result = tag.attributes.result;
+	const newElements = elements.map((element: XastElement) => {
+		const in1 = element.attributes.in1;
+		const in2 = element.attributes.in2;
+		const result = element.attributes.result;
 
 		if (result) {
 			if (result in aliases) {
 				// If this attribute has been seen before, assign the the id an alias in
-				// both aliases and replace it with the new value in the tag
-				const newId = uuid("n");
-				tag.attributes.result = newId;
+				// both aliases and replace it with the new value in the element
+				const newId = uuid(element.name);
+				element.attributes.result = newId;
 				aliases[result] = newId;
 			} else {
 				// If its a new id, add it to aliases but don't change it.
 				// aliases[result] = result
-				const newId = uuid("n");
-				tag.attributes.result = newId;
+				const newId = uuid(element.name);
+				element.attributes.result = newId;
 				aliases[result] = newId;
 			}
 		}
@@ -207,7 +194,7 @@ export function uniquifyInputIds(tags) {
 		if (in1) {
 			if (in1 in aliases) {
 				// if this id has an alias, use the alias instead of the existing ID
-				tag.attributes.in1 = aliases[in1];
+				element.attributes.in1 = aliases[in1];
 			} else {
 				// if this id has no result id at all, it may be an error, or it could be a reserved id.
 				// console.log(in1);
@@ -217,186 +204,117 @@ export function uniquifyInputIds(tags) {
 		if (in2) {
 			if (in2 in aliases) {
 				// if this id has an alias, use the alias instead of the existing ID
-				tag.attributes.in2 = aliases[in2];
+				element.attributes.in2 = aliases[in2];
 			} else {
 				// if this id has no result id at all, it may be an error, or it could be a reserved id.
 				// console.log(in2);
 			}
 		}
 
-		return tag;
+		return element;
 	});
-	return newTags;
+	return newElements;
 }
 
-export function fillInInputs(tags) {
+export function fillInInputs(elements: XastElement[]) {
 	let lastUnsetResult = "SourceGraphic";
 
-	const newTags = tags.map((tag) => {
-		const in1 = tag.attributes.in1;
-		const in2 = tag.attributes.in2;
-		const result = tag.attributes.result;
+	const newElements = elements.map((element) => {
+		const in1 = element.attributes.in1;
+		const in2 = element.attributes.in2;
+		const result = element.attributes.result;
 
 		if (in1) {
 			// noop
 		} else {
-			const metadata = nodeMetadata[tag.name];
+			const metadata = nodeMetadata[element.name];
 			if (metadata.targets.includes("in1")) {
-				tag.attributes.in1 = lastUnsetResult;
+				element.attributes.in1 = lastUnsetResult;
 			}
 		}
 
 		if (in2) {
 			// noop
 		} else {
-			const metadata = nodeMetadata[tag.name];
+			const metadata = nodeMetadata[element.name];
 			if (metadata.targets.includes("in2")) {
-				tag.attributes.in2 = lastUnsetResult;
+				element.attributes.in2 = lastUnsetResult;
 			}
 		}
 
 		if (result) {
 			// noop
 		} else {
-			const newId = uuid("n");
-			tag.attributes.result = newId;
+			const newId = uuid(element.name);
+			element.attributes.result = newId;
 			lastUnsetResult = newId;
 		}
 
-		return tag;
+		return element;
 	});
 
-	return newTags;
+	return newElements;
 }
 
-// function nodeProps(i) {
-//     return {
-//         position: {
-//             x: i * 300,
-//             y: 0,
-//         },
-//         positionAbsolute: {
-//             x: i * 300,
-//             y: 0,
-//         },
-//         width: 250,
-//         height: 104,
-//         selected: false,
-//         dragging: false,
-//     }
-// }
+function removeSingularResultAttributes(elements: XastElement[]) {
+	// Create a set to store all 'in1' and 'in2' attribute values
+	const references = new Set<string>();
 
-// export function parse(str) {
-//     let errors = []
+	// Populate the set with 'in1' and 'in2' values from all elements
+	elements.forEach((element) => {
+		const attrs = element.attributes;
+		if (attrs.in1) references.add(attrs.in1);
+		if (attrs.in2) references.add(attrs.in2);
+	});
 
-//     const options = {
-//         space: "svg",
-//         fragment: true,
-//         verbose: true,
-//         onerror: (error) => {
-//             errors.push({ ...error })
-//         },
-//     }
+	// Check each element's 'result' attribute to see if it exists in the references set
+	elements.forEach((element) => {
+		const resultValue = element.attributes.result;
+		if (resultValue && !references.has(resultValue)) {
+			// If the 'result' value is not found in the references, delete it
+			delete element.attributes.result;
+		}
+	});
+	return elements;
+}
 
-//     const ast = fromXml(
-//         str,
-//         // @ts-ignore
-//         options
-//     )
+// function createEdgeList(filterElements: FilterElement[]): Edge[] {
+//   let edges: Edge[] = [];
+//   let lastResult: string | undefined;
 
-//     const filterNodes = ast
-//         .children[0].children
-//         .filter((node) => node.type === "element")
-//         .map(setInToIn1)
+//   filterElements.forEach((element, index) => {
+//     const result = element.attributes.result || `implicitResult${index}`;
+//     const inputs = ["in", "in1", "in2"]; // List of possible input attributes
 
-//     // these functions must run in order
-//     const normalizedTags = infill(
-//         uniquify(filterNodes)
-//     )
+//     // Establish the default input if none provided
+//     let inputSource = index === 0 ? "SourceGraphic" : lastResult;
 
-//     const nodes = normalizedTags.reduce((acc, tag, i) => {
+//     inputs.forEach(input => {
+//       if (element.attributes[input]) {
+//         // If the input is explicitly defined, use it
+//         edges.push([element.attributes[input], result]);
+//       } else if (input === "in" || input === "in1") {
+//         // The "in" or "in1" attribute falls back to the previous result or SourceGraphic
+//         edges.push([inputSource, result]);
+//       }
+//     });
 
-//         const name = nodeTypesByTagName[tag.name]
+//     // Track the last result for subsequent primitives that don't define an input
+//     lastResult = result;
 
-//         // only used to replace reserved ids
-//         const newId = uuid('n')
-
-//         const nodesToAdd = [
-//             {
-//                 id: tag.attributes.result,
-//                 type: name,
-//                 data: parsers[name](tag),
-//                 ...nodeProps(i)
-//             }
-//         ];
-
-//         if (sourceKeys.includes(tag.attributes.in1)) {
-//             nodesToAdd[0].data.in1 = newId;
-//             nodesToAdd.push({
-//                 id: newId,
-//                 type: 'source',
-//                 data: {
-//                     source: tag.attributes.in1,
-//                     result: newId
-//                 },
-//                 ...nodeProps(i)
-//             }
-//             )
+//     // Account for elements which do not have 'result' attribute by creating an implicit result
+//     if (!element.attributes.result) {
+//       edges = edges.map(edge => {
+//         if (edge[1] === lastResult) {
+//           return [edge[0], result];
 //         }
-
-//         if (sourceKeys.includes(tag.attributes.in2)) {
-//             nodesToAdd[0].data.in2 = newId;
-//             nodesToAdd.push({
-//                 id: newId,
-//                 type: 'source',
-//                 data: {
-//                     source: tag.attributes.in2,
-//                     result: newId
-//                 },
-//                 ...nodeProps(i)
-//             }
-//             )
-//         }
-
-//         return [...acc, ...nodesToAdd]
-
-//     }, [])
-
-//     const edges = nodes.reduce((acc, node, i) => {
-//         const edgeProps = {
-//             selected: false,
-//             type: "custom",
-//         }
-//         const in1Edges = nodes
-//             .filter(n => node.data.result === n.data.in1)
-//             .map(n => ({
-//                 id: uuid("e"),
-//                 source: node.id,
-//                 sourceHandle: "result",
-//                 target: n.id,
-//                 targetHandle: "in1",
-//                 ...edgeProps
-//             }))
-
-//         const in2Edges = nodes
-//             .filter(n => node.data.result === n.data.in2)
-//             .map(n => ({
-//                 id: uuid("e"),
-//                 source: node.id,
-//                 sourceHandle: "result",
-//                 target: n.id,
-//                 targetHandle: "in2",
-//                 ...edgeProps
-//             }))
-
-//         return [...acc, ...in1Edges, ...in2Edges]
-
-//     }, [])
-
-//     console.log(nodes, edges)
-
-//     return {
-//         nodes,
-//         edges,
+//         return edge;
+//       });
 //     }
+//   });
+
+//   // Remove any self-referencing edges where input equals output
+//   edges = edges.filter(edge => edge[0] !== edge[1]);
+
+//   return edges;
 // }

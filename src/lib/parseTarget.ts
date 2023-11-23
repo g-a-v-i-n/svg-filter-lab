@@ -1,7 +1,7 @@
 import { XastElement } from "@/types";
 import { STRING } from "./attrTypes";
 
-export const parseInput = {
+export const parseTarget = {
 	in1: (node: XastElement) => {
 		return {
 			type: STRING,

@@ -16,8 +16,7 @@ export const gardenOfDelights = /*svg*/`
 `
 
 const out = /*svg*/ `
-<filter x="-50%" y="-50%" width="200%" height="200%" id="filter-blend-Ap8tl0bD">
-<feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="8" seed="20" stitchTiles="noStitch" result="turbulence-Fpg8p5Nz" in="SourceGraphic"></feTurbulence>
+<filter x="-50%" y="-50%" width="200%" height="200%" id="filter-blend-Ap8tl0bD"><feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="8" seed="20" stitchTiles="noStitch" result="turbulence-Fpg8p5Nz" in="SourceGraphic"></feTurbulence>
 <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.2 -0.4" result="colorMatrix-wX0LLU0D" in="turbulence-Fpg8p5Nz"></feColorMatrix>
 <feConvolveMatrix kernelMatrix="3 0 0 0 2 0 0 0 -1 " order="3" divisor="2" bias="0" targetX="1" targetY="1" edgeMode="duplicate" kernelUnitLength="3" result="convolveMatrix-6WN8rCvP" in="colorMatrix-wX0LLU0D"></feConvolveMatrix>
 <feComposite in2="composite-duKKKxAd" operator="atop" result="composite-duKKKxAd" in="convolveMatrix-6WN8rCvP"></feComposite>

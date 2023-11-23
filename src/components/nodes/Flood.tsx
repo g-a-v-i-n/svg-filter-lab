@@ -1,28 +1,29 @@
 import { memo } from "react";
 import { Container } from "../nodeParts/Container";
 import useStore from "@state/store";
-import { State, NodeMetadata, NodeState, XastElement } from "@/types";
+import { State, NodeMetadata, NodeState, XastElement, Color } from "@/types";
 import string from "@lib/string";
-import { NUMBER, STRING } from "@lib/attrTypes";
+import { COLOR, NUMBER, STRING } from "@lib/attrTypes";
 
 import { NodeProps } from "reactflow";
 import { NumberInput } from "../nodeParts/NumberInput";
 import { cloneDeep } from "lodash";
 import { parseTarget } from "@/src/lib/parseTarget";
+import { ColorInput } from "../nodeParts/ColorInput";
 
 export const meta = {
-	title: "Gaussian blur",
-	tagName: "feGaussianBlur",
-	nodeType: "gaussianBlur",
-	icon: "􀴿",
+	title: "Flood",
+	tagName: "feFlood",
+	nodeType: "flood",
+	icon: "􀣯",
 	width: 220,
-	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur",
+	mdn: "https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feFlood",
 	cat: "",
-	targets: ["in1"],
+	targets: [],
 	sources: ["result"],
 } as NodeMetadata;
 
-function GaussianBlur(props: NodeProps) {
+function Flood(props: NodeProps) {
 	const { id, selected, dragging } = props;
 	const { data, setAttr } = useStore((state: State) => ({
 		data: state.data[id],
@@ -41,18 +42,25 @@ function GaussianBlur(props: NodeProps) {
 
 	return (
 		<Container {...containerProps}>
-			<NumberInput
-				title="Std. deviation"
+			<ColorInput
+				title="Color"
 				labelSpan="col-span-4"
 				inputSpan="col-span-2"
-				value={attributes.stdDeviation.value}
-				onChange={(v: number) => setAttr("attributes.stdDeviation.value", v)}
+				value={attributes["flood-color"].value}
+				onChange={(v: Color) => setAttr("attributes.flood-color.value", v)}
+			/>
+			<NumberInput
+				title="Opacity"
+				labelSpan="col-span-4"
+				inputSpan="col-span-2"
+				value={attributes["flood-opacity"].value}
+				onChange={(v: number) => setAttr("attributes.flood-opacity.value", v)}
 			/>
 		</Container>
 	);
 }
 
-export const Node = memo(GaussianBlur);
+export const Node = memo(Flood);
 
 export const initialState = {
 	tagName: meta.tagName,
@@ -61,9 +69,20 @@ export const initialState = {
 			type: STRING,
 			value: "SourceGraphic",
 		},
-		stdDeviation: {
+		"flood-color": {
+			type: COLOR,
+			value: {
+				type: "rgb",
+				value: {
+					r: 0,
+					g: 0,
+					b: 0,
+				},
+			},
+		},
+		"flood-opacity": {
 			type: NUMBER,
-			value: 0,
+			value: 1,
 		},
 	},
 	children: [],
@@ -75,9 +94,15 @@ export function importer(node: XastElement) {
 		state.attributes.in1 = parseTarget.in1(node);
 	}
 
-	if (node.attributes.stdDeviation) {
-		state.attributes.stdDeviation.value = string.toNumber(
-			node.attributes.stdDeviation,
+	if (node.attributes["flood-color"]) {
+		state.attributes["flood-color"].value = string.toColor(
+			node.attributes["flood-color"],
+		);
+	}
+
+	if (node.attributes["flood-opacity"]) {
+		state.attributes["flood-opacity"].value = string.toNumber(
+			node.attributes["flood-opacity"],
 		);
 	}
 	return state;

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { rubberbandPath } from "./rubberbandPath";
-import { EdgeProps } from "reactflow";
+import { EdgeProps, getBezierPath } from "reactflow";
 
 export default function CustomEdge(props: EdgeProps) {
 	const {
@@ -11,17 +11,27 @@ export default function CustomEdge(props: EdgeProps) {
 		targetY,
 		style = {},
 		markerEnd,
+		sourcePosition,
+		targetPosition,
 		selected,
 	} = props;
-
+	const [edgePath] = getBezierPath({
+		sourceX: sourceX - 5,
+		sourceY,
+		sourcePosition,
+		targetX: targetX + 5,
+		targetY,
+		targetPosition,
+	});
 	return (
 		<>
 			<path
 				id={id}
 				style={style}
-				d={rubberbandPath(sourceX, sourceY, targetX, targetY)}
+				d={edgePath}
 				markerEnd={markerEnd}
-				strokeWidth="5px"
+				strokeLinecap="round"
+				strokeWidth="6px"
 				className={clsx({
 					"transition-colors": true,
 					"stroke-[#8c8c8c] dark:stroke-[#737373]": !selected,

@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import ReactFlow, { ReactFlowProvider, Background, Controls } from "reactflow";
+import ReactFlow, {
+	ReactFlowProvider,
+	Background,
+	Controls,
+	BackgroundVariant,
+} from "reactflow";
 // @ts-ignore: allotment has incorrectly bundled or missing types
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
@@ -18,19 +23,21 @@ const Home = () => {
 	const RFWrapper = useRef(null);
 
 	const {
+		data,
 		nodes,
 		edges,
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
 		onSelectionChange,
-		onDrop,
+		createNodeViaDrop,
 		onDragOver,
-		setXyfInstance,
+		setReactFlowInstance,
 		importFilter,
 	} = useStore();
 
-	console.log("app rendered");
+	// console.log("app rendered");
+	// console.log(data);
 
 	useEffect(() => {
 		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -70,7 +77,7 @@ const Home = () => {
 				</button>
 			</div>
 			<Allotment>
-				<Allotment.Pane minSize={100} maxSize={220} preferredSize={220}>
+				<Allotment.Pane minSize={100} maxSize={320} preferredSize={220}>
 					<Sidebar />
 				</Allotment.Pane>
 				<Allotment.Pane minSize={200}>
@@ -86,39 +93,22 @@ const Home = () => {
 								nodeTypes={nodeTypes}
 								edgeTypes={edgeTypes}
 								connectionLineComponent={ConnectionLine}
-								onDrop={(event) => onDrop(event, RFWrapper)}
-								onInit={setXyfInstance}
+								onDrop={(event) => createNodeViaDrop(event, RFWrapper)}
+								onInit={setReactFlowInstance}
 								onDragOver={onDragOver}
 								fitView
 								selectionOnDrag
 								panOnScroll
 								panOnDrag={false}
-								// maxZoom={1}
+								// snapToGrid
 								attributionPosition="bottom-center"
 							>
-								<Background color="#ccc" variant="dots" />
+								<Background color="#ccc" variant={BackgroundVariant.Dots} />
 							</ReactFlow>
 							<Controls />
 						</div>
 					</ReactFlowProvider>
 				</Allotment.Pane>
-				{/* <Allotment.Pane minSize={200} preferredSize={200}>
-        <Preview />
-      </Allotment.Pane> */}
-
-				{/* <Tray /> */}
-				{/* 
-      <div className="fixed right-4 top-4 flex flex-col gap-y-2">
-        <div className="bg-green cs-text text-inversePrimary dark:text-primary p-2 rounded-full">
-          {pkg.version}
-        </div>
-        <button onClick={() => logState(nodes, edges)}>log state</button>
-        <button onClick={() => logRender(nodes, edges)}>render</button>
-        <button onClick={() => importFilter()}>import</button>
-        <button onClick={() => parse(lizardSkin)}>parse</button>
-      </div>
-
-       */}
 			</Allotment>
 		</main>
 	);

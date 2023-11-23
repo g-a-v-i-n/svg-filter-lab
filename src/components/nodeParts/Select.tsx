@@ -35,7 +35,7 @@ export const Select = forwardRef(
 						>
 							<div className="group flex items-center justify-center gap-x-2 pl-2">
 								<SelectPrimitive.Value className="cs-text text-gray-700" />
-								<SelectPrimitive.Icon className="button cs-text-xs flex items-center justify-center h-[18px] w-[18px] rounded text-gray-500 text-center font-bold group-hover:text-gray-900">
+								<SelectPrimitive.Icon className="button cs-text-xs flex items-center justify-center h-[18px] w-[18px] rounded text-gray-500 text-center font-bold group-hover:text-gray-900 flex-none">
 									􀆈
 								</SelectPrimitive.Icon>
 							</div>
